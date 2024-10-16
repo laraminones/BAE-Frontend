@@ -3,15 +3,18 @@ import { Router } from '@angular/router';
 import {LocalStorageService} from "src/app/services/local-storage.service";
 import {EventMessageService} from "src/app/services/event-message.service";
 import { ServiceSpecServiceService } from 'src/app/services/service-spec-service.service';
+import {AttachmentServiceService} from "src/app/services/attachment-service.service";
 import { LoginInfo } from 'src/app/models/interfaces';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import * as moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
 
 import {components} from "src/app/models/service-catalog";
+import { initFlowbite } from 'flowbite';
 type ServiceSpecification_Create = components["schemas"]["ServiceSpecification_Create"];
 type CharacteristicValueSpecification = components["schemas"]["CharacteristicValueSpecification"];
 type ProductSpecificationCharacteristic = components["schemas"]["CharacteristicSpecification"];
+import { NgxFileDropEntry, FileSystemFileEntry, FileSystemDirectoryEntry } from 'ngx-file-drop';
 
 @Component({
   selector: 'create-service-spec',
@@ -24,8 +27,8 @@ export class CreateServiceSpecComponent implements OnInit {
 
   serviceToCreate:ServiceSpecification_Create | undefined;
 
-  stepsElements:string[]=['general-info','chars','summary'];
-  stepsCircles:string[]=['general-circle','chars-circle','summary-circle'];
+  stepsElements:string[]=['general-info','chars','plugins','summary'];
+  stepsCircles:string[]=['general-circle','chars-circle','plugins-circle','summary-circle'];
 
   //markdown variables:
   showPreview:boolean=false;
@@ -36,10 +39,12 @@ export class CreateServiceSpecComponent implements OnInit {
   showGeneral:boolean=true;
   showChars:boolean=false;
   showSummary:boolean=false;
+  showPlugins:boolean=false;
   //Check if step was done
   generalDone:boolean=false;
   charsDone:boolean=false;
-  finishDone:boolean=false;
+  finishDone:boolean=false;  
+  pluginsDone:boolean=false;
 
   //SERVICE GENERAL INFO:
   generalForm = new FormGroup({
@@ -59,6 +64,19 @@ export class CreateServiceSpecComponent implements OnInit {
   creatingChars:CharacteristicValueSpecification[]=[];
   showCreateChar:boolean=false;
 
+  //ASSETS
+  assets:any[]=[];
+  assetsSelected:boolean=false;
+  selectedAsset:any;
+  attFileName = new FormControl('', [Validators.required, Validators.pattern('[a-zA-Z0-9 _.-]*')]);
+  assetURL = new FormControl('', [Validators.required])
+  public files: NgxFileDropEntry[] = [];
+  filePreview:boolean=false;
+  createdFile:any;
+  dynamicForm!: FormGroup;
+  formFields:any;
+  objectFormFields:any;
+
   errorMessage:any='';
   showError:boolean=false;
 
@@ -68,7 +86,9 @@ export class CreateServiceSpecComponent implements OnInit {
     private localStorage: LocalStorageService,
     private eventMessage: EventMessageService,
     private elementRef: ElementRef,
+    private attachmentService: AttachmentServiceService,
     private servSpecService: ServiceSpecServiceService,
+    private fb: FormBuilder
   ) {
     this.eventMessage.messages$.subscribe(ev => {
       if(ev.type === 'ChangedSession') {
@@ -94,6 +114,26 @@ export class CreateServiceSpecComponent implements OnInit {
 
   ngOnInit() {
     this.initPartyInfo();
+    this.dynamicForm = this.fb.group({});
+    this.servSpecService.getAssetTypes().then(data => {
+      console.log('-- assets --')
+      console.log(data)
+      this.assets=data;
+      if(this.assets.length>0){
+        this.selectedAsset=this.assets[0];
+        this.formFields=this.selectedAsset.form;
+        Object.keys(this.formFields).forEach(field => {
+          const fieldData = this.formFields[field];
+          const control = this.fb.control(
+            fieldData.default || '', 
+            fieldData.mandatory ? Validators.required : []
+          );
+          this.objectFormFields=Object.keys(this.formFields)
+          console.log(Object.keys(this.formFields))
+          this.dynamicForm.addControl(field, control);
+        });
+      }
+    })
   }
 
   initPartyInfo(){
@@ -118,6 +158,7 @@ export class CreateServiceSpecComponent implements OnInit {
     this.showChars=false;
     this.showSummary=false;
     this.showPreview=false;
+    this.showPlugins=false;
   }
 
   toggleChars(){
@@ -126,6 +167,16 @@ export class CreateServiceSpecComponent implements OnInit {
     this.showChars=true;
     this.showSummary=false;
     this.showPreview=false;
+    this.showPlugins=false;
+  }
+
+  togglePlugins(){
+    this.selectStep('plugins','plugins-circle');
+    this.showGeneral=false;
+    this.showChars=false;
+    this.showSummary=false;
+    this.showPreview=false;
+    this.showPlugins=true;
   }
 
   onTypeChange(event: any) {
@@ -143,6 +194,30 @@ export class CreateServiceSpecComponent implements OnInit {
       this.rangeCharSelected=true;
     }
     this.creatingChars=[];
+  }
+
+  onAssetChange(event: any){    
+    if(this.formFields){
+      Object.keys(this.formFields).forEach(field => {
+        this.dynamicForm.removeControl(field)
+      });
+    }
+    let idx = this.assets.findIndex((element: { id: any; }) => element.id == event.target.value) 
+    this.selectedAsset=this.assets[idx];
+    this.formFields=this.selectedAsset.form;
+    if(this.formFields){
+      Object.keys(this.formFields).forEach(field => {
+        const fieldData = this.formFields[field];
+        const control = this.fb.control(
+          fieldData.default || '', 
+          fieldData.mandatory ? Validators.required : []
+        );
+        this.dynamicForm.addControl(field, control);
+      });
+      this.objectFormFields=Object.keys(this.formFields);
+    }
+    console.log('asset change')
+    console.log(this.selectedAsset)
   }
 
   addCharValue(){
@@ -239,8 +314,11 @@ export class CreateServiceSpecComponent implements OnInit {
   }
 
   showFinish(){
+    console.log('---form vals ---')
+    console.log(this.dynamicForm.value)
     this.charsDone=true;
     this.finishDone=true;
+    this.showPlugins=false;
     if(this.generalForm.value.name!=null){
       this.serviceToCreate={
         name: this.generalForm.value.name,
@@ -421,6 +499,83 @@ export class CreateServiceSpecComponent implements OnInit {
     if(this.generalForm.value.description){
       this.description=this.generalForm.value.description;
     }    
+  }
+
+  public dropped(files: NgxFileDropEntry[],sel:any) {
+    this.files = files;
+    for (const droppedFile of files) {
+ 
+      // Is it a file?
+      if (droppedFile.fileEntry.isFile) {
+        const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
+        fileEntry.file((file: File) => {
+          console.log('dropped')       
+
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = (e: any) => {
+              const base64String: string = e.target.result.split(',')[1];
+              console.log('BASE 64....')
+              console.log(base64String); // You can use this base64 string as needed
+              let fileBody = {
+                content: {
+                  name: this.selectedAsset.name.replace(/\s/g, "")+file.name,
+                  data: base64String
+                },
+                contentType: file.type,
+                isPublic: false
+              }
+              this.attachmentService.uploadFile(fileBody).subscribe({
+                next: data => {
+                    console.log(data)
+                    this.cdr.detectChanges();
+                    console.log('uploaded')
+                    this.filePreview=true;
+                    this.createdFile=data.content;
+                    console.log(this.createdFile)
+                },
+                error: error => {
+                    console.error('There was an error while uploading!', error);
+                    if(error.error.error){
+                      console.log(error)
+                      this.errorMessage='Error: '+error.error.error;
+                    } else {
+                      this.errorMessage='There was an error while uploading the file!';
+                    }
+                    if (error.status === 413) {
+                      this.errorMessage='File size too large! Must be under 3MB.';
+                    }
+                    this.showError=true;
+                    setTimeout(() => {
+                      this.showError = false;
+                    }, 3000);
+                }
+              });
+            };
+            reader.readAsDataURL(file);
+          }
+ 
+        });
+      } else {
+        // It was a directory (empty directories are added, otherwise only files)
+        const fileEntry = droppedFile.fileEntry as FileSystemDirectoryEntry;
+        console.log(droppedFile.relativePath, fileEntry);
+      }
+    }
+  }
+
+  public fileOver(event: any){
+    console.log(event);
+  }
+ 
+  public fileLeave(event: any){
+    console.log('leave')
+    console.log(event);
+  }
+
+  deleteFile(){
+    this.createdFile='';
+    this.filePreview=false;
   }
 
 }

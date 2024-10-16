@@ -601,7 +601,9 @@
         "_description": "Description",
         "_next": "Next",
         "_finish": "Finish",
-        "_create_serv": "Create service"
+        "_create_serv": "Create service",
+        "_plugins": "Assets",
+        "_includes_plugins": "Does the service include assets?"
     },
     "UPDATE_SERV_SPEC": {
         "_back": "Back",

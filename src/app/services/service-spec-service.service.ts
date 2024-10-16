@@ -50,4 +50,9 @@ export class ServiceSpecServiceService {
     let url = `${ServiceSpecServiceService.BASE_URL}${ServiceSpecServiceService.SERVICE}${ServiceSpecServiceService.API_SERVICE_SPEC}/${id}`;
     return this.http.patch<any>(url, body);
   }
+
+  getAssetTypes(){
+    let url = `http://localhost:8004/charging/api/assetManagement/assetTypes`;
+    return lastValueFrom(this.http.get<any[]>(url));
+  }
 }
