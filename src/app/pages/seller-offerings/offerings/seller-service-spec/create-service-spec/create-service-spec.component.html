@@ -434,14 +434,22 @@
                 </div>
                 @if(assetsSelected){
                     <div>
-                        <label class="font-bold ml-4 mt-4 dark:text-white">Select asset's type</label>
+                        <label class="font-bold ml-4 mt-4 dark:text-white">Select an asset</label>
                         <select id="type" (change)="onAssetChange($event)"
                         class="ml-4 mb-4 shadow bg-white border border-gray-300 dark:bg-secondary-300 dark:border-secondary-200 dark:text-white text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                             @for(asset of assets; track asset){
                                 <option value="{{asset.id}}">{{asset.name}}</option>  
                             }                              
                         </select>
-                        @if(selectedAsset.formats.includes('URL')){
+                        @if(hasBothAssetTypes==true){
+                            <label class="font-bold ml-4 mt-4 dark:text-white">Select asset's type</label>
+                            <select id="type" (change)="onAssetTypeChange($event)"
+                            class="ml-4 mb-4 shadow bg-white border border-gray-300 dark:bg-secondary-300 dark:border-secondary-200 dark:text-white text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                <option value="URL">URL</option>
+                                <option value="FILE">FILE</option>                              
+                            </select>
+                        }
+                        @if(selectedAssetType=='URL'){
                             <label class="font-bold ml-4 mt-4 dark:text-white">Add asset's URL</label>
                             <div class="flex ml-4 items-center h-fit mt-2 mb-2 w-full justify-between">
                                 <input type="text" id="att-name"
@@ -449,7 +457,7 @@
                                     class="w-full bg-gray-50 border border-gray-300 text-gray-900 dark:bg-secondary-300 dark:border-secondary-200 dark:text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5" />
                             </div>
                         }
-                        @if(selectedAsset.formats.includes('FILE')){
+                        @if(selectedAssetType=='FILE'){
                             @if(!filePreview){
                                 <label class="font-bold ml-4 mt-4 dark:text-white">Upload asset's file</label>
                                 <div class="flex w-full justify-center justify-items-center">

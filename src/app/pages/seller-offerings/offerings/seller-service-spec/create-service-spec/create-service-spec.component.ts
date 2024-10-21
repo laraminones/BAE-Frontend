@@ -67,6 +67,8 @@ export class CreateServiceSpecComponent implements OnInit {
   //ASSETS
   assets:any[]=[];
   assetsSelected:boolean=false;
+  hasBothAssetTypes:boolean=false;
+  selectedAssetType:any=undefined;
   selectedAsset:any;
   attFileName = new FormControl('', [Validators.required, Validators.pattern('[a-zA-Z0-9 _.-]*')]);
   assetURL = new FormControl('', [Validators.required])
@@ -121,6 +123,13 @@ export class CreateServiceSpecComponent implements OnInit {
       this.assets=data;
       if(this.assets.length>0){
         this.selectedAsset=this.assets[0];
+        if(this.selectedAsset.formats.includes('URL') && this.selectedAsset.formats.includes('FILE')){
+          this.hasBothAssetTypes=true;
+        } else if(this.selectedAsset.formats.includes('URL')) {
+          this.selectedAssetType = 'URL';
+        } else if(this.selectedAsset.formats.includes('FILE')){
+          this.selectedAssetType = 'FILE';
+        }
         this.formFields=this.selectedAsset.form;
         Object.keys(this.formFields).forEach(field => {
           const fieldData = this.formFields[field];
@@ -196,6 +205,12 @@ export class CreateServiceSpecComponent implements OnInit {
     this.creatingChars=[];
   }
 
+  onAssetTypeChange(event:any){
+    console.log('change asset type')
+    console.log(event.target.value)
+    this.selectedAssetType=event.target.value;
+  }
+
   onAssetChange(event: any){    
     if(this.formFields){
       Object.keys(this.formFields).forEach(field => {
@@ -204,6 +219,13 @@ export class CreateServiceSpecComponent implements OnInit {
     }
     let idx = this.assets.findIndex((element: { id: any; }) => element.id == event.target.value) 
     this.selectedAsset=this.assets[idx];
+    if(this.selectedAsset.formats.includes('URL') && this.selectedAsset.formats.includes('FILE')){
+      this.hasBothAssetTypes=true;
+    } else if(this.selectedAsset.formats.includes('URL')) {
+      this.selectedAssetType = 'URL';
+    } else if(this.selectedAsset.formats.includes('FILE')){
+      this.selectedAssetType = 'FILE';
+    }
     this.formFields=this.selectedAsset.form;
     if(this.formFields){
       Object.keys(this.formFields).forEach(field => {
