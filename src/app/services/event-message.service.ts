@@ -9,7 +9,7 @@ export interface EventMessage {
   'SellerOffer' | 'SellerCreateOffer' | 'SellerUpdateProductSpec' | 'SellerUpdateServiceSpec' | 'SellerUpdateResourceSpec' | 'SellerUpdateOffer' |
   'SellerCatalog' | 'SellerCatalogCreate' | 'SellerCatalogUpdate' | 'CategoryAdded' | 'CategoryRemoved' | 'ChangedSession' | 'CloseCartCard'|
   'AdminCategories' | 'CreateCategory' | 'UpdateCategory' | 'ShowCartToast' | 'HideCartToast' | 'CloseContact' | 'OpenServiceDetails' | 'OpenResourceDetails' | 'OpenProductInvDetails' |
-  'SavePricePlan' | 'UpdatePricePlan' | 'ToggleEditPrice' | 'ToggleNewPrice';
+  'SavePricePlan' | 'UpdatePricePlan' | 'ToggleEditPrice' | 'ToggleNewPrice' | 'CloseFeedback';
   text?: string,
   value?: object | boolean
 }
@@ -185,5 +185,9 @@ export class EventMessageService {
 
   emitToggleNewPricePlan(pricePlan:any){
     this.eventMessageSubject.next({type: 'ToggleNewPrice', value: pricePlan})
+  }
+
+  emitCloseFeedback(show:boolean){
+    this.eventMessageSubject.next({type: 'CloseFeedback', value: show})
   }
 }

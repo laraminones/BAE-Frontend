@@ -10,6 +10,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import {CategoriesPanelComponent} from "./categories-panel/categories-panel.component";
 import { CartDrawerComponent } from "./cart-drawer/cart-drawer.component";
+import { FeedbackModalComponent } from './feedback-modal/feedback-modal.component';
 
 const imports: any[] = [
   CommonModule,
@@ -30,7 +31,7 @@ const declarations: any[] = [
 @NgModule({
     imports: [...imports, CategoriesPanelComponent],
   exports: [...imports, ...declarations],
-  declarations: [...declarations],
+  declarations: [...declarations, FeedbackModalComponent],
   providers:[DatePipe, TranslateService]
 })
 export class SharedModule { }

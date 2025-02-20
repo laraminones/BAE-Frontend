@@ -28,6 +28,7 @@ export class AppInitService {
                 environment.KB_ONBOARDING_GUIDELINES_URL = config.domeOnboardingGuidelines;
                 environment.KB_GUIDELNES_URL = config.domeGuidelines;
                 environment.REGISTRATION_FORM_URL = config.domeRegistrationForm;
+                environment.PURCHASE_ENABLED = config.purchaseEnabled;
                 resolve(config);
             }),
             error: (error) => {
