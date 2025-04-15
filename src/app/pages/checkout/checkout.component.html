@@ -44,6 +44,7 @@
           <div class="flex items-center space-x-3 rtl:space-x-reverse md:space-x-4"><span
             class="flex h-8 w-8 items-center justify-center rounded-full bg-primary-100 text-base text-white lg:text-xl">2</span>
             <p class="text-lg capitalize text-heading lg:text-xl dark:text-white">{{ 'SHOPPING_CART._billingAddress' | translate }}</p></div>
+          @if (billingAddresses.length > 0) {
           <button
             (click)="addBill=true;$event.stopPropagation();"
             class="flex items-center text-sm font-semibold text-accent dark:text-white transition-colors duration-200 hover:text-accent-hover focus:text-accent-hover focus:outline-0">
@@ -52,6 +53,7 @@
             </svg>
             Add
           </button>
+        }
         </div>
 
         <div id="billing-addresses" role="radiogroup" aria-labelledby="billing-addresses">

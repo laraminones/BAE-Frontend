@@ -166,7 +166,9 @@ export class CheckoutComponent implements OnInit {
   }
 
   goToInventory() {
-    this.router.navigate(['/product-inventory']);
+    //this.router.navigate(['/product-inventory']);
+    //Changed QA wants to redirect to orders page (Ticket#831759)
+    this.router.navigate(['/product-orders']);
   }
 
   /*  async orderProduct(){
