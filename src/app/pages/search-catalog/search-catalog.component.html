@@ -71,7 +71,7 @@
           <span class="sr-only">Loading...</span>
         </div>
       } @else {
-        <div class="flex items-center mx-auto max-w-screen-xl w-full items-center bg-white dark:bg-secondary-100 rounded-lg shadow-lg ml-4">
+        <div class="flex items-center mx-auto max-w-screen-xl w-full items-center bg-white dark:bg-secondary-100 rounded-lg shadow-lg ml-4 mb-4">
           <div class="relative w-full">
             <!-- Background image layer -->
             <div class="absolute inset-0 bg-no-repeat bg-cover opacity-40 z-0 rounded-lg"
@@ -80,21 +80,21 @@
           
             <!-- Content layer -->
             <div class="relative flex flex-row justify-between items-start w-full p-8">
-              <div class="flex flex-col w-3/4 pr-4">
+              <div class="flex flex-col w-full md:w-3/4 pr-4">
                 <h5 class="text-2xl font-bold tracking-tight line-clamp-4 text-primary-100 dark:text-white break-words">
-                  {{ catalog.name }}
+                  {{ providerName }}
                 </h5>
                 <markdown
                   class="line-clamp-[4] break-words dark:text-white text-gray-900 mt-2"
-                  [data]="catalog.description ? catalog.description : ('CATALOGS._no_desc' | translate)">
+                  [data]="providerDescription != '' ? providerDescription : ('CATALOGS._no_desc' | translate)">
                 </markdown>
               </div>
           
               <!-- Vertical Divider -->
-              <div class="self-stretch w-px bg-gray-400 mx-4"></div>
+              <div class="hidden md:block self-stretch w-px bg-gray-400 mx-4"></div>
           
               <!-- Logo -->
-              <img class="w-[100px] lg:w-[200px] self-center z-10 dark:text-white" src="{{ logo }}" />
+              <img class="w-[100px] lg:w-[200px] hidden md:block self-center z-10 dark:text-white" src="{{ logo }}" />
             </div>
           </div>
           

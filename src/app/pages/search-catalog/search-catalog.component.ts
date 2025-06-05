@@ -44,7 +44,8 @@ export class SearchCatalogComponent implements OnInit{
 
   id:any;
   catalog:any;
-  provider:any;
+  providerName:string='';
+  providerDescription:string='';
   products: ProductOffering[]=[];
   nextProducts: ProductOffering[]=[];
   loading: boolean = false;
@@ -68,9 +69,21 @@ export class SearchCatalogComponent implements OnInit{
       this.cdr.detectChanges();
       const owner = this.catalog.relatedParty.find((item: { role: string; }) => item.role === 'Owner');
       if(owner.id.startsWith('urn:ngsi-ld:individual')){
-        this.logo='assets/images/Dome-Marketplace.svg'
+        this.accService.getUserInfo(owner.id).then(info  => {
+          console.log('info')
+          console.log(info)
+          this.providerName=info.givenName;
+          const provdesc = info.partyCharacteristic.find((item: { name: string; }) => item.name === 'description')
+          this.providerDescription=provdesc.value;
+        })
+        this.logo='assets/images/Dome-Marketplace.svg';
       } else {
         this.accService.getOrgInfo(owner.id).then(info  => {
+          console.log('info')
+          console.log(info)
+          this.providerName=info.tradingName;
+          const provdesc = info.partyCharacteristic.find((item: { name: string; }) => item.name === 'description')
+          this.providerDescription=provdesc.value;
           const logo = info.partyCharacteristic.find((item: { name: string; }) => item.name === 'logo')
           if(logo){
             this.logo=logo.value
