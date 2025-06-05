@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, Input } from '@angular/core';
 import {faMessagePen, faHandsHoldingHeart} from "@fortawesome/pro-solid-svg-icons";
 import {EventMessageService} from "../../services/event-message.service";
 
@@ -11,6 +11,8 @@ export class FeedbackModalComponent {
   constructor(
     private eventMessage: EventMessageService
   ) {  }
+  @Input() rateMessage: string
+  @Input() writeMessage: string
   protected readonly faMessagePen = faMessagePen;
   protected readonly faHandsHoldingHeart = faHandsHoldingHeart;
   rating: number = 0; // Current rating
