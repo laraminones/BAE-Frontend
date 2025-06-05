@@ -49,6 +49,7 @@ export class CategoryComponent implements ControlValueAccessor, OnInit, AfterVie
   selectedCategories: Category[] = [];
   unformattedCategories:Category[]=[];
   categories:Category[]=[];
+
   private originalValue: Category[] = [];
   private hasBeenModified: boolean = false;
   private isEditMode: boolean = false;
@@ -96,7 +97,7 @@ export class CategoryComponent implements ControlValueAccessor, OnInit, AfterVie
     this.categories = []; // Asegurar que siempre es un array
 
     try {
-      const data = await this.api.getLaunchedCategories();
+      const data = await this.api.getDefaultCategories();
 
       if (!Array.isArray(data) || data.length === 0) {
         console.error('No hay categorías disponibles.');

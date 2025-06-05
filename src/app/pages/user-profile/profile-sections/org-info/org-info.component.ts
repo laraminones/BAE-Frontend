@@ -10,7 +10,8 @@ import { initFlowbite } from 'flowbite';
 import * as moment from 'moment';
 import {components} from "../../../../models/party-catalog";
 import { v4 as uuidv4 } from 'uuid';
-import {parsePhoneNumber, getCountries, getCountryCallingCode, CountryCode} from 'libphonenumber-js'
+import {getCountries, getCountryCallingCode, CountryCode} from 'libphonenumber-js'
+import {parsePhoneNumber} from 'libphonenumber-js/max'
 import {AttachmentServiceService} from "src/app/services/attachment-service.service";
 import { NgxFileDropEntry, FileSystemFileEntry, FileSystemDirectoryEntry } from 'ngx-file-drop';
 import { environment } from 'src/environments/environment';
@@ -315,21 +316,30 @@ export class OrgInfoComponent {
 
   saveMedium(){
     if(this.phoneSelected){
-      const phoneNumber = parsePhoneNumber(this.phonePrefix.code + this.mediumForm.value.telephoneNumber);
-      if (phoneNumber) {
-        if (!phoneNumber.isValid()) {
-          console.log('NUMERO INVALIDO')
-          this.mediumForm.controls['telephoneNumber'].setErrors({'invalidPhoneNumber': true});
-          this.toastVisibility = true;
-          setTimeout(() => {
+        try{
+            const phoneNumber = parsePhoneNumber(this.phonePrefix.code + this.mediumForm.value.telephoneNumber);
+            if (phoneNumber) {
+            if (!phoneNumber.isValid()) {
+                console.log('NUMERO INVALIDO')
+                this.mediumForm.controls['telephoneNumber'].setErrors({'invalidPhoneNumber': true});
+                this.toastVisibility = true;
+                setTimeout(() => {
+                this.toastVisibility = false
+                }, 2000);
+                return;
+            } else {
+                this.mediumForm.controls['telephoneNumber'].setErrors(null);
+                this.toastVisibility = false;
+            }
+            }
+        }catch (e : any){
+            this.mediumForm.controls['telephoneNumber'].setErrors({'invalidPhoneNumber': true});
+            this.toastVisibility = true;
+            setTimeout(() => {
             this.toastVisibility = false
-          }, 2000);
-          return;
-        } else {
-          this.mediumForm.controls['telephoneNumber'].setErrors(null);
-          this.toastVisibility = false;
+            }, 2000);
+            return;
         }
-      }
     }
 
     if (this.mediumForm.invalid) {
@@ -434,21 +444,31 @@ export class OrgInfoComponent {
             }
           }
         } else {
-          const phoneNumber = parsePhoneNumber(this.phonePrefix.code + this.mediumForm.value.telephoneNumber);
-          if (phoneNumber) {
-            if (!phoneNumber.isValid()) {
-              console.log('NUMERO INVALIDO')
-              this.mediumForm.controls['telephoneNumber'].setErrors({'invalidPhoneNumber': true});
-              this.toastVisibility = true;
-              setTimeout(() => {
-                this.toastVisibility = false
-              }, 2000);
-              return;
-            } else {
-              this.mediumForm.controls['telephoneNumber'].setErrors(null);
-              this.toastVisibility = false;
+            try{
+                const phoneNumber = parsePhoneNumber(this.phonePrefix.code + this.mediumForm.value.telephoneNumber);
+                if (phoneNumber) {
+                  if (!phoneNumber.isValid()) {
+                    console.log('NUMERO INVALIDO')
+                    this.mediumForm.controls['telephoneNumber'].setErrors({'invalidPhoneNumber': true});
+                    this.toastVisibility = true;
+                    setTimeout(() => {
+                      this.toastVisibility = false
+                    }, 2000);
+                    return;
+                  } else {
+                    this.mediumForm.controls['telephoneNumber'].setErrors(null);
+                    this.toastVisibility = false;
+                  }
+                }
             }
-          }
+            catch(error){
+                this.mediumForm.controls['telephoneNumber'].setErrors({'invalidPhoneNumber': true});
+                    this.toastVisibility = true;
+                    setTimeout(() => {
+                      this.toastVisibility = false
+                    }, 2000);
+                    return;
+            }
           this.contactmediums[index]={
             id: this.contactmediums[index].id,
             mediumType: 'TelephoneNumber',

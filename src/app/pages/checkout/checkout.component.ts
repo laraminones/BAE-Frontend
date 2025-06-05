@@ -170,114 +170,6 @@ export class CheckoutComponent implements OnInit {
     this.router.navigate(['/product-orders']);
   }
 
-  /*  async orderProduct(){
-
-      console.log('buying')
-      console.log(moment().utc())
-      this.loading_purchase=true;
-      let products = []
-      for(let i = 0; i<this.items.length; i++){
-
-        console.log('ITEMS PRICING....')
-        console.log(this.items)
-
-        if(this.items[i].options.pricing != undefined){
-          products.push({
-            "id": this.items[i].id,
-            "action": "add",
-            "productOffering": {
-              "id": this.items[i].id,
-              "href": this.items[i].id
-            },
-            //Setting pricing position to 0 as we're assuming we're always selecting the same price plan on the price simulation
-            "itemTotalPrice": [
-              {
-                "productOfferingPrice": {
-                  "id": this.items[i].options.pricing[0].id,
-                  "href": this.items[i].options.pricing[0].id,
-                }
-              }
-            ],
-            "product": {
-              "productCharacteristic": this.items[i].options.characteristics
-            }
-          })
-          this.cdr.detectChanges();
-        }
-
-
-      }
-      this.cdr.detectChanges();
-      console.log('productos creados....')
-      console.log(products)
-
-      console.log(this.selectedBillingAddress.id)
-      let productOrder = {
-        "productOrderItem": products,
-        "relatedParty": [
-          {
-            "id": this.relatedParty,
-            "href": this.relatedParty,
-            "role": "Customer"
-          }
-        ],
-        //priority??
-        "priority": '4',
-        "billingAccount": {
-          "id": this.selectedBillingAddress.id,
-          "href": this.selectedBillingAddress.id
-        },
-        "notificationContact": this.selectedBillingAddress.email,
-      }
-      console.log('--- order ---')
-      console.log(productOrder)
-
-      await this.orderService.postProductOrder(productOrder).subscribe({
-        next: data => {
-          console.log(data)
-          console.log('PROD ORDER DONE');
-          this.cartService.emptyShoppingCart().subscribe({
-            next: data => {
-              console.log(data)
-              console.log('EMPTY');
-            },
-            error: error => {
-              this.loading_purchase=false;
-              this.cdr.detectChanges();
-              console.error('There was an error while updating!', error.error);
-              if(error.error.error){
-                console.log(error)
-                this.errorMessage='Error: '+error.error.error;
-              } else {
-                this.errorMessage='There was an error while purchasing!';
-              }
-              this.showError=true;
-              setTimeout(() => {
-                this.showError = false;
-              }, 3000);
-            }
-          });
-          this.loading_purchase=false;
-          this.goToInventory();
-        },
-        error: error => {
-          this.loading_purchase=false;
-          this.cdr.detectChanges();
-          console.error('There was an error during purchase!', error);
-          if(error.error.error){
-            console.log(error)
-            this.errorMessage='Error: '+error.error.error;
-          } else {
-            this.errorMessage='There was an error while purchasing!';
-          }
-          this.showError=true;
-          setTimeout(() => {
-            this.showError = false;
-          }, 3000);
-        }
-      });
-    }*/
-
   async orderProduct() {
     console.log('buying');
     console.log(moment().utc());
@@ -318,6 +210,16 @@ export class CheckoutComponent implements OnInit {
   }
 
   private createProductPayload(item: any) {
+    let itemTotalPrice: any = [];
+    if (item.options.pricing.length > 0) {
+      itemTotalPrice = [{
+        productOfferingPrice: {
+          id: item.options.pricing[0].id,
+          href: item.options.pricing[0].id
+        }
+      }]
+    }
+
     return {
       id: item.id,
       action: 'add',
@@ -325,14 +227,7 @@ export class CheckoutComponent implements OnInit {
         id: item.id,
         href: item.id
       },
-      itemTotalPrice: [
-        {
-          productOfferingPrice: {
-            id: item.options.pricing[0].id,
-            href: item.options.pricing[0].id
-          }
-        }
-      ],
+      itemTotalPrice: itemTotalPrice,
       product: {
         productCharacteristic: item.options.characteristics
       }

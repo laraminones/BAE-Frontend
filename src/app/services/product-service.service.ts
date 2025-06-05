@@ -154,7 +154,25 @@ export class ApiServiceService {
     );
   }
 
-  getCategoryById(id:any){
+  async getDefaultCategories() {
+    let categories: any[] = [];
+    if (environment.DFT_CATALOG_ID && environment.DFT_CATALOG_ID !== '') {
+      // Return the default catalog categories
+      const catalog = await this.getCatalog(environment.DFT_CATALOG_ID);
+      if(catalog.category) {
+        categories = await Promise.all(catalog.category.map(async (category: any) => {
+          return this.getCategoryById(category.id)
+        }));
+      }
+    } else {
+      // Return all the launched categories
+      categories = await this.getLaunchedCategories();
+    }
+
+    return categories;
+  }
+
+  getCategoryById(id:any) {
     let url = `${ApiServiceService.BASE_URL}${ApiServiceService.API_PRODUCT}/category/${id}`;
 
     return lastValueFrom(this.http.get<any>(url));

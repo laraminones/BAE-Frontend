@@ -1,4 +1,4 @@
-import {Component, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, ChangeDetectorRef} from '@angular/core';
+import {Component, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, ChangeDetectorRef, SimpleChanges} from '@angular/core';
 import {CharacteristicComponent} from "../characteristic/characteristic.component";
 import {MarkdownComponent} from "ngx-markdown";
 import {components} from "../../models/product-catalog";
@@ -46,6 +46,7 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
   tsAndCs: ProductOfferingTerm;
   hasProfile: boolean = false;
   isCustom: boolean = false;
+  isFree: boolean = false;
   images: AttachmentRefOrValue[]  = [];
   toastVisibility: boolean = false;
   orderChars:any[]=[];
@@ -75,7 +76,15 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
     document.addEventListener('keydown', this.handleEscape.bind(this));
     // Configurar los términos y condiciones
     this.tsAndCs = this.productOff?.productOfferingTerm?.[0] || { description: '' };
-    if(this.tsAndCs.description==''){
+    this.isFree = this.productOff?.productOfferingPrice?.length === 0;
+
+    if (this.isFree) {
+      this.form.get('selectedPricePlan')?.setValue({});
+      this.characteristics = this.prodSpec.productSpecCharacteristic || [];
+      this.filterCharacteristics();
+    }
+
+    if(this.tsAndCs.description == ''){
       this.form.controls['tsAccepted'].setValue(true);
       this.cdr.detectChanges();
     }
@@ -90,6 +99,15 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
     }
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['prodSpec'] && this.isFree) {
+      this.characteristics = this.prodSpec.productSpecCharacteristic || [];
+      this.filterCharacteristics();
+
+      this.updateOrderChars();
+    }
+  }
+
   ngOnDestroy(): void {
     // Eliminar eventos de teclado al destruir el componente
     document.removeEventListener('keydown', this.handleEscape.bind(this));
@@ -101,22 +119,9 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
     this.closeDrawer.emit();
   }
 
-  // Handle price plan selection
-  onPricePlanSelected(pricePlan: any): void {
-    this.form.get('selectedPricePlan')?.setValue(pricePlan);
-
-    // Set chars based on selected price plan
-    this.isCustom = pricePlan.priceType === 'custom';
-    if (pricePlan.prodSpecCharValueUse) {
-      this.characteristics = pricePlan.prodSpecCharValueUse;
-      this.hasProfile = true;
-    } else {
-      this.characteristics = this.prodSpec.productSpecCharacteristic || [];
-      this.hasProfile = false;
-    }
-
-    this.filteredCharacteristics=[];
-    for(let i=0;i<this.characteristics.length;i++){
+  filterCharacteristics() {
+    this.filteredCharacteristics = [];
+    for(let i = 0; i < this.characteristics.length; i++){
       if (!certifications.some(certification => certification.name === this.characteristics[i].name)) {
         this.filteredCharacteristics.push(this.characteristics[i]);
       }
@@ -140,6 +145,23 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
     });
 
     this.form.setControl('characteristics', characteristicsGroup);
+  }
+
+  // Handle price plan selection
+  onPricePlanSelected(pricePlan: any): void {
+    this.form.get('selectedPricePlan')?.setValue(pricePlan);
+
+    // Set chars based on selected price plan
+    this.isCustom = pricePlan.priceType === 'custom';
+    if (pricePlan.prodSpecCharValueUse) {
+      this.characteristics = pricePlan.prodSpecCharValueUse;
+      this.hasProfile = true;
+    } else {
+      this.characteristics = this.prodSpec.productSpecCharacteristic || [];
+      this.hasProfile = false;
+    }
+
+    this.filterCharacteristics();
 
     this.selectedPricePlan = pricePlan;
     console.log(this.selectedPricePlan);
@@ -170,21 +192,18 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
   getValues(obj: any): any[] {
     return Object.values(obj);
   }
-  // Método para calcular el precio usando el servicio
-  calculatePrice(): void {
-    if (this.isCustom) {
-      return
-    }
 
-    const selectedPricePlan = this.form.get('selectedPricePlan')?.value;
+  updateOrderChars() {
     const selectedCharacteristics = this.form.get('characteristics')?.value;
+
     console.log('chars....')
     console.log(selectedCharacteristics)
     console.log('general chars...')
     console.log(this.filteredCharacteristics)
     console.log('keys of selected chars...')
     console.log(this.getKeys(selectedCharacteristics))
-    this.orderChars=[];
+
+    this.orderChars = [];
     for(let i=0; i<this.getKeys(selectedCharacteristics).length;i++){
       let idx = this.filteredCharacteristics.findIndex(item => item.id === this.getKeys(selectedCharacteristics)[i]);
       console.log(this.filteredCharacteristics[idx])
@@ -204,7 +223,22 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
         "valueType": valueType,
       })
     }
+  }
 
+  // Método para calcular el precio usando el servicio
+  calculatePrice(): void {
+    this.updateOrderChars();
+
+    if (this.isFree) {
+      this.price = [];
+      this.isLoading = false;
+    }
+
+    if (this.isCustom || this.isFree) {
+      return
+    }
+
+    const selectedPricePlan = this.form.get('selectedPricePlan')?.value;
     //PROD is an OrderItem
     let prod = {
       "id": this.productOff?.id,
@@ -225,6 +259,7 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
         "productCharacteristic": this.orderChars
       }
     }
+
     let orderItems = [];
     orderItems.push(prod);
 
@@ -261,52 +296,6 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
   getProductImage() {
     return this.images.length > 0 ? this.images?.at(0)?.url : 'https://placehold.co/600x400/svg';
   }
-
-  /*async createOrder() {
-    if (this.form.invalid) {
-      console.error('Form is invalid');
-      return;
-    }
-
-    const formValues = this.form.value;
-    const orderPayload = {
-      productId: this.productOff?.id,
-      pricePlan: formValues.selectedPricePlan,
-      characteristics: this.orderChars,
-      tsAccepted: formValues.tsAccepted,
-      priceSummary: this.price
-    };
-
-    let prodOptions = {
-      "id": this.productOff?.id,
-      "name":  this.productOff?.name,
-      "image": this.getProductImage(),
-      "href": this.productOff?.href,
-      "options": {
-        "characteristics": this.orderChars,
-        "pricing": this.price
-      },
-      "termsAccepted": formValues.tsAccepted
-    }
-
-    await this.cartService.addItemShoppingCart(prodOptions).subscribe({
-      next: data => {
-          console.log(data)
-          console.log('Update successful');
-      },
-      error: error => {
-          console.error('There was an error while updating!', error);
-      }
-    });
-    prodOptions.options.pricing=this.price
-    this.eventMessage.emitAddedCartItem(prodOptions as cartProduct);
-
-    console.log('Order Payload:', orderPayload);
-    this.onClose();
-    // Llamar al servicio para crear el pedido
-
-  }
-  */
 
   async createOrder() {
     if (this.form.invalid) {
