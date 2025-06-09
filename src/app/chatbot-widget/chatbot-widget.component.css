@@ -35,7 +35,7 @@
 /* CONTENT IS CLOSE */
 .chatbox__support {
     position: fixed;
-    bottom: 90px;  /* Spostato più in alto per evitare il pulsante */
+    bottom: 120px;  /* Spostato più in alto per evitare il pulsante */
     right: 20px;   /* Allineato con il pulsante */
     width: 80vw;
     max-width: 400px;
@@ -60,7 +60,7 @@
 /* BUTTON */
 .chatbox__button {
     position: fixed;
-    bottom: 20px;
+    bottom: 55px;
     right: 20px;
     z-index: 999;
 }
