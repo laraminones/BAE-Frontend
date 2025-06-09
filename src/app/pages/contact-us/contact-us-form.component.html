@@ -21,7 +21,9 @@
             <div>
                 <label for="email" class="font-bold text-lg dark:text-white">Email</label>
                 <input formControlName="email" type="text" id="email"
-                [ngClass]="(contactForm.get('email')?.invalid == true && contactForm.value.email!='') || (contactForm.get('email')?.touched && contactForm.value.email=='') ? 'border-red-600' : 'border-gray-300 dark:border-secondary-200'"
+                [ngClass]="contactForm.get('email')?.touched && contactForm.get('email')?.invalid
+                ? 'border-red-600'
+                : 'border-gray-300 dark:border-secondary-200'"  
                 class="mb-2 bg-gray-50 dark:bg-secondary-300 border dark:text-white text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
                 @if(contactForm.get('email')?.invalid && contactForm.get('email')?.errors?.['maxlength']){
                     <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">Email is too long. Must be less than 320 characters.</span></p>
@@ -29,31 +31,35 @@
                 @if(contactForm.get('email')?.invalid && contactForm.get('email')?.errors?.['pattern']){
                     <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">Email must follow the following format: example&#64;example.example</span></p>
                 }
-                @if(contactForm.get('email')?.invalid && contactForm.get('email')?.errors?.['required'] && (contactForm.get('email')?.touched && contactForm.value.email=='')){
+                @if(contactForm.get('email')?.touched && contactForm.get('email')?.hasError('required')){
                     <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">This field is mandatory.</span></p>
                 }
             </div>
             <div>
                 <label for="name" class="font-bold text-lg dark:text-white">First name</label>
                 <input formControlName="name" type="text" id="name"
-                [ngClass]="(contactForm.get('name')?.invalid == true && contactForm.value.name!='') || (contactForm.get('name')?.touched && contactForm.value.name=='') ? 'border-red-600' : 'border-gray-300 dark:border-secondary-200'"
+                [ngClass]="contactForm.get('name')?.touched && contactForm.get('name')?.invalid
+                ? 'border-red-600'
+                : 'border-gray-300 dark:border-secondary-200'"  
                 class="mb-2 bg-gray-50 dark:bg-secondary-300 border dark:text-white text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />        
                 @if(contactForm.get('name')?.invalid && contactForm.get('name')?.errors?.['maxlength']){
                     <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">This field is too long. Must be less than 100 characters.</span></p>
                 }
-                @if(contactForm.get('name')?.invalid && contactForm.get('name')?.errors?.['required'] && (contactForm.get('name')?.touched && contactForm.value.name=='')){
+                @if(contactForm.get('name')?.touched && contactForm.get('name')?.hasError('required')){
                     <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">This field is mandatory.</span></p>
                 }              
             </div>
             <div>
                 <label for="lastname" class="font-bold text-lg dark:text-white">Last name</label>
                 <input formControlName="lastname" type="text" id="lastname"
-                [ngClass]="(contactForm.get('lastname')?.invalid == true && contactForm.value.lastname!='') || (contactForm.get('lastname')?.touched && contactForm.value.lastname=='') ? 'border-red-600' : 'border-gray-300 dark:border-secondary-200'"
+                [ngClass]="contactForm.get('lastname')?.touched && contactForm.get('lastname')?.invalid
+                ? 'border-red-600'
+                : 'border-gray-300 dark:border-secondary-200'"              
                 class="mb-2 bg-gray-50 dark:bg-secondary-300 border dark:text-white text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />        
                 @if(contactForm.get('lastname')?.invalid && contactForm.get('lastname')?.errors?.['maxlength']){
                     <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">This field is too long. Must be less than 100 characters.</span></p>
                 }
-                @if(contactForm.get('lastname')?.invalid && contactForm.get('lastname')?.errors?.['required'] && (contactForm.get('lastname')?.touched && contactForm.value.lastname=='')){
+                @if(contactForm.get('lastname')?.touched && contactForm.get('lastname')?.hasError('required')){
                     <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">This field is mandatory.</span></p>
                 } 
             </div>
@@ -62,24 +68,28 @@
             <div>
                 <label for="organization" class="font-bold text-lg dark:text-white">Organization</label>
                 <input formControlName="organization" type="text" id="organization"
-                [ngClass]="(contactForm.get('organization')?.invalid == true && contactForm.value.organization!='') || (contactForm.get('organization')?.touched && contactForm.value.organization=='') ? 'border-red-600' : 'border-gray-300 dark:border-secondary-200'"
+                [ngClass]="contactForm.get('organization')?.touched && contactForm.get('organization')?.invalid
+                ? 'border-red-600'
+                : 'border-gray-300 dark:border-secondary-200'"  
                 class="mb-2 bg-gray-50 dark:bg-secondary-300 border dark:text-white text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />        
                 @if(contactForm.get('organization')?.invalid && contactForm.get('organization')?.errors?.['maxlength']){
                     <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">This field is too long. Must be less than 100 characters.</span></p>
                 }
-                @if(contactForm.get('organization')?.invalid && contactForm.get('organization')?.errors?.['required'] && (contactForm.get('organization')?.touched && contactForm.value.organization=='')){
+                @if(contactForm.get('organization')?.touched && contactForm.get('organization')?.hasError('required')){
                     <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">This field is mandatory.</span></p>
                 } 
             </div>
             <div>
                 <label for="role" class="font-bold text-lg dark:text-white">Role in organization</label>
                 <input formControlName="role" type="text" id="role"
-                [ngClass]="(contactForm.get('role')?.invalid == true && contactForm.value.role!='') || (contactForm.get('role')?.touched && contactForm.value.role=='') ? 'border-red-600' : 'border-gray-300 dark:border-secondary-200'"
+                [ngClass]="contactForm.get('role')?.touched && contactForm.get('role')?.invalid
+                ? 'border-red-600'
+                : 'border-gray-300 dark:border-secondary-200'"  
                 class="mb-2 bg-gray-50 dark:bg-secondary-300 border dark:text-white text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />        
                 @if(contactForm.get('role')?.invalid && contactForm.get('role')?.errors?.['maxlength']){
                     <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">This field is too long. Must be less than 100 characters.</span></p>
                 }
-                @if(contactForm.get('role')?.invalid && contactForm.get('role')?.errors?.['required'] && (contactForm.get('role')?.touched && contactForm.value.role=='')){
+                @if(contactForm.get('role')?.touched && contactForm.get('role')?.hasError('required')){
                     <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">This field is mandatory.</span></p>
                 } 
             </div>
@@ -87,9 +97,11 @@
         <div>
             <label for="organization" class="font-bold text-lg dark:text-white">Message</label>
             <textarea id="editor" formControlName="message" rows="8" 
-            [ngClass]="(contactForm.get('message')?.invalid == true && contactForm.value.message!='') || (contactForm.get('message')?.touched && contactForm.value.message=='') ? 'border-red-600' : 'border-gray-300 dark:border-secondary-200'"
+            [ngClass]="contactForm.get('message')?.touched && contactForm.get('message')?.invalid
+            ? 'border-red-600'
+            : 'border-gray-300 dark:border-secondary-200'"  
             class="block w-full min-h-fit rounded-lg px-2 text-sm text-gray-800 dark:text-gray-200 border bg-white dark:bg-secondary-300" placeholder="Add product description..." ></textarea>
-            @if(contactForm.get('message')?.invalid && contactForm.get('message')?.errors?.['required'] && (contactForm.get('message')?.touched && contactForm.value.message=='')){
+            @if(contactForm.get('message')?.touched && contactForm.get('message')?.hasError('required')){
                 <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">This field is mandatory.</span></p>
             }
         </div>
@@ -113,5 +125,28 @@
         </button>       
 
     </form>
+</div>
+@if(showThanksMessage){
+<div class="fixed inset-0 flex items-center justify-center z-40">
+    <div id="details-modal" tabindex="-1" aria-hidden="true" class="flex justify-center overflow-x-hidden justify-center items-center w-1/2 md:inset-0 h-full max-h-full rounded-lg  $event.stopPropagation();">
+        <div class="relative w-full max-w-7xl max-h-full rounded-t-lg" (click)="$event.stopPropagation();">
+            <!-- Modal content -->
+            <div class="relative sm:m-8 bg-white rounded-lg shadow dark:border-gray-600 dark:bg-secondary-100 bg-cover bg-right-bottom rounded-lg overflow-y-auto max-h-[calc(100vh-10rem)]">
+              <button type="button" (click)="hide();$event.stopPropagation();" class="absolute top-4 right-4 z-50 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="details-modal">
+                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                </svg>
+                <span class="sr-only">{{ 'CARD._close' | translate }}</span>
+              </button>
+
+                <div class="w-full mb-4 rounded-t-lg p-8">
+                    
+                    <fa-icon [icon]="faHandsHoldingHeart" class="text-5xl text-primary-50 align-middle mr-2"></fa-icon>
+                    <h5 class="md:text-3xl lg:text-4xl mt-2 font-semibold tracking-tight text-secondary-100 dark:text-white text-wrap break-all">Thank you for contacting DOME Marketplace.</h5>
     
+                </div>
+        </div>
+      </div>
     </div>
+</div> 
+}
