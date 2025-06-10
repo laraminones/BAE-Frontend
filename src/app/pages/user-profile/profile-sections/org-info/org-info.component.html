@@ -515,7 +515,22 @@
 
 
 @if (successVisibility) {
-    <div id="toast-success" class="flex grid grid-flow-row mr-2 items-center w-auto max-w-xs p-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800 fixed top-1/2 right-0 z-50 justify-center" role="alert">
+    <div class="flex justify-center items-center fixed w-fit top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50" >
+        <div id="alert-additional-content-2" class="p-4 mb-4 text-white rounded-lg bg-primary-100" role="alert">
+            <div class="flex items-center">
+              <svg class="flex-shrink-0 w-4 h-4 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+              </svg>
+              <h3 class="text-lg font-medium">Update success</h3>
+            </div>
+            <div class="mt-2 mb-4 text-sm pr-8 pl-8">
+                {{ 'PROFILE._success' | translate }}.
+            </div>
+        </div>
+    </div>
+
+
+    <!--<div id="toast-success" class="flex grid grid-flow-row mr-2 items-center w-auto max-w-xs p-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800 fixed top-1/2 right-0 z-50 justify-center" role="alert">
       <div class="flex items-center justify-center">         
         <div class="text-sm font-normal">
           {{ 'PROFILE._success' | translate }}.
@@ -529,5 +544,5 @@
           </button>
         </div>
       </div>
-    </div>
+    </div>-->
 }
