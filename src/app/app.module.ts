@@ -86,6 +86,14 @@ import { MultipleSelectComponent } from './shared/multiple-select/multiple-selec
 import {CharacteristicComponent} from "./shared/characteristic/characteristic.component";
 import {PricePlanDrawerComponent} from "./shared/price-plan-drawer/price-plan-drawer.component";
 import {OfferComponent} from "./shared/forms/offer/offer.component";
+import { ThemeService } from './services/theme.service';
+import { ThemeAwareTranslateLoader } from './services/theme-aware-translate.loader';
+
+// Función Factory requerida para crear el cargador con sus dependencias
+export function createThemeAwareLoader(http: HttpClient, themeService: ThemeService) {
+  return new ThemeAwareTranslateLoader(http, themeService);
+}
+
 
 @NgModule({
   declarations: [
@@ -168,8 +176,8 @@ import {OfferComponent} from "./shared/forms/offer/offer.component";
             defaultLanguage: 'en',
             loader: {
                 provide: TranslateLoader,
-                useFactory: HttpLoaderFactory,
-                deps: [HttpClient]
+                useFactory: (createThemeAwareLoader),
+                deps: [HttpClient, ThemeService]
             }
         }),
         CategoriesPanelComponent,

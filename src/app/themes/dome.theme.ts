@@ -13,6 +13,11 @@ export const DOME_THEME_CONFIG: ThemeConfig = {
     linkedin: environment.DOME_LINKEDIN,
     youtube: environment.DOME_YOUTUBE,
     twitter: environment.DOME_X,
+  },
+  dashboard: {
+    title: 'Digital Trust to move forward',
+    subtitle: 'Join the first open distributed marketplace ecosystem for cloud, edge & AI services in Europe.',
+    showFeaturedOfferings: true,
+    showPlatformBenefits: true,
   }
-  // colors: { primary: '#FF6F00' }
 };

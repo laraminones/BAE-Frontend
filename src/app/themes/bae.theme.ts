@@ -14,6 +14,11 @@ export const BAE_THEME_CONFIG: ThemeConfig = {
     linkedin: 'https://linkedin.com/company/ocean-theme-example',
     youtube: 'https://youtube.com/c/ocean-theme-example',
     twitter: 'https://twitter.com/ocean-theme-example',
+  },
+  dashboard: {
+    title: 'The Trusted Data Space Marketplace',
+    subtitle: 'The FIWARE BAE Marketplace leverages the FIWARE Data Space Connector to share data and services in the cloud, edge and AI.',
+    showFeaturedOfferings: true,
+    showPlatformBenefits: false,
   }
-  // colors: { primary: '#0077cc' }
 };

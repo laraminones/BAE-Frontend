@@ -30,6 +30,14 @@ export interface ThemeAuthUrlsConfig {
   // Other possible URLs..
 }
 
+export interface DashboardConfig {
+  title?: string;
+  subtitle?: string;
+  showFeaturedOfferings?: boolean;
+  showPlatformBenefits?: boolean;
+  // Add more sections
+}
+
 
 export interface ThemeConfig {
   name: string; // Theme Id, ej: 'DOME', 'OCEAN'
@@ -39,5 +47,6 @@ export interface ThemeConfig {
   links?: ThemeLinkConfig;
   authUrls?: ThemeAuthUrlsConfig;
   colors?: ThemeColorsConfig;
+  dashboard?: DashboardConfig;
   // More theme specific propierties
 }

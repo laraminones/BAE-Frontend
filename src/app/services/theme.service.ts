@@ -1,8 +1,8 @@
-import { Injectable, Renderer2, RendererFactory2, Inject, PLATFORM_ID } from '@angular/core';
+import {Injectable, Renderer2, RendererFactory2, Inject, PLATFORM_ID, Injector} from '@angular/core';
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ThemeConfig, AVAILABLE_THEMES } from '../themes';
-import { environment } from '../../environments/environment'; // Para obtener el tema del proveedor
+import {TranslateService} from "@ngx-translate/core";
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +19,8 @@ export class ThemeService {
   constructor(
     private rendererFactory: RendererFactory2,
     @Inject(DOCUMENT) private document: Document,
-    @Inject(PLATFORM_ID) private platformId: Object
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private injector: Injector
   ) {
     this.renderer = this.rendererFactory.createRenderer(null, null);
     this.currentThemeSubject = new BehaviorSubject<ThemeConfig | null>(null);
@@ -76,12 +77,41 @@ export class ThemeService {
       const oldTheme = this.currentThemeSubject.value;
       this.applyThemeClassToBody(themeToApply.name, oldTheme?.name);
       this.currentThemeSubject.next(themeToApply);
+
+      try {
+        const translateService = this.injector.get(TranslateService);
+        if (translateService.currentLang) {
+          translateService.reloadLang(translateService.currentLang);
+        }
+      } catch (e) {
+        console.error('No se pudo obtener TranslateService. ¿Está importado el TranslateModule correctamente?', e);
+      }
+
+
     } else {
       console.error("ThemeService: No se pudo determinar un tema para aplicar.");
       // Aquí podría ser útil aplicar una clase de 'error-theme' o similar
       // para indicar visualmente que algo falló con la tematización.
     }
   }
+
+  private findTheme(providerThemeName?: string): ThemeConfig | undefined {
+    let themeToApply: ThemeConfig | undefined;
+
+    if (providerThemeName) {
+      themeToApply = this.availableThemes.find(t => t.name.toLowerCase() === providerThemeName.toLowerCase());
+      if (!themeToApply) {
+        console.warn(`ThemeService: El tema del proveedor '${providerThemeName}' no se encontró. Usando el tema por defecto.`);
+      }
+    }
+
+    if (!themeToApply) {
+      themeToApply = this.defaultTheme;
+    }
+
+    return themeToApply;
+  }
+
 
   /**
    * Obtiene la configuración completa del tema actualmente activo.
