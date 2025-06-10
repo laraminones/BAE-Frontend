@@ -1,7 +1,13 @@
+@import '@ctrl/ngx-emoji-mart/picker';
+@import 'app/themes/dome.theme.scss';
+@import 'app/themes/bae.theme.scss';
+
 /* You can add global styles to this file, and also import other style files */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
 
 @layer base {
   html {
@@ -9,7 +15,8 @@
   }
 }
 
-@import '@ctrl/ngx-emoji-mart/picker';
+
+
 
 :root {
   /* Default light mode colors */
@@ -197,13 +204,13 @@ markdown a:hover {
 
 /* Autofill background configuration */
 :root {
-  --autofill-bg-light: #f0f0f0;  
-  --autofill-text-light: #000000; 
+  --autofill-bg-light: #f0f0f0;
+  --autofill-text-light: #000000;
 }
 
 [data-theme='dark'] {
-  --autofill-bg-dark: #182740;  
-  --autofill-text-dark: #ffffff; 
+  --autofill-bg-dark: #182740;
+  --autofill-text-dark: #ffffff;
 }
 
 input:-webkit-autofill {
