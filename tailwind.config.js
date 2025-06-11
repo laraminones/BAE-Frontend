@@ -14,14 +14,14 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          50: 'var(--theme-primary-50)',   // Antes '#00add3'
-          100: 'var(--theme-primary-100)', // Antes '#2d58a7'
+          50: 'rgb(var(--theme-primary-50) / <alpha-value>)',   // Antes '#00add3'
+          100: 'rgb(var(--theme-primary-100) / <alpha-value>)', // Antes '#2d58a7'
         },
         secondary: {
-          50: 'var(--theme-secondary-50)',  // Antes '#dde6f6'
-          100: 'var(--theme-secondary-100)',// Antes '#14274a'
-          200: 'var(--theme-secondary-200)',// Antes '#0c1c38'
-          300: 'var(--theme-secondary-300)',// Antes '#182740'
+          50: 'rgb(var(--theme-secondary-50) / <alpha-value>)',  // Antes '#dde6f6'
+          100: 'rgb(var(--theme-secondary-100) / <alpha-value>)',// Antes '#14274a'
+          200: 'rgb(var(--theme-secondary-200) / <alpha-value>)',// Antes '#0c1c38'
+          300: 'rgb(var(--theme-secondary-300) / <alpha-value>)',// Antes '#182740'
         },
         // Puedes añadir más colores temáticos aquí si es necesario
         // Ejemplo:

@@ -31,8 +31,6 @@ export interface ThemeAuthUrlsConfig {
 }
 
 export interface DashboardConfig {
-  title?: string;
-  subtitle?: string;
   showFeaturedOfferings?: boolean;
   showPlatformBenefits?: boolean;
   // Add more sections
