@@ -29,7 +29,7 @@ import * as uuid from 'uuid';
 import { TranslateService } from '@ngx-translate/core';
 import {ShoppingCartServiceService} from "../../services/shopping-cart-service.service";
 import {ThemeService} from "../../services/theme.service";
-import {ThemeAuthUrlsConfig, ThemeConfig, ThemeLinkConfig} from "../../themes";
+import {NavLink, ThemeAuthUrlsConfig, ThemeConfig, ThemeLinkConfig} from "../../themes";
 
 @Component({
   selector: 'bae-header',
@@ -91,7 +91,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, DoCheck, OnDestro
 
   currentTheme: ThemeConfig | null = null;
   private themeSubscription: Subscription = new Subscription();
-  public themeLinks: ThemeLinkConfig | undefined;
+  public headerLinks: NavLink[] = [];
   public themeAuthUrls: ThemeAuthUrlsConfig | undefined;
 
 
@@ -145,7 +145,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, DoCheck, OnDestro
 
     this.themeSubscription = this.themeService.currentTheme$.subscribe(theme => {
       this.currentTheme = theme;
-      this.themeLinks = theme?.links;
+      this.headerLinks = theme?.links?.headerLinks || [];
       this.themeAuthUrls = theme?.authUrls;
       // Podrías hacer más cosas aquí cuando el tema cambia si es necesario
     });

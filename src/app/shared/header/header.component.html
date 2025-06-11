@@ -11,63 +11,44 @@
       <div class="hidden w-full lg:block lg:w-auto bg-primary-100 dark:bg-secondary-100 rounded-lg align-items-middle">
         <ul class="flex flex-col font-medium p-4 lg:p-0 rounded-lg lg:text-white lg:flex-row lg:space-x-8 lg:mt-0 lg:border-0">
 
-          <li>
-            <a data-cy="publishOffering" id="verifyDropdown" data-dropdown-toggle="verifyDropdownMenu" class="block cursor-pointer py-2 pl-3 pr-4 text-white rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-secondary-50 lg:p-0 dark:text-white lg:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent" aria-current="page">{{ 'HEADER._verify' | translate }}</a>
-          </li>
-          <!-- Dropdown menu -->
-          <div id="verifyDropdownMenu" class="z-10 hidden bg-secondary-50 divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-            <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="verifyDropdown">
-                <li>
-                  <a href="{{knowledge_onboarding}}" target="_blank"  class="flex w-full justify-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                    {{ 'HEADER._guidelines' | translate }}
-                  </a>
-                </li>
-                <li>
-                  <a href="{{registration}}" target="_blank"  class="flex w-full justify-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                    {{ 'HEADER._registration' | translate }}
-                  </a>
-                </li>
-                <li>
-                  <a href="{{knowledge_guidelines}}" target="_blank"  class="flex w-full justify-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                    {{ 'HEADER._guideline_publish' | translate }}
-                  </a>
-                </li>
-            </ul>
-          </div>
+          <!-- Bucle dinámico para generar la navegación -->
+          <ng-container *ngFor="let link of headerLinks">
+            <li>
+              <!-- CASO 1: El enlace es un MENÚ DESPLEGABLE (tiene 'children') -->
+              <ng-container *ngIf="link.children && link.children.length > 0; else simpleLink">
+                <button [id]="link.id" [attr.data-dropdown-toggle]="link.id + 'Menu'" class="block cursor-pointer py-2 pl-3 pr-4 text-white rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-secondary-50 lg:p-0 dark:text-white lg:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent" aria-current="page">
+                  {{ link.label | translate }}
+                </button>
+                <!-- Menú desplegable -->
+                <div [id]="link.id + 'Menu'" class="z-10 hidden bg-secondary-50 divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                  <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" [attr.aria-labelledby]="link.id!">
+                    <li *ngFor="let childLink of link.children">
+                      <!-- Enlace externo -->
+                      <a *ngIf="!childLink.isRouterLink" [href]="childLink.url" target="_blank" class="flex w-full justify-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                        {{ childLink.label | translate }}
+                      </a>
+                      <!-- Enlace interno (botón que navega) -->
+                      <button *ngIf="childLink.isRouterLink" (click)="goTo(childLink.url!)" class="flex w-full justify-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                        {{ childLink.label | translate }}
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </ng-container>
 
-          <li data-cy="browse">
-            <a id="searchDropdown" data-dropdown-toggle="searchDropdownMenu" class="block cursor-pointer py-2 pl-3 pr-4 text-white rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-secondary-50 lg:p-0 dark:text-white lg:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent" aria-current="page">{{ 'HEADER._browse' | translate }}</a>
-          </li>
-
-          <!-- Dropdown menu -->
-          <div id="searchDropdownMenu" class="z-10 hidden bg-secondary-50 divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-            <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="searchDropdown">
-                <li>
-                  <button (click)="goTo('/search')" class="flex w-full justify-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                    {{ 'HEADER._services' | translate }}
-                  </button>
-                </li>
-                <li>
-                  <button (click)="goTo('/catalogues')" class="flex w-full justify-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                    {{ 'HEADER._catalogs' | translate }}
-                  </button>
-                </li>
-            </ul>
-          </div>
-
-          <li data-cy="about">
-            <a href="{{domeAbout}}" target="_blank" class="block py-2 pl-3 pr-4 text-white rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-secondary-50 lg:p-0 dark:text-white lg:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent">{{ 'HEADER._about' | translate }}</a>
-          </li>
-
-          <!--<li>
-            <button data-dropdown-toggle="support-dropdown" data-dropdown-placement="bottom-end" class="block py-2 pl-3 pr-4 text-white rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-secondary-50 lg:p-0 dark:text-white lg:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent" aria-current="page">{{ 'HEADER._support' | translate }}</button>
-          </li>-->
-          <li>
-            <a href="{{domeRegister}}" class="sm:block lg:hidden cursor-pointer py-2 pl-3 pr-4 text-white rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-secondary-50 lg:p-0 dark:text-white lg:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent" aria-current="page">{{ 'HEADER._register' | translate }}</a>
-          </li>
-          <li>
-            <a (click)="onLoginClick()" class="sm:block lg:hidden cursor-pointer py-2 pl-3 pr-4 text-white rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-secondary-50 lg:p-0 dark:text-white lg:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent" aria-current="page">Login</a>
-          </li>
+              <!-- CASO 2: El enlace es SIMPLE (no tiene 'children') -->
+              <ng-template #simpleLink>
+                <!-- Enlace externo -->
+                <a *ngIf="!link.isRouterLink" [href]="link.url" target="_blank" class="block py-2 pl-3 pr-4 text-white rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-secondary-50 lg:p-0 dark:text-white lg:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent">
+                  {{ link.label | translate }}
+                </a>
+                <!-- Enlace interno -->
+                <a *ngIf="link.isRouterLink" [routerLink]="link.url" class="block py-2 pl-3 pr-4 text-white rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-secondary-50 lg:p-0 dark:text-white lg:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent">
+                  {{ link.label | translate }}
+                </a>
+              </ng-template>
+            </li>
+          </ng-container>
         </ul>
       </div>
 

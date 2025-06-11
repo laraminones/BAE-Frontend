@@ -1,5 +1,39 @@
-import { ThemeConfig } from './theme.interfaces';
+import {NavLink, ThemeConfig} from './theme.interfaces';
 import { environment } from '../../environments/environment';
+
+const domeHeaderLinks: NavLink[] = [
+  {
+    label: 'HEADER._verify',
+    id: 'verifyDropdown', // ID para el toggle de Flowbite
+    children: [
+      { label: 'HEADER._guidelines', url: environment.KB_ONBOARDING_GUIDELINES_URL, isRouterLink: false },
+      { label: 'HEADER._registration', url: environment.REGISTRATION_FORM_URL, isRouterLink: false },
+      { label: 'HEADER._guideline_publish', url: environment.KB_GUIDELNES_URL, isRouterLink: false }
+    ]
+  },
+  {
+    label: 'HEADER._browse',
+    id: 'searchDropdown', // ID para el toggle de Flowbite
+    children: [
+      { label: 'HEADER._services', url: '/search', isRouterLink: true },
+      { label: 'HEADER._catalogs', url: '/catalogues', isRouterLink: true }
+    ]
+  },
+  {
+    label: 'HEADER._about',
+    url: environment.DOME_ABOUT_LINK,
+    isRouterLink: false
+  }
+];
+
+
+const domeFooterLinks: NavLink[] = [
+  { label: 'FOOTER._privacy', url: 'assets/documents/privacy.pdf', isRouterLink: false },
+  { label: 'FOOTER._cookies', url: 'assets/documents/cookies.pdf', isRouterLink: false },
+  { label: 'FOOTER._licensing', url: 'assets/documents/terms.pdf', isRouterLink: false },
+  { label: 'FOOTER._contact', url: '/contact-us', isRouterLink: true },
+];
+
 
 export const DOME_THEME_CONFIG: ThemeConfig = {
   name: 'DOME',
@@ -10,9 +44,14 @@ export const DOME_THEME_CONFIG: ThemeConfig = {
     cardDefaultBgUrl: 'assets/themes/dome/cardBackground.png'
   },
   links: {
+    headerLinks: domeHeaderLinks,
+    footerLinks: domeFooterLinks,
+
     linkedin: environment.DOME_LINKEDIN,
     youtube: environment.DOME_YOUTUBE,
     twitter: environment.DOME_X,
+    privacyPolicy: 'assets/documents/privacy.pdf',
+
   },
   dashboard: {
     showFeaturedOfferings: true,

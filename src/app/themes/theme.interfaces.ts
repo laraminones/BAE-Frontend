@@ -7,15 +7,33 @@ export interface ThemeAssetConfig {
   // other specific theme assets
 }
 
+export interface NavLink {
+  label: string; // Text to be shown, ie. 'About Us', 'Contact'
+  id?: string; // dropdown ID, ie: 'browseDropdown'
+
+  // simple link
+  url?: string;   // URL or router link
+  isRouterLink?: boolean; // true if routerLink, false if external link
+
+  // Dropdown menu links
+  children?: NavLink[];
+
+  icon?: string; // Optional: icon next to the link
+}
+
 export interface ThemeLinkConfig {
+  headerLinks?: NavLink[];
+  footerLinks?: NavLink[];
+
+  // Social networks
   linkedin?: string;
   youtube?: string;
   twitter?: string;
+
   // Add more theme specific links
   privacyPolicy?: string;
   termsOfService?: string;
   contactUs?: string;
-
 }
 
 export interface ThemeColorsConfig {

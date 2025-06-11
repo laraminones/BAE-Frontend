@@ -64,6 +64,6 @@ export const environment = {
     BUNDLE_ENABLED: false,
     DFT_CATALOG_ID: '',
     MAX_FILE_SIZE:3145728,
-    providerThemeName: 'BAE'
+    providerThemeName: 'DOME'
 
 };

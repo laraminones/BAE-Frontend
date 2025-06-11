@@ -1,5 +1,22 @@
-import { ThemeConfig } from './theme.interfaces';
-// Si este tema no usa 'environment' para los enlaces, no necesitas importarlo aquí.
+import {NavLink, ThemeConfig} from './theme.interfaces';
+import {environment} from "../../environments/environment";
+
+const baeHeaderLinks: NavLink[] = [
+  {
+    label: 'HEADER._home',
+    url: '/',
+    isRouterLink: true
+  },
+  {
+    label: 'HEADER._browse',
+    id: 'searchDropdown', // ID para el toggle de Flowbite
+    children: [
+      { label: 'HEADER._services', url: '/search', isRouterLink: true },
+      { label: 'HEADER._catalogs', url: '/catalogues', isRouterLink: true }
+    ]
+  }
+  ];
+
 
 export const BAE_THEME_CONFIG: ThemeConfig = {
   name: 'BAE',
@@ -11,6 +28,8 @@ export const BAE_THEME_CONFIG: ThemeConfig = {
     cardDefaultBgUrl: 'assets/themes/bae/cardBackground.svg'
   },
   links: {
+    headerLinks: baeHeaderLinks,
+
     linkedin: 'https://linkedin.com/company/ocean-theme-example',
     youtube: 'https://youtube.com/c/ocean-theme-example',
     twitter: 'https://twitter.com/ocean-theme-example',
