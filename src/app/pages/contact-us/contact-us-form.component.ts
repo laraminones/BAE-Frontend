@@ -1,5 +1,6 @@
 import {Component, HostListener, OnInit, ChangeDetectorRef} from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
+import {faHandsHoldingHeart} from "@fortawesome/pro-solid-svg-icons";
 
 @Component({
   selector: 'app-contact-us-form',
@@ -17,8 +18,11 @@ export class ContactUsFormComponent implements OnInit {
     message: new FormControl('', [Validators.required]),
   });
 
+  protected readonly faHandsHoldingHeart = faHandsHoldingHeart;
+
   dataControllerDome:any='https://dome-project.eu/about/#partners';
   DPA:any='https://dome-marketplace-sbx.org/assets/documents/privacy.pdf';
+  showThanksMessage:boolean=false;
   
   ngOnInit() {
   }
@@ -33,8 +37,24 @@ export class ContactUsFormComponent implements OnInit {
 
     const mailtoLink = `mailto:info@dome-marketplace.eu?body=${message}`;
     
+    this.showThanksMessage=true;
     // Open the mailto link
     window.location.href = mailtoLink;
+    this.resetContactForm();
   }
 
+  hide(){
+    this.showThanksMessage=false;
+  }
+  resetContactForm(): void {
+    this.contactForm.reset();
+  
+    Object.values(this.contactForm.controls).forEach(control => {
+      control.setErrors(null); // clear errors
+      control.markAsPristine();
+      control.markAsUntouched();
+      control.updateValueAndValidity({ onlySelf: true, emitEvent: false });
+    });
+  }
+  
 }

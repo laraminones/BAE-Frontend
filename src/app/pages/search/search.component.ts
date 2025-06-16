@@ -36,6 +36,7 @@ export class SearchComponent implements OnInit {
   keywords:any=undefined;
   searchField = new FormControl();
   showPanel = false;
+  feedback:boolean=false;
 
   constructor(
     private api: ApiServiceService,
@@ -49,6 +50,11 @@ export class SearchComponent implements OnInit {
     this.eventMessage.messages$.subscribe(ev => {
       if(ev.type === 'AddedFilter' || ev.type === 'RemovedFilter') {
         this.checkPanel();
+      }
+    })
+    this.eventMessage.messages$.subscribe(ev => {
+      if(ev.type === 'CloseFeedback') {
+        this.feedback = false;
       }
     })
   } 
@@ -85,7 +91,15 @@ export class SearchComponent implements OnInit {
           await this.getProducts(false);
         }
       });
-    }    
+    }
+    setTimeout(() => {
+      const userInfo = this.localStorage.getObject('login_items') as LoginInfo;
+
+      // The user is logged in
+      if ((JSON.stringify(userInfo) != '{}' && (((userInfo.expire - moment().unix())-4) > 0))) {
+        this.feedback = true;
+      }
+    });
   }
 
   @HostListener('document:click')

@@ -39,6 +39,7 @@ export class UserInfoComponent implements OnInit {
 
   errorMessage:any='';
   showError:boolean=false;
+  successVisibility:boolean=false;
 
   constructor(
     private localStorage: LocalStorageService,
@@ -115,6 +116,11 @@ export class UserInfoComponent implements OnInit {
     this.accountService.updateUserInfo(this.partyId,profile).subscribe({
       next: data => {
         this.userProfileForm.reset();
+        this.getProfile();
+        this.successVisibility = true;
+        setTimeout(() => {
+          this.successVisibility = false
+        }, 2000);       
         this.getProfile();        
       },
       error: error => {

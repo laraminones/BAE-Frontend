@@ -148,6 +148,20 @@ export class BillingAccountFormComponent implements OnInit {
     this.cdr.detectChanges()
   }
 
+  resetBillingForm(): void {
+    this.billingForm.reset({
+      telephoneType: 'Mobile'
+    });
+    
+  
+    Object.values(this.billingForm.controls).forEach(control => {
+      control.setErrors(null); // clear errors
+      control.markAsPristine();
+      control.markAsUntouched();
+      control.updateValueAndValidity({ onlySelf: true, emitEvent: false });
+    });
+  }
+
   createBilling() {
     let aux = this.localStorage.getObject('login_items') as LoginInfo;
 
@@ -224,7 +238,7 @@ export class BillingAccountFormComponent implements OnInit {
       this.accountService.postBillingAccount(billacc).subscribe({
         next: data => {
           this.eventMessage.emitBillAccChange(true);
-          this.billingForm.reset();
+          this.resetBillingForm();
         },
         error: error => {
           console.error('There was an error while creating!', error);
@@ -323,7 +337,7 @@ export class BillingAccountFormComponent implements OnInit {
         this.accountService.updateBillingAccount(this.billAcc.id, bill_body).subscribe({
           next: data => {
             this.eventMessage.emitBillAccChange(false);
-            this.billingForm.reset();
+            this.resetBillingForm();
           },
           error: error => {
             console.error('There was an error while updating!', error);

@@ -7,11 +7,13 @@
       </ng-container>
     </div>
 
-    <!-- Footer Links Dinámicos -->
+    <!-- Dynamic Footer Links -->
     <ul class="flex flex-wrap items-center text-sm font-medium text-gray-500 dark:text-gray-400">
-      <li>
-        <button (click)="feedback=!feedback;$event.stopPropagation();" class="mr-4 hover:underline md:mr-6">Feedback</button>
-      </li>
+      @if(checkLogged){
+        <li>
+          <button (click)="feedback=!feedback;$event.stopPropagation();" class="mr-4 hover:underline md:mr-6">Feedback</button>
+        </li>
+      }
       <li *ngFor="let link of footerLinks">
         <!-- Enlace externo (ej. a un PDF o web externa) -->
         <a *ngIf="!link.isRouterLink" [href]="link.url" target="_blank" class="mr-4 hover:underline md:mr-6">
@@ -22,11 +24,17 @@
           {{ link.label | translate }}
         </a>
       </li>
+      <li>
+        <a (click)="goTo('/contact-us')" target="_blank" class="hover:underline cursor-pointer">{{ 'FOOTER._contact' | translate }}</a>
+      </li>
     </ul>
   </div>
 </footer>
 
 @if(feedback){
-  <feedback-modal class="fixed inset-0 flex items-center justify-center z-40"></feedback-modal>
-
+  <feedback-modal
+  rateMessage="How would you rate your overall experience with DOME?"
+  writeMessage="How can we improve DOME?"
+  type="experience"
+  class="fixed inset-0 flex items-center justify-center z-40"></feedback-modal>
 }

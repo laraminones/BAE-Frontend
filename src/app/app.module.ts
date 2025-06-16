@@ -94,6 +94,7 @@ export function createThemeAwareLoader(http: HttpClient, themeService: ThemeServ
   return new ThemeAwareTranslateLoader(http, themeService);
 }
 
+import {AboutDomeComponent} from "src/app/pages/about-dome/about-dome.component"
 
 @NgModule({
   declarations: [
@@ -187,7 +188,8 @@ export function createThemeAwareLoader(http: HttpClient, themeService: ThemeServ
         MatomoRouterModule,
         CharacteristicComponent,
         PricePlanDrawerComponent,
-        OfferComponent
+        OfferComponent,
+        AboutDomeComponent
     ],
   providers: [
     AppInitService,

@@ -53,7 +53,7 @@ const STANDALONE_IMPORTS = [
   ],
   providers:[
     DatePipe,
-    TranslateService // Ojo: Si el servicio ya se provee en root (AppModule), puede que no necesites esto aquí.
+    TranslateService
   ]
 })
 export class SharedModule { }
