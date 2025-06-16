@@ -76,6 +76,7 @@ export class CardComponent implements OnInit, AfterViewInit {
 
   selectedPricePlanId: string | null = null;
   selectedPricePlan:any = null;
+  showQuoteModal:boolean=false;
 
 
 
@@ -130,6 +131,9 @@ export class CardComponent implements OnInit, AfterViewInit {
         this.closeCats=false;
       }
       this.cdr.detectChanges();
+    }
+    if(this.showQuoteModal=true){
+      this.showQuoteModal=false;
     }
     if(this.cartSelection==true){
       this.cartSelection=false;
@@ -613,6 +617,13 @@ async deleteProduct(product: Product | undefined){
 
   closeDrawer(): void {
     this.isDrawerOpen = false;
+  }
+
+  toggleQuoteModal(){
+    //Hides details modal
+    this.showModal=false;
+    //Show quote modal
+    this.showQuoteModal=true;
   }
 
   protected readonly JSON = JSON;
