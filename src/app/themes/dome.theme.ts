@@ -21,8 +21,8 @@ const domeHeaderLinks: NavLink[] = [
   },
   {
     label: 'HEADER._about',
-    url: environment.DOME_ABOUT_LINK,
-    isRouterLink: false
+    url: '/about',
+    isRouterLink: true
   }
 ];
 
