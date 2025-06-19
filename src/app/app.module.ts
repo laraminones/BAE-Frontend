@@ -87,6 +87,7 @@ import {CharacteristicComponent} from "./shared/characteristic/characteristic.co
 import {PricePlanDrawerComponent} from "./shared/price-plan-drawer/price-plan-drawer.component";
 import {OfferComponent} from "./shared/forms/offer/offer.component";
 import {AboutDomeComponent} from "src/app/pages/about-dome/about-dome.component"
+import { QuotesModule } from "src/app/features/quotes/quotes.module"
 
 @NgModule({
   declarations: [
@@ -164,6 +165,7 @@ import {AboutDomeComponent} from "src/app/pages/about-dome/about-dome.component"
         PickerComponent,
         NgxFileDropModule,
         ChatbotWidgetComponent,
+        QuotesModule,
         MarkdownModule.forRoot(),
         TranslateModule.forRoot({
             defaultLanguage: 'en',

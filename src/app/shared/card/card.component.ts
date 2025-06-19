@@ -77,6 +77,7 @@ export class CardComponent implements OnInit, AfterViewInit {
   selectedPricePlanId: string | null = null;
   selectedPricePlan:any = null;
   showQuoteModal:boolean=false;
+  customerId:string='';
 
 
 
@@ -117,6 +118,10 @@ export class CardComponent implements OnInit, AfterViewInit {
 
           this.cdr.detectChanges();
         }
+        if(ev.type === 'CloseQuoteRequest'){
+          this.showQuoteModal=false;
+          this.cdr.detectChanges();
+        }
       })
     }
 
@@ -152,6 +157,7 @@ export class CardComponent implements OnInit, AfterViewInit {
     let aux = this.localStorage.getObject('login_items') as LoginInfo;
     if(JSON.stringify(aux) != '{}' && (((aux.expire - moment().unix())-4) > 0)) {
       this.check_logged=true;
+      this.customerId=aux.partyId;
       this.cdr.detectChanges();
     } else {
       this.check_logged=false,

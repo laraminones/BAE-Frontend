@@ -11,6 +11,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import {CategoriesPanelComponent} from "./categories-panel/categories-panel.component";
 import { CartDrawerComponent } from "./cart-drawer/cart-drawer.component";
 import { FeedbackModalComponent } from './feedback-modal/feedback-modal.component';
+import { QuoteRequestModalComponent } from './quote-request-modal/quote-request-modal.component'
 
 const imports: any[] = [
   CommonModule,
@@ -18,7 +19,8 @@ const imports: any[] = [
   FormsModule,
   ReactiveFormsModule,
   FontAwesomeModule,
-  TranslateModule
+  TranslateModule,
+  QuoteRequestModalComponent
 ];
 
 const declarations: any[] = [

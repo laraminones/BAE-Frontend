@@ -17,6 +17,7 @@ import { AuthGuard } from './guard/auth.guard';
 import { OrganizationDetailsComponent } from "./pages/organization-details/organization-details.component"
 import { ProductOrdersComponent } from './pages/product-orders/product-orders.component';
 import {AboutDomeComponent} from "src/app/pages/about-dome/about-dome.component"
+import { QuoteListComponent } from "src/app/features/quotes/pages/quote-list/quote-list.component"
 
 const routes: Routes = [
   {
@@ -75,6 +76,10 @@ const routes: Routes = [
   },
   { path: 'product-orders',
     component: ProductOrdersComponent,
+    canActivate: [AuthGuard], data: { roles: [] }
+  },
+  { path: 'quote-list',
+    component: QuoteListComponent,
     canActivate: [AuthGuard], data: { roles: [] }
   },
   { path: '**', redirectTo: 'dashboard', pathMatch: 'full' },

@@ -220,13 +220,13 @@
                 </svg>
                 {{ 'CARD._add_cart' | translate }}
               </button>
-              }
               <button type="button" (click)="toggleQuoteModal();$event.stopPropagation();" class="m-4 w-fit flex items-center justify-start text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                 {{ 'CARD._quote' | translate }}
                 <svg class="w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/>
                 </svg>
               </button>
+              }
               <button type="button" (click)="goToProductDetails(productOff)" class="m-4 w-fit flex items-center justify-start text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                 {{ 'CARD._details' | translate }}
                 <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
@@ -276,26 +276,14 @@
 
 <!-- Main modal -->
 @if (showQuoteModal){
-  <div id="quote-modal" [ngClass]="showQuoteModal ? 'backdrop-blur-sm': ''" tabindex="-1" aria-hidden="true" class="flex justify-center overflow-x-hidden fixed top-0 right-0 left-0 z-40 justify-center items-center w-full md:inset-0 h-full max-h-full rounded-lg shadow-2xl">
-    <div class="relative w-full max-w-7xl max-h-full rounded-t-lg" (click)="$event.stopPropagation();">
-        <!-- Modal content -->
-        <div class="relative sm:m-8 bg-white rounded-lg shadow dark:border-gray-600 dark:bg-secondary-100 bg-cover bg-right-bottom rounded-lg overflow-y-auto max-h-[calc(100vh-10rem)]">
-          <button (click)="showQuoteModal=false" type="button" class="absolute top-4 right-4 z-50 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="quote-modal">
-            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-            </svg>
-            <span class="sr-only">{{ 'CARD._close' | translate }}</span>
-          </button>
-
-          <div class="w-full mb-4 rounded-t-lg">
-
-            <div class="flex flex-col p-4 overflow-x-hidden">
-                <h5 class="md:text-3xl lg:text-4xl font-semibold tracking-tight text-primary-100 dark:text-primary-50 text-wrap break-all">Create quote</h5>
-            </div>
-          </div>
-
-
-        </div>
-    </div>
-  </div>
+  <app-quote-request-modal 
+  [ngClass]="showQuoteModal ? 'backdrop-blur-sm': ''" 
+  class="flex justify-center overflow-x-hidden fixed top-0 right-0 left-0 z-40 justify-center items-center w-full md:inset-0 h-full max-h-full rounded-lg shadow-2xl"
+  (click)="$event.stopPropagation();"
+  [productOff]="productOff"
+  [prodSpec]="prodSpec"
+  [orgInfo]="orgInfo"
+  [customerId]="customerId"
+  [isOpen]="showQuoteModal"
+  ></app-quote-request-modal>
 }

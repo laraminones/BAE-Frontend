@@ -64,4 +64,16 @@ export const environment = {
     BUNDLE_ENABLED: false,
     DFT_CATALOG_ID: '',
     MAX_FILE_SIZE:3145728,
+    quoteApi: 'http://localhost:8080/quoteManagement',
+    quoteEndpoints: {
+        createQuote: '/createQuote',
+        listAllQuotes: '/listAllQuotes',
+        getQuoteById: '/quoteById',
+        getQuotesByUser: '/quoteByUser',
+        updateQuoteStatus: '/updateQuoteStatus',
+        updateQuoteDate: '/updateQuoteDate',
+        addNoteToQuote: '/addNoteToQuote',
+        addAttachmentToQuote: '/addAttachmentToQuote',
+        deleteQuote: '/quote'
+    }
 };
