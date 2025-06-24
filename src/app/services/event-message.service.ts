@@ -10,7 +10,7 @@ export interface EventMessage {
   'SellerCatalog' | 'SellerCatalogCreate' | 'SellerCatalogUpdate' | 'CategoryAdded' | 'CategoryRemoved' | 'ChangedSession' | 'CloseCartCard'|
   'AdminCategories' | 'CreateCategory' | 'UpdateCategory' | 'ShowCartToast' | 'HideCartToast' | 'CloseContact' | 'OpenServiceDetails' | 'OpenResourceDetails' | 'OpenProductInvDetails' |
   'SavePricePlan' | 'UpdatePricePlan' | 'ToggleEditPrice' | 'ToggleNewPrice' |
-  'SubformChange' | 'CloseFeedback' | 'CloseQuoteRequest';
+  'SubformChange' | 'CloseFeedback' | 'UpdateOffer' | 'CloseQuoteRequest';
   text?: string,
   value?: object | boolean | FormChangeState | PricePlanChangeState
 }
@@ -202,4 +202,8 @@ export class EventMessageService {
   emitCloseQuoteRequest(show:boolean) {
     this.eventMessageSubject.next({type: 'CloseQuoteRequest', value: show})
   }  
+
+  emitUpdateOffer(show:boolean) {
+    this.eventMessageSubject.next({type: 'UpdateOffer', value: show})
+  }
 }

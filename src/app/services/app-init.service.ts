@@ -30,6 +30,7 @@ export class AppInitService {
                 environment.KB_GUIDELNES_URL = config.domeGuidelines;
                 environment.REGISTRATION_FORM_URL = config.domeRegistrationForm;
                 environment.DFT_CATALOG_ID = config.defaultId;
+                environment.quoteApi = config.quoteApi ?? 'http://localhost:8080/quoteManagement';
                 resolve(config);
             }),
             error: (error) => {
