@@ -488,7 +488,14 @@ export class QuoteListComponent implements OnInit {
 
   ngOnInit() {
     let aux = this.localStorage.getObject('login_items') as LoginInfo;
-    this.currentUserId = aux.id;
+
+    if(aux.logged_as == aux.id){
+      this.currentUserId = aux.partyId;
+    } else {
+      let loggedOrg = aux.organizations.find((element: { id: any; }) => element.id == aux.logged_as)
+      this.currentUserId = loggedOrg.partyId
+    }
+
     if (this.currentUserId) {
       this.loadQuotes();
     } else {
