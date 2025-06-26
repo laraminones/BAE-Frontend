@@ -198,7 +198,12 @@ export class CardComponent implements OnInit, AfterViewInit {
     let aux = this.localStorage.getObject('login_items') as LoginInfo;
     if(JSON.stringify(aux) != '{}' && (((aux.expire - moment().unix())-4) > 0)) {
       this.check_logged=true;
-      this.customerId=aux.partyId;
+      if(aux.logged_as==aux.id){
+        this.customerId = aux.partyId;
+      } else {
+        let loggedOrg = aux.organizations.find((element: { id: any; }) => element.id == aux.logged_as)
+        this.customerId = loggedOrg.partyId
+      }
       this.cdr.detectChanges();
     } else {
       this.check_logged=false,
