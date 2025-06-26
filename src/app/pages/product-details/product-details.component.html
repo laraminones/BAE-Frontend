@@ -137,22 +137,40 @@
                 }
             </ul>
             @if(check_logged){
-            <button type="button" (click)="openDrawer()" [disabled]="!PURCHASE_ENABLED" [ngClass]="!PURCHASE_ENABLED ? 'opacity-50' : 'hover:bg-primary-50'" class="hidden md:flex w-fit m-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                <svg class="w-3.5 h-3.5 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 21">
-                <path d="M15 12a1 1 0 0 0 .962-.726l2-7A1 1 0 0 0 17 3H3.77L3.175.745A1 1 0 0 0 2.208 0H1a1 1 0 0 0 0 2h.438l.6 2.255v.019l2 7 .746 2.986A3 3 0 1 0 9 17a2.966 2.966 0 0 0-.184-1h2.368c-.118.32-.18.659-.184 1a3 3 0 1 0 3-3H6.78l-.5-2H15Z"/>
-                </svg>
-                {{ 'CARD._add_cart' | translate }}
-            </button>
+                @if (!isCustom()) {
+                    <button type="button" (click)="openDrawer()" [disabled]="!PURCHASE_ENABLED" [ngClass]="!PURCHASE_ENABLED ? 'opacity-50' : 'hover:bg-primary-50'" class="hidden md:flex w-fit m-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                        <svg class="w-3.5 h-3.5 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 21">
+                            <path d="M15 12a1 1 0 0 0 .962-.726l2-7A1 1 0 0 0 17 3H3.77L3.175.745A1 1 0 0 0 2.208 0H1a1 1 0 0 0 0 2h.438l.6 2.255v.019l2 7 .746 2.986A3 3 0 1 0 9 17a2.966 2.966 0 0 0-.184-1h2.368c-.118.32-.18.659-.184 1a3 3 0 1 0 3-3H6.78l-.5-2H15Z"/>
+                        </svg>
+                    {{ 'CARD._add_cart' | translate }}
+                    </button>
+                } @else {
+                    <button type="button" (click)="toggleQuoteModal();$event.stopPropagation();" class="hidden md:flex m-4 w-fit flex items-center justify-start text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                        {{ 'CARD._quote' | translate }}
+                        <svg class="w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/>
+                        </svg>
+                    </button>
+                }
             }
         </div>
-        @if(check_logged){
-            <button type="button" (click)="openDrawer()" [disabled]="!PURCHASE_ENABLED" [ngClass]="!PURCHASE_ENABLED ? 'opacity-50' : 'hover:bg-primary-50'" class="flex md:hidden justify-end w-fit m-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                <svg class="w-3.5 h-3.5 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 21">
-                <path d="M15 12a1 1 0 0 0 .962-.726l2-7A1 1 0 0 0 17 3H3.77L3.175.745A1 1 0 0 0 2.208 0H1a1 1 0 0 0 0 2h.438l.6 2.255v.019l2 7 .746 2.986A3 3 0 1 0 9 17a2.966 2.966 0 0 0-.184-1h2.368c-.118.32-.18.659-.184 1a3 3 0 1 0 3-3H6.78l-.5-2H15Z"/>
-                </svg>
-                {{ 'CARD._add_cart' | translate }}
-            </button>
+        @if(check_logged) {
+            @if (!isCustom()) {
+                <button type="button" (click)="openDrawer()" [disabled]="!PURCHASE_ENABLED" [ngClass]="!PURCHASE_ENABLED ? 'opacity-50' : 'hover:bg-primary-50'" class="flex md:hidden justify-end w-fit m-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                    <svg class="w-3.5 h-3.5 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 21">
+                        <path d="M15 12a1 1 0 0 0 .962-.726l2-7A1 1 0 0 0 17 3H3.77L3.175.745A1 1 0 0 0 2.208 0H1a1 1 0 0 0 0 2h.438l.6 2.255v.019l2 7 .746 2.986A3 3 0 1 0 9 17a2.966 2.966 0 0 0-.184-1h2.368c-.118.32-.18.659-.184 1a3 3 0 1 0 3-3H6.78l-.5-2H15Z"/>
+                        </svg>
+                    {{ 'CARD._add_cart' | translate }}
+                </button>
+            } @else {
+                <button type="button" (click)="toggleQuoteModal();$event.stopPropagation();" class="md:hidden m-4 w-fit flex items-center justify-start text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                    {{ 'CARD._quote' | translate }}
+                    <svg class="w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/>
+                    </svg>
+                </button>
             }
+        }
     </div>
 
     <div class="w-full h-full bg-secondary-50 rounded-b-lg p-4 dark:bg-secondary-100 dark:border-gray-800 border-secondary-50 border-b">
@@ -494,6 +512,19 @@
 
 @if (showError){
 <error-message class="flex justify-center items-center fixed w-fit top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50" [message]="errorMessage"></error-message>
+}
+
+@if (showQuoteModal){
+  <app-quote-request-modal 
+  [ngClass]="showQuoteModal ? 'backdrop-blur-sm': ''" 
+  class="flex justify-center overflow-x-hidden fixed top-0 right-0 left-0 z-40 justify-center items-center w-full md:inset-0 h-full max-h-full rounded-lg shadow-2xl"
+  (click)="$event.stopPropagation();"
+  [productOff]="productOff"
+  [prodSpec]="prodSpec"
+  [orgInfo]="orgInfo"
+  [customerId]="customerId"
+  [isOpen]="showQuoteModal"
+  ></app-quote-request-modal>
 }
 
 <!-- Drawer Reutilizable -->

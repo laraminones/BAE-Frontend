@@ -72,8 +72,10 @@ export class ProductDetailsComponent implements OnInit {
   showTermsMore:boolean=false;
   PURCHASE_ENABLED: boolean = environment.PURCHASE_ENABLED;
   showReadMoreButton:boolean=false;
+  customerId:string='';
 
   orgInfo:any=undefined;
+  showQuoteModal:boolean = false;
 
   protected readonly faScaleBalanced = faScaleBalanced;
   protected readonly faArrowProgress = faArrowProgress;
@@ -128,7 +130,10 @@ export class ProductDetailsComponent implements OnInit {
         }
 
         this.cdr.detectChanges();
-      }
+      } else if(ev.type === 'CloseQuoteRequest'){
+          this.showQuoteModal=false;
+          this.cdr.detectChanges();
+        }
     })
   }
 
@@ -176,6 +181,14 @@ export class ProductDetailsComponent implements OnInit {
     if(JSON.stringify(aux) != '{}' && (((aux.expire - moment().unix())-4) > 0)) {
       this.check_logged=true;
       this.cdr.detectChanges();
+
+      if(aux.logged_as == aux.id){
+        this.customerId = aux.partyId;
+      } else {
+        let loggedOrg = aux.organizations.find((element: { id: any; }) => element.id == aux.logged_as)
+        this.customerId = loggedOrg.partyId
+      }
+
     } else {
       this.check_logged=false,
       this.cdr.detectChanges();
@@ -200,7 +213,7 @@ export class ProductDetailsComponent implements OnInit {
               prices.push(price);
               console.log(price)
               if(price.priceType == 'custom'){
-                this.checkCustom=true;
+                this.checkCustom = true;
               }
             })
           }
@@ -264,8 +277,8 @@ export class ProductDetailsComponent implements OnInit {
         }
         this.category = this.productOff?.category?.at(0)?.name ?? 'none';
         this.categories = this.productOff?.category;
-        this.price = this.productOff?.productOfferingPrice?.at(0)?.price?.value + ' ' +
-          this.productOff?.productOfferingPrice?.at(0)?.price?.unit ?? 'n/a';
+        this.price = this.productOff?.productOfferingPrice?.at(0)?.price?.value + ' ' + this.productOff?.productOfferingPrice?.at(0)?.price?.unit ?? 'n/a';
+
         let profile = this.productOff?.attachment?.filter(item => item.name === 'Profile Picture') ?? [];
         console.log('profile...')
         console.log(profile)
@@ -345,8 +358,17 @@ export class ProductDetailsComponent implements OnInit {
     })
   }
 
+  toggleQuoteModal(){
+    //Show quote modal
+    this.showQuoteModal = true;
+  }
+
   isVerified(char: any) {
     return char.verified == true
+  }
+
+  isCustom() {
+    return this.checkCustom;
   }
 
   ngAfterViewChecked() {

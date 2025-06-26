@@ -14,6 +14,7 @@ type ProductOffering = components["schemas"]["ProductOffering"];
 })
 export class PriceServiceService {
   public static BASE_URL: String = environment.BASE_URL;
+  public static API_CATALOG: String = environment.PRODUCT_CATALOG;
 
   constructor(private http: HttpClient) {}
 
@@ -92,6 +93,24 @@ export class PriceServiceService {
       }
     }
     return result;
+  }
+
+  getProductPrice(id:any) {
+    let url = `${PriceServiceService.BASE_URL}${PriceServiceService.API_CATALOG}/productOfferingPrice/${id}`
+
+    return lastValueFrom(this.http.get<any>(url));
+  }
+
+  async isCustomOffering(offering: ProductOffering | undefined): Promise<boolean> {
+    let isCustom: boolean  = false;
+    // Download the first POP if exists
+    if (offering?.productOfferingPrice && offering?.productOfferingPrice.length > 0) {
+      // Check if the first POP is a custom one
+      const pop = await this.getProductPrice(offering.productOfferingPrice[0].id);
+      isCustom = pop.priceType.toLowerCase() === 'custom';
+    }
+
+    return isCustom;
   }
 
   calculatePrice(prod: any) {

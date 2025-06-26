@@ -79,8 +79,7 @@ export class CardComponent implements OnInit, AfterViewInit {
   productAlreadyInCart:boolean=false;
   showQuoteModal:boolean=false;
   customerId:string='';
-
-
+  isCustomPrice:boolean = false;
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -193,8 +192,7 @@ export class CardComponent implements OnInit, AfterViewInit {
     }
   }
 
-
-  ngOnInit() {
+  async ngOnInit() {
     let aux = this.localStorage.getObject('login_items') as LoginInfo;
     if(JSON.stringify(aux) != '{}' && (((aux.expire - moment().unix())-4) > 0)) {
       this.check_logged=true;
@@ -219,8 +217,7 @@ export class CardComponent implements OnInit, AfterViewInit {
       this.categories = this.productOff?.category;
       this.checkMoreCats=false;
     }
-    //this.price = this.productOff?.productOfferingPrice?.at(0)?.price?.value + ' ' +
-    //  this.productOff?.productOfferingPrice?.at(0)?.price?.unit ?? 'n/a';
+
     let profile = this.productOff?.attachment?.filter(item => item.name === 'Profile Picture') ?? [];
     if(profile.length==0){
       this.images = this.productOff?.attachment?.filter(item => item.attachmentType === 'Picture') ?? [];
@@ -228,7 +225,7 @@ export class CardComponent implements OnInit, AfterViewInit {
       this.images = profile;
     }
     let specId:any|undefined=this.productOff?.productSpecification?.id;
-    if(specId != undefined){
+    if(specId != undefined) {
       this.api.getProductSpecification(specId).then(spec => {
         let vcs = 0
         let domeSup = 0
@@ -287,13 +284,7 @@ export class CardComponent implements OnInit, AfterViewInit {
       })
     }
 
-    let result:any = this.priceService.formatCheapestPricePlan(this.productOff);
-    this.price = {
-      "price": result.price,
-      "unit": result.unit,
-      "priceType": result.priceType,
-      "text": result.text
-    }
+    this.isCustomPrice = await this.priceService.isCustomOffering(this.productOff)
 
     this.prepareOffData();
 
@@ -307,6 +298,10 @@ export class CardComponent implements OnInit, AfterViewInit {
     })
 
     this.cdr.detectChanges();
+  }
+
+  isCustom(): boolean {
+    return this.isCustomPrice;
   }
 
   getProductImage() {
