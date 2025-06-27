@@ -203,8 +203,8 @@ export class EventMessageService {
     this.eventMessageSubject.next({type: 'UpdateOffer', value: show})
   }
 
-  emitUpdateUsageSpec(show:boolean){
-    this.eventMessageSubject.next({type: 'UpdateUsageSpec', value: show})
+  emitUpdateUsageSpec(usageSpec:any){
+    this.eventMessageSubject.next({type: 'UpdateUsageSpec', value: usageSpec})
   }
 
   emitUsageSpecList(show:boolean){

@@ -29,8 +29,10 @@ export class UsageListComponent  implements OnInit {
 
   ngOnInit(): void {
     this.initPartyInfo();
+    this.loading=true;
     this.usageService.getUsageSpecs(this.partyId).then(data => {
       this.usageSpecs=data;
+      this.loading=false;
     })
   }
 
@@ -50,8 +52,8 @@ export class UsageListComponent  implements OnInit {
     this.eventMessage.emitCreateUsageSpec(true);
   }
 
-  goToUpdate(serv:any){
-    this.eventMessage.emitUpdateUsageSpec(true);
+  goToUpdate(usageSpec:any){
+    this.eventMessage.emitUpdateUsageSpec(usageSpec);
   }
 
 }

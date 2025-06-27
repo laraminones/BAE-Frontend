@@ -54,8 +54,7 @@ export class UsageSpecMetricsComponent {
   async ngOnInit() {
     console.log('📝 Initializing form in', this.formType, 'mode');
     this.isEditMode = this.formType === 'update';
-    // Si hay valores iniciales en el formulario, los cargamos
-    await this.getMetrics();
+    console.log(this.metrics)
   }
 
   deleteMetric(metric:any){
@@ -64,6 +63,17 @@ export class UsageSpecMetricsComponent {
       this.metrics.splice(index, 1);
     }
     this.onChange([...this.metrics]);
+    const currentValue = [...this.metrics];
+    const dirtyFields = this.getDirtyFields(currentValue);
+    const changeState: FormChangeState = {
+      subformType: 'category',
+      isDirty: true,
+      dirtyFields,
+      originalValue: this.originalValue,
+      currentValue
+    };
+    console.log('🚀 Emitting change state:', changeState);
+    this.eventMessage.emitSubformChange(changeState);
   }
 
   saveMetric(){
@@ -76,10 +86,18 @@ export class UsageSpecMetricsComponent {
     this.onChange([...this.metrics]);
     this.cdr.detectChanges();
     this.showCreateMetric=false;
-  }
-
-  getMetrics(){
-
+    const currentValue = [...this.metrics];
+    const dirtyFields = this.getDirtyFields(currentValue);
+    const changeState: FormChangeState = {
+      subformType: 'metrics',
+      isDirty: true,
+      dirtyFields,
+      originalValue: this.originalValue,
+      currentValue
+    };
+    console.log('🚀 Emitting change state:', changeState);
+    this.eventMessage.emitSubformChange(changeState);
+    this.metricsForm.reset();
   }
 
   registerOnChange(fn: any): void {

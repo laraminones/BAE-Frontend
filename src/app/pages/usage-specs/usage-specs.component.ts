@@ -21,11 +21,20 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { UsageListComponent } from "src/app/pages/usage-specs/usage-sections/usage-list/usage-list.component"
 import { UsageSpecComponent } from "src/app/shared/forms/usage-spec/usage-spec.component"
 import { CreateUsageSpecComponent } from "./usage-sections/create-usage-spec/create-usage-spec.component"
+import { UpdateUsageSpecComponent } from './usage-sections/update-usage-spec/update-usage-spec.component'
 
 @Component({
   selector: 'app-usage-specs',
   standalone: true,
-  imports: [TranslateModule, FontAwesomeModule, CommonModule, UsageListComponent, UsageSpecComponent, CreateUsageSpecComponent],
+  imports: [
+    TranslateModule,
+    FontAwesomeModule,
+    CommonModule,
+    UsageListComponent,
+    UsageSpecComponent,
+    CreateUsageSpecComponent,
+    UpdateUsageSpecComponent
+  ],
   providers: [DatePipe],
   templateUrl: './usage-specs.component.html',
   styleUrl: './usage-specs.component.css'
@@ -36,6 +45,7 @@ export class UsageSpecsComponent implements OnInit {
   show_usage_specs:boolean=true;
   show_create_usage:boolean=false;
   show_update_usage:boolean=false;
+  usageSpecToUpdate:any;
 
   constructor(
     private localStorage: LocalStorageService,
@@ -45,10 +55,11 @@ export class UsageSpecsComponent implements OnInit {
     this.eventMessage.messages$.subscribe(ev => {
       if(ev.type === 'UsageSpecList' && ev.value == true) {        
         this.goToUsageSpec();
-      } else if(ev.type === 'UpdateUsageSpec' && ev.value == true) {  
+      } else if(ev.type === 'UpdateUsageSpec' && ev.value) {  
         this.show_update_usage=true;
         this.show_usage_specs=false;
         this.show_create_usage=false;
+        this.usageSpecToUpdate=ev.value;
       } else if(ev.type === 'CreateUsageSpec' && ev.value == true) {  
         this.show_create_usage=true;
         this.show_update_usage=false;

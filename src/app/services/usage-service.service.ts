@@ -31,7 +31,7 @@ export class UsageServiceService {
   }
 
   updateUsageSpec(usageSpec:any,id:any){
-    let url = `${UsageServiceService.BASE_URL}/usage/usageSpecification`;
+    let url = `${UsageServiceService.BASE_URL}/usage/usageSpecification/${id}`;
 
     return this.http.patch<any>(url, usageSpec);
   }

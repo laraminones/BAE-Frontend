@@ -40,5 +40,8 @@
           @if(show_create_usage){
             <create-usage-spec></create-usage-spec>
           }
+          @if(show_update_usage){
+            <update-usage-spec [usageSpec]="usageSpecToUpdate"></update-usage-spec>
+          }
       </div>
   </div>

@@ -15,6 +15,7 @@ import { UsageSpecMetricsComponent } from './usage-spec-metrics/usage-spec-metri
 import { UsageSpecSummaryComponent } from './usage-spec-summary/usage-spec-summary.component'
 import { AccountServiceService } from 'src/app/services/account-service.service'
 import { UsageServiceService } from 'src/app/services/usage-service.service'
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'usage-spec-form',
@@ -138,7 +139,6 @@ export class UsageSpecComponent implements OnInit {
 
   submitForm() {
     if (this.formType === 'update') {
-      this.eventMessage.emitUpdateUsageSpec(true);
       console.log('🔄 Starting offer update process...');
       console.log('📝 Current form changes:', this.formChanges);
       
@@ -160,7 +160,19 @@ export class UsageSpecComponent implements OnInit {
   }
 
   loadUsageSpecData(){
-
+    if(this.usageSpec){
+      const metrics = this.usageSpec.specCharacteristic = this.usageSpec.specCharacteristic.map((item: any) => ({
+        ...item,
+        id: uuidv4()
+      }));
+      this.usageSpecForm.patchValue({
+        generalInfo: {
+          name: this.usageSpec.name,
+          description: this.usageSpec.description
+        },
+        metrics: metrics
+      });
+    }
   }
 
   async createUsageSpec(){
@@ -172,7 +184,13 @@ export class UsageSpecComponent implements OnInit {
     const usageSpec: any = {
       name: generalInfo.name,
       description: generalInfo.description || '',
-      specCharacteristic: metrics
+      specCharacteristic: metrics,
+      relatedParty: [
+        {
+          id: this.partyId,
+          href: this.partyId,
+        }
+      ],
     }
     console.log(usageSpec)
 
@@ -199,8 +217,53 @@ export class UsageSpecComponent implements OnInit {
 
   }
 
-  updateUsageSpec(){
+  async updateUsageSpec(){
+    console.log('🔄 Starting offer update process...');
+    console.log('📝 Current form changes:', this.formChanges);
 
+    // Preparar el payload base con los datos que no han cambiado
+    const basePayload: any = {
+      name: this.usageSpec.name,
+      description: this.usageSpec.description,
+      specCharacteristic: this.usageSpec.specCharacteristic
+    };
+
+    // Procesar cada cambio emitido por los subformularios
+    for (const [subformType, change] of Object.entries(this.formChanges)) {
+      console.log(`📝 Processing changes for ${subformType}:`, change);
+
+      switch (subformType) {
+        case 'generalInfo':
+          // Actualizar información general
+          basePayload.name = change.currentValue.name;
+          basePayload.description = change.currentValue.description;
+          break;
+        case 'metrics':
+          // Actualizar metricas
+          const metrics = change.currentValue.map((metric: any) => ({
+            name: metric.name,
+            description: metric.description,
+            valueType: 'number'
+          }));
+          basePayload.specCharacteristic = metrics
+          console.log('------ here')
+          console.log(metrics)
+          break;
+      }
+    }
+    console.log('📝 Final update payload:', basePayload);
+
+    try {
+      // Llamar a la API para actualizar la oferta
+      await lastValueFrom(this.usageSpecService.updateUsageSpec(basePayload, this.usageSpec.id));
+      console.log('✅ Usage Spec updated successfully');
+      this.goBack();
+    } catch (error: any) {
+      console.error('❌ Error updating Usage Spec:', error);
+      this.errorMessage = error?.error?.error ? 'Error: ' + error.error.error : 'An error occurred while updating the Usage Spec!';
+      this.showError = true;
+      setTimeout(() => (this.showError = false), 3000);
+    }
   }
 
 
