@@ -14,10 +14,19 @@ import * as moment from 'moment';
 export class UsageServiceService {
 
   public static BASE_URL: String = environment.BASE_URL;
+  public static USAGE_SPEC_LIMIT: number = environment.USAGE_SPEC_LIMIT;
 
   constructor(private http: HttpClient,private localStorage: LocalStorageService) { }
 
-  getUsageSpecs(partyId:any) {
+  getUsageSpecs(page:any,partyId:any) {
+
+    let url = `${UsageServiceService.BASE_URL}/usage/usageSpecification?limit=${UsageServiceService.USAGE_SPEC_LIMIT}&offset=${page}&relatedParty.id=${partyId}`;
+
+    return lastValueFrom(this.http.get<any[]>(url));
+  }
+
+  getAllUsageSpecs(partyId:any) {
+
     let url = `${UsageServiceService.BASE_URL}/usage/usageSpecification?relatedParty.id=${partyId}`;
 
     return lastValueFrom(this.http.get<any[]>(url));

@@ -1,11 +1,14 @@
 import {Component, EventEmitter, HostListener, Input, OnInit, Output, ChangeDetectorRef} from '@angular/core';
-import {FormsModule, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormsModule, FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormControl} from '@angular/forms';
 import {MarkdownTextareaComponent} from "../../../markdown-textarea/markdown-textarea.component";
+import { UsageServiceService } from 'src/app/services/usage-service.service';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
 import {TranslateModule} from "@ngx-translate/core";
 import {NgClass} from "@angular/common";
 import { initFlowbite } from 'flowbite';
 import * as moment from 'moment';
 import { certifications } from 'src/app/models/certification-standards.const';
+import { LoginInfo } from 'src/app/models/interfaces';
 
 @Component({
   selector: 'app-price-component-drawer',
@@ -37,8 +40,18 @@ export class PriceComponentDrawerComponent implements OnInit {
   selectedCharacteristicVal:any;
   showDiscount:boolean=false;
   filteredChars:any[]=[];
+  usageSpecs:any[]=[];
+  selectedUsageSpec:any;
+  selectedMetric:any;
+  showMetricSelect:boolean=false;
+  partyId:any='';
 
-  constructor(private fb: FormBuilder, private cdr: ChangeDetectorRef,) {}
+  constructor(
+    private fb: FormBuilder,
+    private cdr: ChangeDetectorRef,
+    private usageService: UsageServiceService,
+    private localStorage: LocalStorageService
+  ) {}
 
   ngOnInit() {
     this.initialized = false;
@@ -100,6 +113,23 @@ export class PriceComponentDrawerComponent implements OnInit {
         this.selectedCharacteristic = selectedChar;
         console.log('selected char')
         console.log(this.selectedCharacteristic)
+      }
+    }
+    this.initPartyInfo();
+    this.usageService.getAllUsageSpecs(this.partyId).then(data => {
+      this.usageSpecs=data;
+    })
+  }
+
+
+  initPartyInfo(){
+    let aux = this.localStorage.getObject('login_items') as LoginInfo;
+    if(JSON.stringify(aux) != '{}' && (((aux.expire - moment().unix())-4) > 0)) {
+      if(aux.logged_as==aux.id){
+        this.partyId = aux.partyId;
+      } else {
+        let loggedOrg = aux.organizations.find((element: { id: any; }) => element.id == aux.logged_as)
+        this.partyId = loggedOrg.partyId
       }
     }
   }
@@ -165,6 +195,24 @@ export class PriceComponentDrawerComponent implements OnInit {
     this.selectedCharacteristicVal = event.target.value;
     this.priceComponentForm.patchValue({
       selectedCharacteristic: this.mapChars(event.target.value)
+    });
+  }
+
+  changePriceComponentUsageSpec(event: any){    
+    if(event.target.value == ''){
+      this.showValueSelect = false;
+      return
+    }
+    this.selectedUsageSpec= this.usageSpecs.find((element: { id: any; }) => element.id == event.target.value)
+    this.showMetricSelect=true;
+    console.log(this.selectedUsageSpec)
+  }
+
+  changePriceComponentMetric(event: any){
+    this.selectedMetric= this.selectedUsageSpec.specCharacteristic.find((element: { name: any; }) => element.name == event.target.value)
+    console.log(this.selectedMetric)
+    this.priceComponentForm.patchValue({
+      usageUnit: this.selectedMetric.name
     });
   }
 
