@@ -478,7 +478,13 @@ export class OfferComponent implements OnInit, OnDestroy{
     }
 
     if (priceType === 'usage') {
-      priceComp.unitOfMeasure = { amount: 1, units: component.usageUnit ?? component.newValue.usageUnit };
+      priceComp.unitOfMeasure = {
+        amount: 1,
+        units: component.usageUnit ?? component.newValue.usageUnit,
+        "@baseType": "Quantity",
+        "@schemaLocation": "https://github.com/laraminones/tmf-new-schemas/blob/main/UsageSpecId.json",
+        usagespecid: component.usageSpecId
+      } as any;
     }
 
     if (component?.selectedCharacteristic || component?.newValue?.selectedCharacteristic) {
@@ -518,7 +524,13 @@ export class OfferComponent implements OnInit, OnDestroy{
     }
 
     if (component.newValue.priceType === 'usage') {
-      priceComp.unitOfMeasure = { amount: 1, units: component.newValue.usageUnit };
+      priceComp.unitOfMeasure = { 
+        amount: 1,
+        units: component.newValue.usageUnit,
+        "@baseType": "Quantity",
+        "@schemaLocation": "https://github.com/laraminones/tmf-new-schemas/blob/main/UsageSpecId.json",
+        usagespecid: component.usageSpecId
+      } as any;
     }
 
     if (component.newValue.selectedCharacteristic) {
@@ -621,7 +633,13 @@ export class OfferComponent implements OnInit, OnDestroy{
     }
 
     if (priceType === 'usage') {
-      price.unitOfMeasure = { amount: 1, units: comp.usageUnit ?? plan?.newValue?.priceComponents[0]?.usageUnit };
+      price.unitOfMeasure = { 
+        amount: 1,
+        units: comp.usageUnit ?? plan?.newValue?.priceComponents[0]?.usageUnit,
+        "@baseType": "Quantity",
+        "@schemaLocation": "https://github.com/laraminones/tmf-new-schemas/blob/main/UsageSpecId.json",
+        usagespecid: plan.usageSpecId
+      } as any;
     }
 
     if (comp?.discountValue != null) {
@@ -681,7 +699,13 @@ export class OfferComponent implements OnInit, OnDestroy{
       }
   
       if (plan.newValue.priceComponents[0]?.priceType === 'usage') {
-        price.unitOfMeasure = { amount: 1, units: plan.newValue.priceComponents[0].usageUnit };
+        price.unitOfMeasure = { 
+          amount: 1,
+          units: plan.newValue.priceComponents[0].usageUnit,
+          "@baseType": "Quantity",
+          "@schemaLocation": "https://github.com/laraminones/tmf-new-schemas/blob/main/UsageSpecId.json",
+          usagespecid: plan.usageSpecId
+        } as any;
       }
   
       if (plan.newValue.priceComponents[0]?.selectedCharacteristic) {

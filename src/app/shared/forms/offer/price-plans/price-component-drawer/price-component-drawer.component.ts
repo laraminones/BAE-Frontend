@@ -77,6 +77,7 @@ export class PriceComponentDrawerComponent implements OnInit {
       discountDurationUnit: ['days'],
       recurringPeriod: ['month'],
       usageUnit: [''],
+      usageSpecId: [''],
       selectedCharacteristic:[undefined]
     });
 
@@ -205,6 +206,9 @@ export class PriceComponentDrawerComponent implements OnInit {
     }
     this.selectedUsageSpec= this.usageSpecs.find((element: { id: any; }) => element.id == event.target.value)
     this.showMetricSelect=true;
+    this.priceComponentForm.patchValue({
+      usageSpecId: this.selectedUsageSpec.id
+    })
     console.log(this.selectedUsageSpec)
   }
 
