@@ -37,9 +37,15 @@ export class ProductDetailsComponent implements OnInit {
   @ViewChild('attachContent')
   attachContent: ElementRef | undefined;
   @ViewChild('agreementsContent')
-  agreementsContent: ElementRef | undefined;
+  agreementsContent: ElementRef | undefined;  
   @ViewChild('textDiv') textDiv!: ElementRef;
   @ViewChild('termsText') termsTextRef!: ElementRef;
+  @ViewChild('agreementsScrollAnchor') agreementsScrollAnchor!: ElementRef;
+  @ViewChild('relScrollAnchor') relScrollAnchor!: ElementRef;
+  @ViewChild('attachScrollAnchor') attachScrollAnchor!: ElementRef;
+  @ViewChild('charsScrollAnchor') charsScrollAnchor!: ElementRef;
+  @ViewChild('detailsScrollAnchor') detailsScrollAnchor!: ElementRef; 
+  
 
   id:any;
   productOff: Product | undefined;
@@ -377,7 +383,7 @@ export class ProductDetailsComponent implements OnInit {
       setTimeout(() => this.checkOverflow(), 0); // Schedule after render
     }
     // Trigger change detection after the view has been initialized
-    this.setImageHeight();
+    //this.setImageHeight();
   }
   
   checkOverflow() {
@@ -675,8 +681,18 @@ async deleteProduct(product: Product | undefined){
 
   goToDetails(scroll:boolean){
     //const targetElement = this.elementRef.nativeElement.querySelector('#detailsContent');
-    if (this.detailsContent!=undefined && scroll) {
-      this.detailsContent.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (scroll) {
+      //this.detailsScrollAnchor.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const anchor = this.detailsScrollAnchor?.nativeElement;
+      if (!anchor) return;
+    
+      // Scroll the outer container if needed
+      const scrollContainer = document.scrollingElement || document.documentElement;
+      anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    
+      // Or: explicitly scroll the document
+      const y = anchor.getBoundingClientRect().top + window.scrollY - 88; // adjust for sticky header
+      window.scrollTo({ top: y, behavior: 'smooth' });
     }
 
     let details_button = document.getElementById('details-button')
@@ -693,8 +709,8 @@ async deleteProduct(product: Product | undefined){
   }
 
   goToChars(scroll:boolean){
-    if (this.charsContent != undefined && scroll) {
-      this.charsContent.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (scroll) {
+      this.charsScrollAnchor.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     let details_button = document.getElementById('details-button')
@@ -711,8 +727,8 @@ async deleteProduct(product: Product | undefined){
   }
 
   goToAttach(scroll:boolean){
-    if (this.attachContent != undefined && scroll) {
-      this.attachContent.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (scroll) {
+      this.attachScrollAnchor.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     let details_button = document.getElementById('details-button')
@@ -729,8 +745,9 @@ async deleteProduct(product: Product | undefined){
   }
 
   goToAgreements(scroll:boolean){
-    if (this.agreementsContent != undefined && scroll) {
-      this.agreementsContent.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center'});
+    if (scroll) {
+      //this.agreementsContent.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start'});
+      this.agreementsScrollAnchor.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     let details_button = document.getElementById('details-button')
@@ -747,8 +764,8 @@ async deleteProduct(product: Product | undefined){
   }
 
   goToRelationships(scroll:boolean){
-    if (this.relationshipsContent != undefined && scroll) {
-      this.relationshipsContent.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (scroll) {
+      this.relScrollAnchor.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     let details_button = document.getElementById('details-button')
