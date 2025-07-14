@@ -119,6 +119,11 @@ export class PriceComponentDrawerComponent implements OnInit {
     this.initPartyInfo();
     this.usageService.getAllUsageSpecs(this.partyId).then(data => {
       this.usageSpecs=data;
+      if(this.priceComponentForm.get('usageSpecId')){
+        this.selectedUsageSpec = this.usageSpecs.find((element: { id: any; }) => element.id == this.priceComponentForm.get('usageSpecId')?.value)
+        this.selectedMetric = this.priceComponentForm.get('usageUnit')?.value
+        this.showMetricSelect=true;
+      }
     })
   }
 
@@ -205,18 +210,29 @@ export class PriceComponentDrawerComponent implements OnInit {
       return
     }
     this.selectedUsageSpec= this.usageSpecs.find((element: { id: any; }) => element.id == event.target.value)
+    if(this.selectedUsageSpec.specCharacteristic.length>0){
+      this.selectedMetric=this.selectedUsageSpec.specCharacteristic[0].name;
+    } else {
+      this.selectedMetric='';
+    }
+    this.priceComponentForm.patchValue({
+      usageUnit: this.selectedMetric
+    });
+    
     this.showMetricSelect=true;
     this.priceComponentForm.patchValue({
       usageSpecId: this.selectedUsageSpec.id
     })
     console.log(this.selectedUsageSpec)
+    console.log(this.priceComponentForm)
   }
 
   changePriceComponentMetric(event: any){
-    this.selectedMetric= this.selectedUsageSpec.specCharacteristic.find((element: { name: any; }) => element.name == event.target.value)
+    //this.selectedMetric= this.selectedUsageSpec.specCharacteristic.find((element: { name: any; }) => element.name == event.target.value)
+    this.selectedMetric = event.target.value
     console.log(this.selectedMetric)
     this.priceComponentForm.patchValue({
-      usageUnit: this.selectedMetric.name
+      usageUnit: this.selectedMetric
     });
   }
 
