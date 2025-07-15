@@ -18,6 +18,13 @@ export class UsageServiceService {
 
   constructor(private http: HttpClient,private localStorage: LocalStorageService) { }
 
+  getUsageSpec(id:any) {
+
+    let url = `${UsageServiceService.BASE_URL}/usage/usageSpecification/${id}`;
+
+    return lastValueFrom(this.http.get<any>(url));
+  }
+
   getUsageSpecs(page:any,partyId:any) {
 
     let url = `${UsageServiceService.BASE_URL}/usage/usageSpecification?limit=${UsageServiceService.USAGE_SPEC_LIMIT}&offset=${page}&relatedParty.id=${partyId}`;
