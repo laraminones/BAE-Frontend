@@ -37,9 +37,15 @@ export class ProductDetailsComponent implements OnInit {
   @ViewChild('attachContent')
   attachContent: ElementRef | undefined;
   @ViewChild('agreementsContent')
-  agreementsContent: ElementRef | undefined;
+  agreementsContent: ElementRef | undefined;  
   @ViewChild('textDiv') textDiv!: ElementRef;
   @ViewChild('termsText') termsTextRef!: ElementRef;
+  @ViewChild('agreementsScrollAnchor') agreementsScrollAnchor!: ElementRef;
+  @ViewChild('relScrollAnchor') relScrollAnchor!: ElementRef;
+  @ViewChild('attachScrollAnchor') attachScrollAnchor!: ElementRef;
+  @ViewChild('charsScrollAnchor') charsScrollAnchor!: ElementRef;
+  @ViewChild('detailsScrollAnchor') detailsScrollAnchor!: ElementRef; 
+  
 
   id:any;
   productOff: Product | undefined;
@@ -50,7 +56,8 @@ export class ProductDetailsComponent implements OnInit {
   attatchments: AttachmentRefOrValue[]  = [];
   prodSpec:ProductSpecification = {};
   complianceProf:any[] = [];
-  complianceLevel:number=1;
+  complianceLevel:string='NL';
+  complianceDescription:string='No level. This product hasnt reached any compliance level yet.'
   serviceSpecs:any[] = [];
   resourceSpecs:any[]=[];
   check_logged:boolean=false;
@@ -66,6 +73,7 @@ export class ProductDetailsComponent implements OnInit {
   checkCustom:boolean=false;
   textDivHeight:any;
   prodChars:any[]=[];
+  selfAtt:any='';
 
   errorMessage:any='';
   showError:boolean=false;
@@ -216,16 +224,16 @@ export class ProductDetailsComponent implements OnInit {
           console.log(this.prodSpec.productSpecCharacteristic)
 
           for(let i=0; i<certifications.length; i++){
-            if(certifications[i].domesupported==true){
+            //Now we only show the certifications that are attached when creating/updating the product
+            let compProf = this.prodSpec.productSpecCharacteristic.find((p => {
+              return p.name === certifications[i].name
+            }));
+            if(compProf){
+              let cert:any = certifications[i]
+              cert.href = compProf.productSpecCharacteristicValue?.at(0)?.value
               this.complianceProf.push(certifications[i])
-            } else {
-              let compProf = this.prodSpec.productSpecCharacteristic.find((p => {
-                return p.name === certifications[i].name
-              }));
-              if(compProf){
-                this.complianceProf.push(certifications[i])
-              }
             }
+            //Deleting certifications out of characteristics' array
             const index = this.prodChars.findIndex(item => item.name === certifications[i].name);
             if(index!==-1){
               this.prodChars.splice(index, 1);
@@ -281,11 +289,22 @@ export class ProductDetailsComponent implements OnInit {
         let tokenComp = []
 
         if(this.prodSpec.productSpecCharacteristic != undefined) {
+
+          // Find if there is a self attestement
+          let selfAttObj = this.prodSpec.productSpecCharacteristic.find((p => {
+            return p.name === `Compliance:SelfAtt`
+          }));
+
+          if(selfAttObj){
+            this.selfAtt = selfAttObj.productSpecCharacteristicValue?.at(0)?.value
+          }          
+
+          // Find if there is a credential attached to the product offering
           let vcProf = this.prodSpec.productSpecCharacteristic.find((p => {
             return p.name === `Compliance:VC`
           }));
 
-          if (vcProf) {
+          if (vcProf) {            
             const vcToken: any = vcProf.productSpecCharacteristicValue?.at(0)?.value
             const decoded = jwtDecode(vcToken)
             let credential: any = null
@@ -307,8 +326,12 @@ export class ProductDetailsComponent implements OnInit {
             }
           }
         }
+        //Hardcoding compliance lever for the moment
+        this.complianceLevel = this.api.getComplianceLevel();
+        this.complianceDescription = this.getComplianceDescription();
 
-        for(let z = 0; z < this.complianceProf.length; z++){
+        //Commenting this  section thus now we don't show a default set of certifications
+        /*for(let z = 0; z < this.complianceProf.length; z++){
           if (this.complianceProf[z].domesupported) {
             domeSup += 1
           }
@@ -332,18 +355,34 @@ export class ProductDetailsComponent implements OnInit {
               vcs += 1
             }
           }
-        }
+        }*/
 
         // Set compliance level
-        if (vcs > 0) {
+        /*if (vcs > 0) {
           this.complianceLevel = 2
           if (vcs == domeSup) {
             this.complianceLevel = 3
           }
-        }
+        }*/
       })
     })
   }
+
+  getComplianceDescription(): string {
+    switch (this.complianceLevel) {
+      case 'NL':
+        return `No level. This product hasn't reached any compliance level yet.`;
+      case 'BL':
+        return `Basic level. Reached when the provider signs the "self attestation" document (attached below).`;
+      case 'P':
+        return `Professional level. The provider has signed the "self attestation" document (attached below) and the product includes the following certifications: BSI-C5, CISPE, EU Cloud CoC, CSA CCM, ISO/IEC 27001, TISAX and SWIPO.`;
+      case 'PP':
+        return `Professional level. The provider has signed the "self attestation" document (attached below) and the product includes the following certifications: BSI-C5, CISPE, EU Cloud CoC, CSA CCM, ISO/IEC 27001, TISAX, SWIPO and CNDCP (Climate Neutral Data Centre Pact).`;
+      default:
+        return '';
+    }
+  }
+  
 
   isVerified(char: any) {
     return char.verified == true
@@ -355,7 +394,7 @@ export class ProductDetailsComponent implements OnInit {
       setTimeout(() => this.checkOverflow(), 0); // Schedule after render
     }
     // Trigger change detection after the view has been initialized
-    this.setImageHeight();
+    //this.setImageHeight();
   }
   
   checkOverflow() {
@@ -653,8 +692,18 @@ async deleteProduct(product: Product | undefined){
 
   goToDetails(scroll:boolean){
     //const targetElement = this.elementRef.nativeElement.querySelector('#detailsContent');
-    if (this.detailsContent!=undefined && scroll) {
-      this.detailsContent.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (scroll) {
+      //this.detailsScrollAnchor.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const anchor = this.detailsScrollAnchor?.nativeElement;
+      if (!anchor) return;
+    
+      // Scroll the outer container if needed
+      const scrollContainer = document.scrollingElement || document.documentElement;
+      anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    
+      // Or: explicitly scroll the document
+      const y = anchor.getBoundingClientRect().top + window.scrollY - 88; // adjust for sticky header
+      window.scrollTo({ top: y, behavior: 'smooth' });
     }
 
     let details_button = document.getElementById('details-button')
@@ -671,8 +720,8 @@ async deleteProduct(product: Product | undefined){
   }
 
   goToChars(scroll:boolean){
-    if (this.charsContent != undefined && scroll) {
-      this.charsContent.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (scroll) {
+      this.charsScrollAnchor.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     let details_button = document.getElementById('details-button')
@@ -689,8 +738,8 @@ async deleteProduct(product: Product | undefined){
   }
 
   goToAttach(scroll:boolean){
-    if (this.attachContent != undefined && scroll) {
-      this.attachContent.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (scroll) {
+      this.attachScrollAnchor.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     let details_button = document.getElementById('details-button')
@@ -707,8 +756,9 @@ async deleteProduct(product: Product | undefined){
   }
 
   goToAgreements(scroll:boolean){
-    if (this.agreementsContent != undefined && scroll) {
-      this.agreementsContent.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center'});
+    if (scroll) {
+      //this.agreementsContent.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start'});
+      this.agreementsScrollAnchor.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     let details_button = document.getElementById('details-button')
@@ -725,8 +775,8 @@ async deleteProduct(product: Product | undefined){
   }
 
   goToRelationships(scroll:boolean){
-    if (this.relationshipsContent != undefined && scroll) {
-      this.relationshipsContent.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (scroll) {
+      this.relScrollAnchor.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     let details_button = document.getElementById('details-button')

@@ -45,6 +45,7 @@ export class PriceComponentDrawerComponent implements OnInit {
   selectedMetric:any;
   showMetricSelect:boolean=false;
   partyId:any='';
+  showPopover = false;
 
   constructor(
     private fb: FormBuilder,

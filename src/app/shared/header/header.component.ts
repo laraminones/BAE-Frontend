@@ -415,6 +415,21 @@ export class HeaderComponent implements OnInit, AfterViewInit, DoCheck, OnDestro
     }
   }
 
+  closeDropdown(id:string) {
+    const dropdown = document.getElementById(id);
+    if (dropdown) {
+      dropdown.classList.add('hidden');
+    }
+  }
+
+  openDropdown(id:string){
+    const dropdown = document.getElementById(id);
+    if (dropdown) {
+      dropdown.classList.remove('hidden');
+    }
+  }
+  
+
   protected readonly faCartShopping = faCartShopping;
   protected readonly faHandHoldingBox = faHandHoldingBox;
   protected readonly faAddressCard = faAddressCard;
