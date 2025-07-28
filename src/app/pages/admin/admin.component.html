@@ -37,6 +37,9 @@
             <button (click)="goToVerification()" id="verify-button" class="block w-full px-4 py-2 border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white">
               {{ 'ADMIN._verification' | translate }}
             </button>
+            <button (click)="goToRevenue()" id="revenue-button" class="block w-full px-4 py-2 border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white">
+              {{ 'ADMIN._revenue' | translate }}
+            </button>
           </div>
        </div>
 
@@ -51,6 +54,9 @@
         }
         @if(show_verification){
           <verification></verification>
+        }
+        @if(show_revenue){
+          <operator-revenue-sharing></operator-revenue-sharing>
         }
     </div>
 </div>

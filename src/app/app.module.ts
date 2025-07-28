@@ -88,6 +88,8 @@ import {PricePlanDrawerComponent} from "./shared/price-plan-drawer/price-plan-dr
 import {OfferComponent} from "./shared/forms/offer/offer.component";
 import {AboutDomeComponent} from "src/app/pages/about-dome/about-dome.component"
 import { MarkdownTextareaComponent } from "src/app/shared/forms/markdown-textarea/markdown-textarea.component"
+import { ProviderRevenueSharingComponent } from "src/app/pages/user-profile/profile-sections/provider-revenue-sharing/provider-revenue-sharing.component"
+import { OperatorRevenueSharingComponent } from "src/app/pages/admin/operator-revenue-sharing/operator-revenue-sharing.component"
 
 @NgModule({
   declarations: [
@@ -183,7 +185,9 @@ import { MarkdownTextareaComponent } from "src/app/shared/forms/markdown-textare
         PricePlanDrawerComponent,
         OfferComponent,
         AboutDomeComponent,
-        MarkdownTextareaComponent
+        MarkdownTextareaComponent,
+        ProviderRevenueSharingComponent,
+        OperatorRevenueSharingComponent
     ],
   providers: [
     AppInitService,
