@@ -13,15 +13,15 @@ import * as moment from 'moment';
 })
 export class RevenueSharingService {
 
-  public static BASE_URL: String = environment.BASE_URL;
+  public static PAYMENT_URL: String = environment.PAYMENT_URL;
 
   constructor(private http: HttpClient,private localStorage: LocalStorageService) { }
 
   getRevenue(id:any){
-    let url = `${RevenueSharingService.BASE_URL}/revenue/dashbord/${id}`;
-    url= "https://payment.dome-marketplace-sbx.org/revenue/dashboard/urn:ngsi-ld:organization:a195013a-a0e4-493a-810a-b040e10da58f"
+    let url = `${RevenueSharingService.PAYMENT_URL}/revenue/dashbord/${id}`;
+    //url= "https://payment.dome-marketplace-sbx.org/revenue/dashboard/urn:ngsi-ld:organization:a195013a-a0e4-493a-810a-b040e10da58f"
  
-    //return lastValueFrom(this.http.get<any>(url));
+    return lastValueFrom(this.http.get<any>(url));
 
     return [{
       "label":"Subscription",

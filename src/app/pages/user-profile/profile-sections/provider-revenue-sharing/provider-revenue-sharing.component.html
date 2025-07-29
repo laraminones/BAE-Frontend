@@ -27,10 +27,10 @@
             <h3 class="md:text-xl lg:text-2xl font-bold text-primary-100 dark:text-white mb-4">Billing History</h3>
             
             <div class="text-lg font-normal text-gray-500 dark:text-gray-400">
-                @for(child of billing.items; track child){
+                @for(child of billing?.items; track child){
                     <div class="mt-4">
                         <b>{{ child?.label }}</b>: 
-                        @for(state of child.items; track state){
+                        @for(state of child?.items; track state){
                             <div class="ml-4">
                               <span>
                                 {{state?.label}}:
@@ -63,7 +63,7 @@
         <div class="border border-primary-100 dark:border-primary-50 rounded-lg p-4 md:p-8 mt-4">
             <h3 class="md:text-xl lg:text-2xl font-bold text-primary-100 dark:text-white mb-4">Referral Program Area</h3>
             <div class="text-lg font-normal text-gray-500 dark:text-gray-400">
-                @for(child of referral.items; track child){
+                @for(child of referral?.items; track child){
                     <div class="mt-4">
                         <b>{{ child?.label }}</b>: {{child?.text}}
                     </div>
@@ -74,7 +74,7 @@
         <div class="border border-primary-100 dark:border-primary-50 rounded-lg p-4 md:p-8 mt-4">
             <h3 class="md:text-xl lg:text-2xl font-bold text-primary-100 dark:text-white mb-4">Support Contact</h3>
             <div class="text-lg font-normal text-gray-500 dark:text-gray-400">
-                @for(child of support.items; track child){
+                @for(child of support?.items; track child){
                     <div class="mt-4">
                         <b>{{ child?.label }}</b>:                                
                         @if(child?.link != null){
