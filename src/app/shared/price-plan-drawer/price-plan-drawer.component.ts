@@ -71,8 +71,7 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
 
   constructor(
     private fb: FormBuilder,
-    private priceService:
-    PriceServiceService,
+    private priceService: PriceServiceService,
     private cartService: ShoppingCartServiceService,
     private eventMessage: EventMessageService,
     private cdr: ChangeDetectorRef,
