@@ -7,10 +7,10 @@
         : 'border-gray-300 dark:border-secondary-200'"  
         class="mb-2 bg-gray-50 border text-gray-900 dark:bg-secondary-300 dark:text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
         @if(billingForm.get('name')?.touched && billingForm.get('name')?.hasError('required')){
-            <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">This field is mandatory.</span></p>
+            <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ 'BILLING._mandatory' | translate }}</span></p>
         }
         @if(billingForm.get('name')?.invalid && billingForm.get('name')?.errors?.['maxlength']){
-            <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">Name is too long. Must be less than 250 characters.</span></p>
+            <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ 'BILLING._too_long' | translate }}</span></p>
         }
     </div>
     <div>
@@ -21,10 +21,10 @@
         : 'border-gray-300 dark:border-secondary-200'" 
         class="mb-2 bg-gray-50 text-gray-900 dark:bg-secondary-300 dark:text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
         @if(billingForm.get('country')?.touched && billingForm.get('country')?.hasError('required')){
-            <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">This field is mandatory.</span></p>
+            <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ 'BILLING._mandatory' | translate }}</span></p>
         }
         @if(billingForm.get('country')?.invalid && billingForm.get('country')?.errors?.['maxlength']){
-            <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">Country is too long. Must be less than 250 characters.</span></p>
+            <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ 'BILLING._too_long' | translate }}</span></p>
         }
     </div>
     <div>
@@ -35,10 +35,10 @@
         : 'border-gray-300 dark:border-secondary-200'" 
         class="mb-2 bg-gray-50 text-gray-900 dark:bg-secondary-300 dark:text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
         @if(billingForm.get('city')?.touched && billingForm.get('city')?.hasError('required')){
-            <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">This field is mandatory.</span></p>
+            <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ 'BILLING._mandatory' | translate }}</span></p>
         }
         @if(billingForm.get('city')?.invalid && billingForm.get('city')?.errors?.['maxlength']){
-            <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">City is too long. Must be less than 250 characters.</span></p>
+            <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ 'BILLING._too_long' | translate }}</span></p>
         }
     </div>
     <div>
@@ -49,10 +49,10 @@
         : 'border-gray-300 dark:border-secondary-200'" 
         class="mb-2 bg-gray-50 text-gray-900 dark:bg-secondary-300 dark:text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
         @if(billingForm.get('stateOrProvince')?.touched && billingForm.get('stateOrProvince')?.hasError('required')){
-            <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">This field is mandatory.</span></p>
+            <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ 'BILLING._mandatory' | translate }}</span></p>
         }
         @if(billingForm.get('stateOrProvince')?.invalid && billingForm.get('stateOrProvince')?.errors?.['maxlength']){
-            <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">State / Province is too long. Must be less than 250 characters.</span></p>
+            <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ 'BILLING._too_long' | translate }}</span></p>
         }
     </div>
     <div>
@@ -63,10 +63,10 @@
         : 'border-gray-300 dark:border-secondary-200'" 
         class="mb-2 bg-gray-50 text-gray-900 dark:bg-secondary-300 dark:text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
         @if(billingForm.get('postCode')?.touched && billingForm.get('postCode')?.hasError('required')){
-            <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">This field is mandatory.</span></p>
+            <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ 'BILLING._mandatory' | translate }}</span></p>
         }
         @if(billingForm.get('postCode')?.invalid && billingForm.get('postCode')?.errors?.['maxlength']){
-            <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">ZIP / Postal Code is too long. Must be less than 250 characters.</span></p>
+            <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ 'BILLING._too_long' | translate }}</span></p>
         }
     </div>
     <div class="col-span-2">
@@ -77,10 +77,10 @@
         : 'border-gray-300 dark:border-secondary-200'" 
         class="mb-2 min-h-fit bg-gray-50 text-gray-900 dark:bg-secondary-300 dark:text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" rows="4"></textarea>
         @if(billingForm.get('street')?.touched && billingForm.get('street')?.hasError('required')){
-            <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">This field is mandatory.</span></p>
+            <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ 'BILLING._mandatory' | translate }}</span></p>
         }
         @if(billingForm.get('street')?.invalid && billingForm.get('street')?.errors?.['maxlength']){
-            <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">Street is too long. Must be less than 1000 characters.</span></p>
+            <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ 'BILLING._too_long_larger' | translate }}</span></p>
         }
     </div>
     <div class="col-span-2">
@@ -92,13 +92,13 @@
         formControlName="email" name="email"
         class="mb-2 bg-gray-50 border text-gray-900 dark:bg-secondary-300 dark:text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
         @if(billingForm.get('email')?.invalid && billingForm.get('email')?.errors?.['maxlength']){
-            <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">Email is too long. Must be less than 320 characters.</span></p>
+            <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ 'BILLING._too_long_email' | translate }}</span></p>
         }
         @if(billingForm.get('email')?.invalid && billingForm.get('email')?.errors?.['pattern']){
-            <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">Email must follow the following format: example&#64;example.example</span></p>
+            <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ 'BILLING._email_format' | translate }}</span></p>
         }
         @if(billingForm.get('email')?.touched && billingForm.get('email')?.hasError('required')){
-            <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">This field is mandatory.</span></p>
+            <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ 'BILLING._mandatory' | translate }}</span></p>
         }
     </div>
     <div class="col-span-2 lg:col-span-1">
@@ -143,7 +143,7 @@
                 <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">You cannot enter negative numbers.</span></p>
             }
             @else if(billingForm.get('telephoneNumber')?.touched && billingForm.get('telephoneNumber')?.hasError('required')){
-                <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">This field is mandatory.</span></p>
+                <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ 'BILLING._mandatory' | translate }}</span></p>
             }
         </div>
     </div>

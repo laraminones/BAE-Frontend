@@ -35,8 +35,8 @@
         <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-secondary-200 dark:text-gray-300">
         <tr>
           <th class="px-6 py-3"></th>
-          <th class="px-6 py-3">Name</th>
-          <th class="px-6 py-3 text-center">Select</th>
+          <th class="px-6 py-3">{{ 'CREATE_OFFER._name' | translate }}</th>
+          <th class="px-6 py-3 text-center">{{ 'CREATE_OFFER._select' | translate }}</th>
         </tr>
         </thead>
         <tbody data-cy="categoryList">
@@ -105,7 +105,7 @@
           }
         } @empty {
           <tr>
-            <td class="text-center dark:bg-gray-800" colspan="3">There's no subcategories</td>
+            <td class="text-center dark:bg-gray-800" colspan="3">{{ 'CREATE_OFFER._no_subcats' | translate }}</td>
           </tr>
         }
       </ng-template>

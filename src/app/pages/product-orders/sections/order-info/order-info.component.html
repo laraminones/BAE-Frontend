@@ -8,7 +8,7 @@
                     class="w-4 h-4 me-2" aria-hidden="true"
                     fill="currentColor"
                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M192 96a48 48 0 1 0 0-96 48 48 0 1 0 0 96zm-8 352l0-96 16 0 0 96-16 0zm-64 0l-88 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l120 0 80 0 376 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-344 0 0-191.1 28.6 47.5c9.1 15.1 28.8 20 43.9 10.9s20-28.8 10.9-43.9l-58.3-97c-17.4-28.9-48.6-46.6-82.3-46.6l-29.7 0c-33.7 0-64.9 17.7-82.3 46.6l-58.3 97c-9.1 15.1-4.2 34.8 10.9 43.9s34.8 4.2 43.9-10.9L120 256.9 120 448zM464 64l0 242.7-25.4-25.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l80 80c12.5 12.5 32.8 12.5 45.3 0l80-80c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L528 306.7 528 64c0-17.7-14.3-32-32-32s-32 14.3-32 32z"/></svg>
-                As Customer
+                  {{ 'PRODUCT_ORDERS._as_customer' | translate }}
             </a>
         </li>
         @if(isSeller){
@@ -20,7 +20,7 @@
                         [ngClass]="role !== 'Seller' ? 'text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300' : 'text-blue-600 dark:text-blue-500'"
                         class="w-4 h-4 me-2" fill="currentColor"
                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M192 96a48 48 0 1 0 0-96 48 48 0 1 0 0 96zm-8 352l0-96 16 0 0 96-16 0zm-64 0l-88 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l120 0 80 0 376 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-344 0 0-191.1 28.6 47.5c9.1 15.1 28.8 20 43.9 10.9s20-28.8 10.9-43.9l-58.3-97c-17.4-28.9-48.6-46.6-82.3-46.6l-29.7 0c-33.7 0-64.9 17.7-82.3 46.6l-58.3 97c-9.1 15.1-4.2 34.8 10.9 43.9s34.8 4.2 43.9-10.9L120 256.9 120 448zM598.6 121.4l-80-80c-12.5-12.5-32.8-12.5-45.3 0l-80 80c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L464 141.3 464 384c0 17.7 14.3 32 32 32s32-14.3 32-32l0-242.7 25.4 25.4c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3z"/></svg>
-                   As Provider
+                      {{ 'PRODUCT_ORDERS._as_provider' | translate }}
                 </a>
             </li>
         }
@@ -145,10 +145,10 @@
                                             {{ 'PRODUCT_INVENTORY._bill' | translate }}
                                         </th>
                                         <th scope="col" class="px-6 py-3 text-center align-middle">
-                                            Date
+                                            {{ 'PRODUCT_ORDERS._date' | translate }}
                                         </th>
                                         <th scope="col" class="text-center align-middle">
-                                            Actions
+                                            {{ 'PRODUCT_ORDERS._actions' | translate }}
                                         </th>
                                     </tr>
                                 </thead>
@@ -245,7 +245,7 @@
                 <div class="w-full md:w-3/4 lg:w-1/2 relative bg-secondary-50 dark:bg-secondary-100 border border-secondary-50 dark:border-gray-800 rounded-lg shadow bg-cover bg-right-bottom" (click)="$event.stopPropagation();">
                     <!-- Modal header -->
                     <div class="flex items-center justify-between p-2 rounded-t dark:border-gray-600 shadow-lg">
-                        <h2 class="md:text-3xl lg:text-4xl font-bold text-primary-100 ml-4 dark:text-white m-4">Order details:</h2>
+                        <h2 class="md:text-3xl lg:text-4xl font-bold text-primary-100 ml-4 dark:text-white m-4">{{ 'PRODUCT_ORDERS._order_details' | translate }}</h2>
                         <button (click)="showOrderDetails=false;" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white">
                             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
@@ -294,12 +294,12 @@
                             </div>
                             <div class="flex flex-row gap-2 text-gray-600">
                               <p class="w-fit text-base font-bold shrink-0 dark:text-white">
-                                  Customer Info:
+                                  {{ 'PRODUCT_ORDERS._customer_info' | translate }}
                               </p>
                             </div>
                             <div class="flex flex-row gap-2 pb-2 pt-2 ml-2 text-gray-600">
                               <p class="w-fit text-base font-bold shrink-0 dark:text-white">
-                                  Name
+                                  {{ 'PRODUCT_ORDERS._name' | translate }}
                               </p>
                               <h3 class="text-base dark:text-gray-200">
                                 {{ customerName$ | async }}
@@ -307,7 +307,7 @@
                           </div>
                             <div class="flex flex-row gap-2 pb-2 ml-2 text-gray-600">
                                 <p class="w-fit text-base font-bold shrink-0 dark:text-white">
-                                    Billing address
+                                    {{ 'PRODUCT_ORDERS._billing_address' | translate }}
                                 </p>
                                 <h3 class="text-base dark:text-gray-200">
                                     {{orderToShow.billingAccount.contact[0].contactMedium[1].characteristic.city}}, {{orderToShow.billingAccount.contact[0].contactMedium[1].characteristic.street1}}, {{orderToShow.billingAccount.contact[0].contactMedium[1].characteristic.country}} ({{orderToShow.billingAccount.name}})
@@ -315,7 +315,7 @@
                             </div>
                             <div class="flex flex-row gap-2 pb-2 ml-2 text-gray-600">
                                 <p class="w-fit text-base font-bold shrink-0 dark:text-white">
-                                    Contact Email
+                                    {{ 'PRODUCT_ORDERS._email' | translate }}
                                 </p>
                                 <h3 class="text-base dark:text-gray-200">
                                     {{orderToShow.billingAccount.contact[0].contactMedium[0].characteristic.emailAddress}}
@@ -323,26 +323,26 @@
                             </div>
                             <div class="flex flex-row gap-2 pb-2 text-gray-600">
                               <a class="cursor-pointer text-blue-600" (click)="goToCustomerDeatils()">
-                                  Show Customer Details
+                                  {{ 'PRODUCT_ORDERS._show_customer_details' | translate }}
                               </a>
                             </div>
                             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-200 rounded-lg border border-1 border-secondary-50 dark:border-gray-800">
                                 <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-secondary-200 dark:text-white">
                                     <tr>
                                         <th scope="col" class="px-6 py-3 text-center align-middle">
-                                            Img
+                                            {{ 'PRODUCT_ORDERS._img' | translate }}
                                         </th>
                                         <th scope="col" class="px-6 py-3 text-center align-middle">
-                                            Name
+                                          {{ 'PRODUCT_ORDERS._name' | translate }}
                                         </th>
                                         <th scope="col" class="px-6 py-3 text-center align-middle">
-                                            Price Plan
+                                          {{ 'PRODUCT_ORDERS._price_plan' | translate }}
                                         </th>
                                         <th scope="col" class="px-6 py-3 text-center align-middle">
-                                          State
+                                          {{ 'PRODUCT_ORDERS._state' | translate }}
                                         </th>
                                         <th scope="col" class="px-6 py-3 text-center align-middle">
-                                          Actions
+                                          {{ 'PRODUCT_ORDERS._actions' | translate }}
                                         </th>
                                     </tr>
                                 </thead>

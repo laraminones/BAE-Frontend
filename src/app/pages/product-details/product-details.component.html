@@ -203,7 +203,7 @@
                 @if (selfAtt) {
                     <a [href]="selfAtt" target="_blank"
                        class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
-                      You can find the self attestation document here.
+                       {{ 'PRODUCT_DETAILS._self_attestation' | translate }}
                     </a>
                   }
                   
@@ -253,7 +253,7 @@
                 </div>
             </div>
 
-            <h2 class="text-4xl font-extrabold text-primary-100 dark:text-primary-50 text-center pb-8 pt-12">Product pricing</h2>
+            <h2 class="text-4xl font-extrabold text-primary-100 dark:text-primary-50 text-center pb-8 pt-12">{{ 'PRODUCT_DETAILS._product_pricing' | translate }}</h2>
             @if(productOff?.productOfferingPrice != undefined){
                 @if(checkCustom){
                     <div class="grid grid-flow-row gap-4 lg:grid-cols-2 lg:auto-cols-auto justify-items-center p-2">
@@ -326,7 +326,7 @@
         <div #charsScrollAnchor id="chars-scroll-anchor" class="pt-[88px] -mt-[88px]"></div>
         @if(prodSpec.productSpecCharacteristic != undefined && prodChars.length>0) {
             <div #charsContent id="chars-container">
-                <h2 class="text-4xl font-extrabold text-primary-100 text-center pb-8 pt-12 dark:text-primary-50">Product characteristics</h2>
+                <h2 class="text-4xl font-extrabold text-primary-100 text-center pb-8 pt-12 dark:text-primary-50">{{ 'PRODUCT_DETAILS._product_chars' | translate }}</h2>
                 <div class="container mx-auto px-4">
                     <div class="flex flex-wrap -mx-4">
                         @for (char of prodChars; track char.id; let idx = $index) {
@@ -377,7 +377,7 @@
 
         <div #attachScrollAnchor id="attach-scroll-anchor" class="pt-[88px] -mt-[88px]"></div>
         @if(attatchments.length>0){
-        <h2 #attachContent class="text-4xl font-extrabold text-primary-100 dark:text-primary-50 text-center pb-8 pt-12">Product attachments</h2>
+        <h2 #attachContent class="text-4xl font-extrabold text-primary-100 dark:text-primary-50 text-center pb-8 pt-12">{{ 'PRODUCT_DETAILS._product_att' | translate }}</h2>
         <div id="attach-container" class="container mx-auto px-4">
             <div class="flex flex-wrap -mx-4">
                 @for (att of attatchments; track att.id) {
@@ -455,7 +455,7 @@
 
         <div #relScrollAnchor id="rel-scroll-anchor" class="pt-[88px] -mt-[88px]"></div>
         @if(prodSpec.productSpecificationRelationship != undefined && prodSpec.productSpecificationRelationship.length>0){
-            <h2 #relationshipsContent class="text-4xl font-extrabold text-primary-100 text-center pb-8 pt-12 dark:text-primary-50">Product relationships</h2>
+            <h2 #relationshipsContent class="text-4xl font-extrabold text-primary-100 text-center pb-8 pt-12 dark:text-primary-50">{{ 'PRODUCT_DETAILS._product_rels' | translate }}</h2>
             <div id="relationships-container" class="container mx-auto px-4">
                 <div class="flex flex-wrap -mx-4">
                     @for (rel of prodSpec.productSpecificationRelationship; track rel.id) {

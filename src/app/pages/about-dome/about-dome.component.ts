@@ -3,13 +3,15 @@ import { Component } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {faFileCertificate, faBadgeCheck, faHandHoldingCircleDollar, faChartNetwork} from "@fortawesome/pro-solid-svg-icons";
 import { environment } from 'src/environments/environment';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-about-dome',
   standalone: true,
   imports: [
     NgClass,
-    FontAwesomeModule
+    FontAwesomeModule,
+    TranslateModule
   ],
   templateUrl: './about-dome.component.html',
   styleUrl: './about-dome.component.css'

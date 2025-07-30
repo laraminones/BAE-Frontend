@@ -8,7 +8,7 @@
     <!-- Header -->
     <div class="flex justify-between items-center">
       <h2 class="text-2xl font-semibold text-primary-100 dark:text-white mb-4">
-        Configure profile's characteristics
+        {{ 'FORMS.PRICE_PLANS._configure_profile_chars' | translate }}
       </h2>
       <button type="button" (click)="closeDrawer()"
               class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
@@ -55,16 +55,16 @@
       </div>
       <!-- Action Buttons -->
       <div class="flex justify-end space-x-3 p-4">
-        <button type="button" (click)="closeDrawer()" class="px-4 py-2 bg-gray-300 dark:bg-gray-600 rounded dark:text-white">Cancel</button>
+        <button type="button" (click)="closeDrawer()" class="px-4 py-2 bg-gray-300 dark:bg-gray-600 rounded dark:text-white">{{ 'FORMS.PRICE_PLANS._cancel' | translate }}</button>
         <button type="button" (click)="saveProfile()"
                 class="px-4 py-2 rounded text-white transition"
                 [ngClass]="{'bg-primary-100 hover:bg-primary-50': form.valid, 'bg-gray-400 cursor-not-allowed': form.invalid}">
-          Save
+          {{ 'FORMS.PRICE_PLANS._save' | translate }}
         </button>
       </div>
     } @else {
       <div class="p-4 my-2 text-sm text-center text-blue-800 rounded-lg bg-blue-50 dark:bg-secondary-100 dark:text-blue-400" role="alert">
-        <span class="font-medium">The selected product specification has no characteristics related.</span>
+        <span class="font-medium">{{ 'FORMS.PRICE_PLANS._prod_spec_no_chars' | translate }}</span>
       </div>
     }
 
