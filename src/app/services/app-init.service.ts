@@ -30,6 +30,7 @@ export class AppInitService {
                 environment.KB_GUIDELNES_URL = config.domeGuidelines;
                 environment.REGISTRATION_FORM_URL = config.domeRegistrationForm;
                 environment.DFT_CATALOG_ID = config.defaultId;
+                environment.PAYMENT_URL = config.paymentUrl
                 resolve(config);
             }),
             error: (error) => {
