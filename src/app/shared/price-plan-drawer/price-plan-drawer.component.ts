@@ -127,6 +127,17 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
 
       this.updateOrderChars();
     }
+    if (changes['isOpen']?.currentValue === true) {
+      this.tsAndCs = this.productOff?.productOfferingTerm?.[0] || { description: '' };
+      if(this.tsAndCs.description == ''){
+        this.form.controls['tsAccepted'].setValue(true);
+        this.cdr.detectChanges();
+      } else {
+        this.form.controls['tsAccepted'].setValue(false);
+        this.cdr.detectChanges();
+      }
+      console.log(this.tsAndCs)
+    }
   }
 
   ngOnDestroy(): void {
