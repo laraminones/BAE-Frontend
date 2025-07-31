@@ -64,12 +64,13 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
   characteristics: ProductSpecificationCharacteristic[] = []; // Características dinámicas
   filteredCharacteristics: ProductSpecificationCharacteristic[] = [];
 
-  /*@HostListener('document:keydown.escape', ['$event'])
+  @HostListener('document:keydown.escape', ['$event'])
   handleEscape(event: KeyboardEvent): void {
-    if (this.isOpen) {
+    if (event.key === 'Escape' && this.isOpen) {
       this.onClose();
     }
-  }*/
+  }
+  
 
   constructor(
     private fb: FormBuilder,
@@ -90,8 +91,10 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
+    console.log('------------producto')
+    console.log(this.productOff)
     // Escuchar eventos de teclado (por si necesitas otros)
-    //document.addEventListener('keydown', this.handleEscape.bind(this));
+    document.addEventListener('keydown', this.handleEscape.bind(this));
     // Configurar los términos y condiciones
     this.tsAndCs = this.productOff?.productOfferingTerm?.[0] || { description: '' };
     this.isFree = this.productOff?.productOfferingPrice?.length === 0;
@@ -128,7 +131,7 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     // Eliminar eventos de teclado al destruir el componente
-    //document.removeEventListener('keydown', this.handleEscape.bind(this));
+    document.removeEventListener('keydown', this.handleEscape.bind(this));
   }
 
   // Método para cerrar el drawer
