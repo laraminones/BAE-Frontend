@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output, OnInit, HostListener } from '@a
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import {NgClass, NgForOf, NgIf} from "@angular/common";
 import { certifications } from 'src/app/models/certification-standards.const';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-configuration-profile-drawer',
@@ -10,7 +11,8 @@ import { certifications } from 'src/app/models/certification-standards.const';
   imports: [
     NgClass,
     NgIf,
-    NgForOf
+    NgForOf,
+    TranslateModule
   ],
   styleUrl: './configuration-profile-drawer.component.css'
 })

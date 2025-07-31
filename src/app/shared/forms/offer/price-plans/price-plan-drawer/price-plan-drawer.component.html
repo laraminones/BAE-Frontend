@@ -34,10 +34,10 @@
           [ngClass]="(formGroup.get('name')?.invalid == true && formGroup.value.name!='') || (formGroup.get('name')?.touched && formGroup.value.name=='') || (formGroup.hasError('nonUniqueName') && formGroup.get('name')?.touched) ? 'border-red-600' : 'border-gray-300 dark:border-gray-600'"
                  class="mt-1 w-full p-2 border rounded dark:bg-gray-700 dark:text-gray-100">
           @if(formGroup.hasError('nonUniqueName') && formGroup.get('name')?.touched){
-            <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">Name must be unique.</span></p>
+            <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ 'FORMS.PRICE_PLANS._unique' | translate }}</span></p>
           }
           @if(formGroup.get('name')?.invalid && formGroup.get('name')?.errors?.['required'] && (formGroup.get('name')?.touched && formGroup.value.name=='')){
-            <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">This field is mandatory.</span></p>
+            <p class="text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ 'FORMS.PRICE_PLANS._mandatory' | translate }}</span></p>
           }
         </div>
 

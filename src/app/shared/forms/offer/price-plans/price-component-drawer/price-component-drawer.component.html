@@ -27,7 +27,7 @@
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Base price</label>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ 'FORMS.PRICE_PLAN_COMPONENT._base_price' | translate }}</label>
       
         <input
           data-cy="price"
@@ -45,15 +45,15 @@
           <div class="text-red-500 text-sm mt-1">
             @if(priceComponentForm.get('price')?.errors?.['required']){
               <div>
-                Price is required.
+                {{ 'FORMS.PRICE_PLAN_COMPONENT._price_required' | translate }}
               </div>
             }@else if(priceComponentForm.get('price')?.errors?.['max']){
               <div>
-                Price cannot exceed 1,000,000,000.
+                {{ 'FORMS.PRICE_PLAN_COMPONENT._price_limit' | translate }}
               </div>
             }@else if(priceComponentForm.get('price')?.errors?.['min'] && (priceComponentForm.get('price')?.touched || priceComponentForm.get('price')?.dirty)){
               <div class="text-red-500 text-sm mt-1">
-                Price must be a positive number.
+                {{ 'FORMS.PRICE_PLAN_COMPONENT._price_positive' | translate }}
               </div>
             }
           </div>
@@ -208,7 +208,7 @@
                  checked:bg-blue-600 checked:border-blue-600"
         />
         <label for="showDiscount" class="ml-2 font-medium text-base text-gray-900 dark:text-white">
-          Does this price component include a discount?
+          {{ 'FORMS.PRICE_PLAN_COMPONENT._includes_discount' | translate }}
         </label>
       </div>
       
@@ -239,11 +239,11 @@
             <div  class="text-red-500 text-sm mt-1">
               @if(priceComponentForm.get('discountValue')?.errors?.['min']){
                 <div>
-                  Discount must be at least 0.
+                  {{ 'FORMS.PRICE_PLAN_COMPONENT._discount_positive' | translate }}
                 </div>
               }@else if(priceComponentForm.get('discountValue')?.errors?.['max']){
                 <div>
-                  Discount cannot exceed 100.
+                  {{ 'FORMS.PRICE_PLAN_COMPONENT._discount_limit' | translate }}
                 </div>
               }
             </div>
@@ -281,7 +281,7 @@
             <div class="text-red-500 text-sm mt-1">
               @if(priceComponentForm.get('discountDuration')?.errors?.['min']){
                 <div>
-                  Duration must be a positive number.
+                  {{ 'FORMS.PRICE_PLAN_COMPONENT._duration_positive' | translate }}
                 </div>
               }
             </div>

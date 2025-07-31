@@ -42,6 +42,7 @@ export class ChatbotWidgetComponent {
     this.state = !this.state;
     this.cdr.detectChanges();
     this.chatbox = this.el.nativeElement.querySelector('.chatbox__support')
+    this.updateChatText();
     // show or hides the box
     /*if(this.state) {
       this.chatbox.classList.add('chatbox--active')
