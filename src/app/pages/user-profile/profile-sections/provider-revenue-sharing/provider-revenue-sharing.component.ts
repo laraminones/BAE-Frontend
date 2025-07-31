@@ -19,6 +19,7 @@ export class ProviderRevenueSharingComponent implements OnInit {
   subscription:any;
   billing:any;
   revenue:any;
+  revenueSummary:any;
   referral:any;
   support:any;
 
@@ -42,6 +43,8 @@ export class ProviderRevenueSharingComponent implements OnInit {
       } else if(info[i].label == 'Billing History'){
         this.billing = info[i]
       } else if(info[i].label == 'Revenue Summary'){
+        this.revenueSummary = info[i]
+      } else if (info[i].label == 'Revenue Volume Monitoring'){
         this.revenue = info[i]
       } else if(info[i].label == 'Referral Program Area'){
         this.referral = info[i]
