@@ -31,6 +31,7 @@ export class AppInitService {
                 environment.REGISTRATION_FORM_URL = config.domeRegistrationForm;
                 environment.DFT_CATALOG_ID = config.defaultId;
                 environment.quoteApi = config.quoteApi ?? 'http://localhost:8080/quoteManagement';
+                environment.PAYMENT_URL = config.paymentUrl
                 resolve(config);
             }),
             error: (error) => {

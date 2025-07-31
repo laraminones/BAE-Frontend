@@ -266,6 +266,7 @@
     "PROFILE":{
         "_general": "General",
         "_bill": "Billing addresses",
+        "_revenue": "Revenue sharing",
         "_orders": "Orders",
         "_order_list": "My order list",
         "_update": "Update",
@@ -996,7 +997,8 @@
         "_verification": "Verification",
         "_productId": "Product ID",
         "_vc": "Verifiable Credential",
-        "_add": "Add"
+        "_add": "Add",
+        "_revenue": "Revenue sharing"
     },
     "CATEGORIES":{
         "_categories": "Categories",

@@ -24,6 +24,7 @@ export class UserProfileComponent implements OnInit{
   show_org_profile:boolean=false;
   show_orders: boolean = false;
   show_billing: boolean = false;
+  show_revenue: boolean = false;
   loggedAsUser: boolean = true;
   profile:any;
   partyId:any='';
@@ -78,6 +79,7 @@ export class UserProfileComponent implements OnInit{
     this.show_profile=true;
     this.show_orders=false;
     this.show_org_profile=false;
+    this.show_revenue=false;
     this.selectGeneral();
   }
 
@@ -86,6 +88,7 @@ export class UserProfileComponent implements OnInit{
     this.show_profile=false;
     this.show_orders=false;
     this.show_org_profile=true;
+    this.show_revenue=false;
     this.selectGeneral();
   }
 
@@ -95,6 +98,18 @@ export class UserProfileComponent implements OnInit{
     this.show_profile=false;
     this.show_orders=false;
     this.show_org_profile=false;
+    this.show_revenue=false;
+    this.cdr.detectChanges();
+    initFlowbite();
+  }
+
+  getRevenue(){
+    this.selectRevenue();    
+    this.show_billing=false;
+    this.show_profile=false;
+    this.show_orders=false;
+    this.show_org_profile=false;
+    this.show_revenue=true;
     this.cdr.detectChanges();
     initFlowbite();
   }
@@ -105,6 +120,7 @@ export class UserProfileComponent implements OnInit{
     this.show_profile=false;
     this.show_orders=true;
     this.show_org_profile=false;
+    this.show_revenue=false;
     this.cdr.detectChanges();
   }
 
@@ -112,30 +128,48 @@ export class UserProfileComponent implements OnInit{
     let bill_button = document.getElementById('bill-button')
     let general_button = document.getElementById('general-button')
     let order_button = document.getElementById('order-button')
+    let revenue_button = document.getElementById('revenue-button')
 
     this.selectMenu(general_button,'text-white bg-primary-100');
     this.unselectMenu(bill_button,'text-white bg-primary-100');
     this.unselectMenu(order_button,'text-white bg-primary-100');
+    this.unselectMenu(revenue_button,'text-white bg-primary-100');
   }
 
   selectBilling(){
     let bill_button = document.getElementById('bill-button')
     let general_button = document.getElementById('general-button')
     let order_button = document.getElementById('order-button')
+    let revenue_button = document.getElementById('revenue-button')
 
     this.selectMenu(bill_button,'text-white bg-primary-100');
     this.unselectMenu(general_button,'text-white bg-primary-100');
     this.unselectMenu(order_button,'text-white bg-primary-100');
+    this.unselectMenu(revenue_button,'text-white bg-primary-100');
   }
 
   selectOrder(){
     let bill_button = document.getElementById('bill-button')
     let general_button = document.getElementById('general-button')
     let order_button = document.getElementById('order-button')
+    let revenue_button = document.getElementById('revenue-button')
 
     this.selectMenu(order_button,'text-white bg-primary-100');
     this.unselectMenu(bill_button,'text-white bg-primary-100');
     this.unselectMenu(general_button,'text-white bg-primary-100');
+    this.unselectMenu(revenue_button,'text-white bg-primary-100');
+  }
+
+  selectRevenue(){
+    let bill_button = document.getElementById('bill-button')
+    let general_button = document.getElementById('general-button')
+    let order_button = document.getElementById('order-button')
+    let revenue_button = document.getElementById('revenue-button')
+
+    this.selectMenu(revenue_button,'text-white bg-primary-100');
+    this.unselectMenu(bill_button,'text-white bg-primary-100');
+    this.unselectMenu(general_button,'text-white bg-primary-100');
+    this.unselectMenu(order_button,'text-white bg-primary-100');
   }
 
   removeClass(elem: HTMLElement, cls:string) {
