@@ -360,17 +360,17 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
       }
     }
 
-    if(this.metrics.length>0){
-      prod.metrics = [];
-      for(let i=0; i < this.metrics.length; i++){
-        prod.metrics.push({
-          usagespecid: this.metrics[i].usagespecid,
-          unitOfMeasure: this.metrics[i].unitOfMeasure,
-          value: this.metrics[i].value
-        })
-      }
-      console.log('formato metrics')
-      console.log(prod.metrics)
+    let usage: any = [];
+    if(this.metrics.length > 0){
+      usage = this.metrics.map(metric => ({
+        usageSpecification: {
+          id: metric.usageSpecId
+        },
+        usageCharacteristic: [{
+          name: metric.unitOfMeasure,
+          value: metric.value
+        }]
+      }));
     }
 
     let orderItems = [];
@@ -378,9 +378,13 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
 
     let prodOrder = {
       "id": uuidv4(),
-      "productOrderItem":orderItems
+      "productOrderItem": orderItems
     }
 
+    const previewReq = {
+      productOrder: prodOrder,
+      usage: usage
+    }
     if (!selectedPricePlan) return;
 
     console.log('--- prod ---')
@@ -388,7 +392,7 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
     console.log('--- prod ---')
 
     this.isLoading = true;
-    this.priceService.calculatePrice(prodOrder).subscribe({
+    this.priceService.calculatePrice(previewReq).subscribe({
       next: (response) => {
         console.log('calculate price...')
         console.log(response.orderTotalPrice)
