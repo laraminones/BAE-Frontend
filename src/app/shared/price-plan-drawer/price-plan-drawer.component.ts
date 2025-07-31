@@ -57,7 +57,7 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
   selectedUsageSpecId: string | null = null;
   selectedUnitOfMeasure: string | null = null;
   metrics:any[]=[];
-  groupedMetrics: { [usageSpecId: string]: { usagespecid: string; name: string; unitOfMeasure: string }[] } = {};
+  groupedMetrics: { [usageSpecId: string]: { usageSpecId: string; name: string; unitOfMeasure: string }[] } = {};
 
   characteristics: ProductSpecificationCharacteristic[] = []; // Características dinámicas
   filteredCharacteristics: ProductSpecificationCharacteristic[] = [];
@@ -182,22 +182,22 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
 
     this.filterCharacteristics();
 
-    if(pricePlan.usagespecid && pricePlan.unitOfMeasure){
-      //let usageSpec = await this.usageService.getUsageSpec(pricePlan.usagespecid)
+    if(pricePlan.usageSpecId && pricePlan.unitOfMeasure){
+      //let usageSpec = await this.usageService.getUsageSpec(pricePlan.usageSpecId)
       this.metrics.push({
         priceId: pricePlan.id,
-        usagespecid: pricePlan.usagespecid,
+        usageSpecId: pricePlan.usageSpecId,
         //name: usageSpec.name,
         unitOfMeasure: pricePlan.unitOfMeasure.units
       })
     } else if(pricePlan.bundledPopRelationship) {
       for(let i=0;i<pricePlan.bundledPopRelationship.length;i++){
         let comp = await this.api.getOfferingPrice(pricePlan.bundledPopRelationship[i].id)
-        if(comp.usagespecid && comp.unitOfMeasure){
-          //let usageSpec = await this.usageService.getUsageSpec(comp.usagespecid)
+        if(comp.usageSpecId && comp.unitOfMeasure){
+          //let usageSpec = await this.usageService.getUsageSpec(comp.usageSpecId)
           this.metrics.push({
             priceId: comp.id,
-            usagespecid: comp.usagespecid,
+            usageSpecId: comp.usageSpecId,
             //name: usageSpec.name,
             unitOfMeasure: comp.unitOfMeasure.units         
           })
@@ -213,7 +213,7 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
       this.selectedMetric=this.metrics[0]
       this.selectedUnitOfMeasure=this.metrics[0].unitOfMeasure
       const grouped = this.metrics.reduce((acc, metric) => {
-        const key = metric.usagespecid;
+        const key = metric.usageSpecId;
       
         if (!acc[key]) {
           acc[key] = [];
@@ -342,7 +342,7 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
     if(this.selectedMetric){
       //Añadir la métrica al orderItem
       prod.metric = {
-        usagespecid: this.selectedMetric.usagespecid,
+        usageSpecId: this.selectedMetric.usageSpecId,
         unitOfMeasure: this.selectedMetric.unitOfMeasure
       }
     }

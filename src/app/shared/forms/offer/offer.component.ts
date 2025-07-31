@@ -324,7 +324,7 @@ export class OfferComponent implements OnInit, OnDestroy{
           price: pricePlan?.price?.value,
           validFor: pricePlan?.validFor || null,
           usageUnit: pricePlan.usageUnit,
-          usageSpecId: pricePlan?.usagespecid
+          usageSpecId: pricePlan?.usageSpecId
         }
         if(pricePlan?.popRelationship){
           let alter = await this.api.getOfferingPrice(pricePlan?.popRelationship[0].id)
@@ -360,7 +360,7 @@ export class OfferComponent implements OnInit, OnDestroy{
             selectedCharacteristic: data?.prodSpecCharValueUse || null,
             currency: data?.price?.unit || 'EUR',
             usageUnit: data?.unitOfMeasure?.units || null,
-            usageSpecId: data?.usagespecid,
+            usageSpecId: data?.usageSpecId,
             recurringPeriod: data?.recurringChargePeriodType || 'month',
             price: data?.price?.value,
             validFor: data?.validFor || null,
@@ -391,13 +391,14 @@ export class OfferComponent implements OnInit, OnDestroy{
       priceInfo.priceComponents=relatedPrices;
       console.log(priceInfo)
       }
-      if(pricePlan.priceType=='usage'){
-        priceInfo.usageUnit=pricePlan.unitOfMeasure.units
-        priceInfo.usageSpecId= pricePlan?.usagespecid
+
+      if(pricePlan.priceType == 'usage'){
+        priceInfo.usageUnit = pricePlan.unitOfMeasure.units
+        priceInfo.usageSpecId = pricePlan?.usageSpecId
       }
 
-      if(pricePlan.priceType=='recurring' || pricePlan.priceType=='recurring-prepaid'){
-        priceInfo.recurringPeriod=pricePlan.recurringChargePeriodType
+      if(pricePlan.priceType == 'recurring' || pricePlan.priceType == 'recurring-prepaid'){
+        priceInfo.recurringPeriod = pricePlan.recurringChargePeriodType
       }
 
       this.pricePlans.push(priceInfo);
@@ -488,7 +489,7 @@ export class OfferComponent implements OnInit, OnDestroy{
       }
       priceComp['@baseType'] = "ProductOfferingPrice";
       priceComp['@schemaLocation'] = "https://raw.githubusercontent.com/laraminones/tmf-new-schemas/main/UsageSpecId.json";
-      (priceComp as any).usagespecid = component.newValue.usageSpecId;
+      (priceComp as any).usageSpecId = component.usageSpecId ?? component?.newValue?.usageSpecId;
 
 
       console.log('-- here')
@@ -540,7 +541,7 @@ export class OfferComponent implements OnInit, OnDestroy{
 
       priceComp['@baseType'] = "ProductOfferingPrice";
       priceComp['@schemaLocation'] = "https://raw.githubusercontent.com/laraminones/tmf-new-schemas/main/UsageSpecId.json";
-      (priceComp as any).usagespecid = component.newValue.usageSpecId;
+      (priceComp as any).usageSpecId = component.newValue.usageSpecId;
 
       console.log('----- here')
       console.log(priceComp)
@@ -653,7 +654,7 @@ export class OfferComponent implements OnInit, OnDestroy{
 
       price['@baseType'] = "ProductOfferingPrice";
       price['@schemaLocation'] = "https://raw.githubusercontent.com/laraminones/tmf-new-schemas/main/UsageSpecId.json";
-      (price as any).usagespecid = comp.usageSpecId ?? plan?.newValue?.priceComponents[0].usageSpecId;
+      (price as any).usageSpecId = comp.usageSpecId ?? plan?.newValue?.priceComponents[0].usageSpecId;
 
 
       console.log('----- here')
@@ -724,7 +725,7 @@ export class OfferComponent implements OnInit, OnDestroy{
 
         price['@baseType'] = "ProductOfferingPrice";
         price['@schemaLocation'] = "https://raw.githubusercontent.com/laraminones/tmf-new-schemas/main/UsageSpecId.json";
-        (price as any).usagespecid = plan?.newValue?.priceComponents[0].usageSpecId;
+        (price as any).usageSpecId = plan?.newValue?.priceComponents[0].usageSpecId;
 
         console.log('----- here')
         console.log(price)
