@@ -17,6 +17,7 @@ type ProductSpecification = components["schemas"]["ProductSpecification"];
 type ProductOfferingTerm = components["schemas"]["ProductOfferingTerm"];
 type ProductSpecificationCharacteristic = components["schemas"]["ProductSpecificationCharacteristic"];
 type AttachmentRefOrValue = components["schemas"]["AttachmentRefOrValue"];
+import { FormsModule } from '@angular/forms';
 
 
 @Component({
@@ -27,7 +28,8 @@ type AttachmentRefOrValue = components["schemas"]["AttachmentRefOrValue"];
     MarkdownComponent,
     NgClass,
     CurrencyPipe,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule
   ],
   templateUrl: './price-plan-drawer.component.html',
   styleUrl: './price-plan-drawer.component.css'
@@ -62,12 +64,12 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
   characteristics: ProductSpecificationCharacteristic[] = []; // Características dinámicas
   filteredCharacteristics: ProductSpecificationCharacteristic[] = [];
 
-  @HostListener('document:keydown.escape', ['$event'])
+  /*@HostListener('document:keydown.escape', ['$event'])
   handleEscape(event: KeyboardEvent): void {
     if (this.isOpen) {
       this.onClose();
     }
-  }
+  }*/
 
   constructor(
     private fb: FormBuilder,
@@ -89,7 +91,7 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     // Escuchar eventos de teclado (por si necesitas otros)
-    document.addEventListener('keydown', this.handleEscape.bind(this));
+    //document.addEventListener('keydown', this.handleEscape.bind(this));
     // Configurar los términos y condiciones
     this.tsAndCs = this.productOff?.productOfferingTerm?.[0] || { description: '' };
     this.isFree = this.productOff?.productOfferingPrice?.length === 0;
@@ -126,7 +128,7 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     // Eliminar eventos de teclado al destruir el componente
-    document.removeEventListener('keydown', this.handleEscape.bind(this));
+    //document.removeEventListener('keydown', this.handleEscape.bind(this));
   }
 
   // Método para cerrar el drawer
@@ -189,7 +191,8 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
         priceId: pricePlan.id,
         usagespecid: pricePlan.usagespecid,
         //name: usageSpec.name,
-        unitOfMeasure: pricePlan.unitOfMeasure.units
+        unitOfMeasure: pricePlan.unitOfMeasure.units,
+        value: 0
       })
     } else if(pricePlan.bundledPopRelationship) {
       for(let i=0;i<pricePlan.bundledPopRelationship.length;i++){
@@ -200,7 +203,8 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
             priceId: comp.id,
             usagespecid: comp.usagespecid,
             //name: usageSpec.name,
-            unitOfMeasure: comp.unitOfMeasure.units         
+            unitOfMeasure: comp.unitOfMeasure.units,
+            value: 0  
           })
         }
       }
@@ -210,7 +214,7 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
     console.log('metrics----')
     console.log(this.metrics)
 
-    if(this.metrics.length>0){
+    /*if(this.metrics.length>0){
       this.selectedMetric=this.metrics[0]
       this.selectedUnitOfMeasure=this.metrics[0].unitOfMeasure
       const grouped = this.metrics.reduce((acc, metric) => {
@@ -225,7 +229,7 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
         return acc;
       }, {} as Record<string, typeof this.metrics>);
       this.groupedMetrics=grouped;        
-    }  
+    }  */
 
     this.selectedPricePlan = pricePlan;
     console.log(this.selectedPricePlan);
@@ -238,9 +242,12 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
     this.selectedUnitOfMeasure = null;
   }
   
-  onMetricChange(event: Event): void {
-    const target = event.target as HTMLSelectElement;
-    this.selectedUnitOfMeasure = target.value;
+  onMetricChange(event: Event, metric: any) {
+    const input = event.target as HTMLInputElement;
+    metric.value = input.valueAsNumber; // update the metric's value with the new input
+    console.log('Metric changed:', metric.unitOfMeasure, 'Value:', metric.value);
+    console.log(this.metrics)
+    this.calculatePrice();
   }
 
   get usageSpecIds(): string[] {
@@ -340,12 +347,17 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
       }
     }
 
-    if(this.selectedMetric){
-      //Añadir la métrica al orderItem
-      prod.metric = {
-        usagespecid: this.selectedMetric.usagespecid,
-        unitOfMeasure: this.selectedMetric.unitOfMeasure
+    if(this.metrics.length>0){
+      prod.metrics = [];
+      for(let i=0; i < this.metrics.length; i++){
+        prod.metrics.push({
+          usagespecid: this.metrics[i].usagespecid,
+          unitOfMeasure: this.metrics[i].unitOfMeasure,
+          value: this.metrics[i].value
+        })
       }
+      console.log('formato metrics')
+      console.log(prod.metrics)
     }
 
     let orderItems = [];
