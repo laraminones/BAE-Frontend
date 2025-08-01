@@ -932,7 +932,12 @@ export class OfferComponent implements OnInit, OnDestroy{
       lifecycleStatus: this.offer.lifecycleStatus,
       version: this.offer.version,
       category: this.offer.category,
-      productOfferingPrice: this.offer.productOfferingPrice,
+      productOfferingPrice: this.offer.productOfferingPrice.map((price: any) => {
+        return { // WORKARROUND ISSUE WITH THE PRICE PLAN TO BE INCLUDED IN THE REF
+          id: price.id,
+          href: price.href
+        }
+      }),
       validFor: this.offer.validFor,
       productOfferingTerm: this.offer.productOfferingTerm
     };
