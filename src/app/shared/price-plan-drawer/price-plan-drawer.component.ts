@@ -10,11 +10,14 @@ import {EventMessageService} from "../../services/event-message.service";
 import { cartProduct } from 'src/app/models/interfaces';
 import { v4 as uuidv4 } from 'uuid';
 import { certifications } from 'src/app/models/certification-standards.const';
+import { UsageServiceService } from 'src/app/services/usage-service.service'
+import { ApiServiceService } from 'src/app/services/product-service.service'
 type Product = components["schemas"]["ProductOffering"];
 type ProductSpecification = components["schemas"]["ProductSpecification"];
 type ProductOfferingTerm = components["schemas"]["ProductOfferingTerm"];
 type ProductSpecificationCharacteristic = components["schemas"]["ProductSpecificationCharacteristic"];
 type AttachmentRefOrValue = components["schemas"]["AttachmentRefOrValue"];
+import { FormsModule } from '@angular/forms';
 
 
 @Component({
@@ -25,7 +28,8 @@ type AttachmentRefOrValue = components["schemas"]["AttachmentRefOrValue"];
     MarkdownComponent,
     NgClass,
     CurrencyPipe,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule
   ],
   templateUrl: './price-plan-drawer.component.html',
   styleUrl: './price-plan-drawer.component.css'
@@ -50,18 +54,32 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
   images: AttachmentRefOrValue[]  = [];
   toastVisibility: boolean = false;
   orderChars:any[]=[];
+  selectedPriceComponents:any[]=[];
+  selectedMetric:any;
+  selectedUsageSpecId: string | null = null;
+  selectedUnitOfMeasure: string | null = null;
+  metrics:any[]=[];
+  groupedMetrics: { [usageSpecId: string]: { usageSpecId: string; name: string; unitOfMeasure: string }[] } = {};
 
   characteristics: ProductSpecificationCharacteristic[] = []; // Características dinámicas
   filteredCharacteristics: ProductSpecificationCharacteristic[] = [];
 
   @HostListener('document:keydown.escape', ['$event'])
   handleEscape(event: KeyboardEvent): void {
-    if (this.isOpen) {
+    if (event.key === 'Escape' && this.isOpen) {
       this.onClose();
     }
   }
+  
 
-  constructor(private fb: FormBuilder, private priceService: PriceServiceService,private cartService: ShoppingCartServiceService,private eventMessage: EventMessageService,private cdr: ChangeDetectorRef,) {
+  constructor(
+    private fb: FormBuilder,
+    private priceService: PriceServiceService,
+    private cartService: ShoppingCartServiceService,
+    private eventMessage: EventMessageService,
+    private cdr: ChangeDetectorRef,
+    private usageService: UsageServiceService,
+    private api: ApiServiceService) {
     // Crear el formulario padre
     this.form = this.fb.group({
       selectedPricePlan: [null, Validators.required], // Plan de precios seleccionado
@@ -72,6 +90,8 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
+    console.log('------------producto')
+    console.log(this.productOff)
     // Escuchar eventos de teclado (por si necesitas otros)
     document.addEventListener('keydown', this.handleEscape.bind(this));
     // Configurar los términos y condiciones
@@ -105,6 +125,17 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
       this.filterCharacteristics();
 
       this.updateOrderChars();
+    }
+    if (changes['isOpen']?.currentValue === true) {
+      this.tsAndCs = this.productOff?.productOfferingTerm?.[0] || { description: '' };
+      if(this.tsAndCs.description == ''){
+        this.form.controls['tsAccepted'].setValue(true);
+        this.cdr.detectChanges();
+      } else {
+        this.form.controls['tsAccepted'].setValue(false);
+        this.cdr.detectChanges();
+      }
+      console.log(this.tsAndCs)
     }
   }
 
@@ -148,8 +179,12 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
   }
 
   // Handle price plan selection
-  onPricePlanSelected(pricePlan: any): void {
+  async onPricePlanSelected(pricePlan: any) {
+    this.metrics=[];
+    console.log('precio')
+    console.log(pricePlan)
     this.form.get('selectedPricePlan')?.setValue(pricePlan);
+
 
     // Set chars based on selected price plan
     this.isCustom = pricePlan.priceType === 'custom';
@@ -163,10 +198,75 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
 
     this.filterCharacteristics();
 
+    if(pricePlan.usageSpecId && pricePlan.unitOfMeasure){
+      //let usageSpec = await this.usageService.getUsageSpec(pricePlan.usageSpecId)
+      this.metrics.push({
+        priceId: pricePlan.id,
+        usageSpecId: pricePlan.usageSpecId,
+        //name: usageSpec.name,
+        unitOfMeasure: pricePlan.unitOfMeasure.units,
+        value: 0
+      })
+    } else if(pricePlan.bundledPopRelationship) {
+      for(let i=0;i<pricePlan.bundledPopRelationship.length;i++){
+        let comp = await this.api.getOfferingPrice(pricePlan.bundledPopRelationship[i].id)
+        if(comp.usageSpecId && comp.unitOfMeasure){
+          //let usageSpec = await this.usageService.getUsageSpec(comp.usageSpecId)
+          this.metrics.push({
+            priceId: comp.id,
+            usageSpecId: comp.usageSpecId,
+            //name: usageSpec.name,
+            unitOfMeasure: comp.unitOfMeasure.units,
+            value: 0  
+          })
+        }
+      }
+  
+    }
+
+    console.log('metrics----')
+    console.log(this.metrics)
+
+    /*if(this.metrics.length>0){
+      this.selectedMetric=this.metrics[0]
+      this.selectedUnitOfMeasure=this.metrics[0].unitOfMeasure
+      const grouped = this.metrics.reduce((acc, metric) => {
+        const key = metric.usageSpecId;
+      
+        if (!acc[key]) {
+          acc[key] = [];
+        }
+      
+        acc[key].push(metric);
+      
+        return acc;
+      }, {} as Record<string, typeof this.metrics>);
+      this.groupedMetrics=grouped;        
+    }  */
+
     this.selectedPricePlan = pricePlan;
     console.log(this.selectedPricePlan);
     this.calculatePrice();
   }
+
+  onUsageSpecChange(event: Event): void {
+    const target = event.target as HTMLSelectElement;
+    this.selectedUsageSpecId = target.value;
+    this.selectedUnitOfMeasure = null;
+  }
+  
+  onMetricChange(event: Event, metric: any) {
+    const input = event.target as HTMLInputElement;
+    metric.value = input.valueAsNumber; // update the metric's value with the new input
+    console.log('Metric changed:', metric.unitOfMeasure, 'Value:', metric.value);
+    console.log(this.metrics)
+    this.calculatePrice();
+  }
+
+  get usageSpecIds(): string[] {
+    return Object.keys(this.groupedMetrics);
+  }
+  
 
   // Handle characteristic value changes
   onValueChange(event: { characteristicId: string; selectedValue: any }): void {
@@ -240,7 +340,7 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
 
     const selectedPricePlan = this.form.get('selectedPricePlan')?.value;
     //PROD is an OrderItem
-    let prod = {
+    let prod : any = {
       "id": this.productOff?.id,
       "action": "add",
       "quantity": "1",
@@ -260,14 +360,31 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
       }
     }
 
+    let usage: any = [];
+    if(this.metrics.length > 0){
+      usage = this.metrics.map(metric => ({
+        usageSpecification: {
+          id: metric.usageSpecId
+        },
+        usageCharacteristic: [{
+          name: metric.unitOfMeasure,
+          value: metric.value
+        }]
+      }));
+    }
+
     let orderItems = [];
     orderItems.push(prod);
 
     let prodOrder = {
       "id": uuidv4(),
-      "productOrderItem":orderItems
+      "productOrderItem": orderItems
     }
 
+    const previewReq = {
+      productOrder: prodOrder,
+      usage: usage
+    }
     if (!selectedPricePlan) return;
 
     console.log('--- prod ---')
@@ -275,7 +392,7 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
     console.log('--- prod ---')
 
     this.isLoading = true;
-    this.priceService.calculatePrice(prodOrder).subscribe({
+    this.priceService.calculatePrice(previewReq).subscribe({
       next: (response) => {
         console.log('calculate price...')
         console.log(response.orderTotalPrice)

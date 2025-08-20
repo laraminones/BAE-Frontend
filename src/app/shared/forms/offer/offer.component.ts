@@ -113,6 +113,7 @@ export class OfferComponent implements OnInit, OnDestroy{
     this.formChanges[change.subformType] = change;
     this.hasChanges = Object.keys(this.formChanges).length > 0;
     console.log('📝 Has changes:', this.hasChanges);
+    console.log(this.formChanges[change.subformType])
   }
 
   ngOnDestroy() {
@@ -177,6 +178,7 @@ export class OfferComponent implements OnInit, OnDestroy{
 
   submitForm() {
     if (this.formType === 'update') {
+      this.eventMessage.emitUpdateOffer(true);
       console.log('🔄 Starting offer update process...');
       console.log('📝 Current form changes:', this.formChanges);
       
@@ -321,7 +323,8 @@ export class OfferComponent implements OnInit, OnDestroy{
           productProfile: configProfileCheck ? this.mapProductProfile(pricePlan?.prodSpecCharValueUse || []) : [],
           price: pricePlan?.price?.value,
           validFor: pricePlan?.validFor || null,
-          usageUnit: pricePlan.usageUnit
+          usageUnit: pricePlan.usageUnit,
+          usageSpecId: pricePlan?.usageSpecId
         }
         if(pricePlan?.popRelationship){
           let alter = await this.api.getOfferingPrice(pricePlan?.popRelationship[0].id)
@@ -357,6 +360,7 @@ export class OfferComponent implements OnInit, OnDestroy{
             selectedCharacteristic: data?.prodSpecCharValueUse || null,
             currency: data?.price?.unit || 'EUR',
             usageUnit: data?.unitOfMeasure?.units || null,
+            usageSpecId: data?.usageSpecId,
             recurringPeriod: data?.recurringChargePeriodType || 'month',
             price: data?.price?.value,
             validFor: data?.validFor || null,
@@ -387,12 +391,14 @@ export class OfferComponent implements OnInit, OnDestroy{
       priceInfo.priceComponents=relatedPrices;
       console.log(priceInfo)
       }
-      if(pricePlan.priceType=='usage'){
-        priceInfo.usageUnit=pricePlan.unitOfMeasure.units
+
+      if(pricePlan.priceType == 'usage'){
+        priceInfo.usageUnit = pricePlan.unitOfMeasure.units
+        priceInfo.usageSpecId = pricePlan?.usageSpecId
       }
 
-      if(pricePlan.priceType=='recurring' || pricePlan.priceType=='recurring-prepaid'){
-        priceInfo.recurringPeriod=pricePlan.recurringChargePeriodType
+      if(pricePlan.priceType == 'recurring' || pricePlan.priceType == 'recurring-prepaid'){
+        priceInfo.recurringPeriod = pricePlan.recurringChargePeriodType
       }
 
       this.pricePlans.push(priceInfo);
@@ -476,7 +482,18 @@ export class OfferComponent implements OnInit, OnDestroy{
     }
 
     if (priceType === 'usage') {
-      priceComp.unitOfMeasure = { amount: 1, units: component.usageUnit ?? component.newValue.usageUnit };
+      console.log(component.newValue)
+      priceComp.unitOfMeasure = {
+        amount: 1,
+        units: component.usageUnit ?? component.newValue.usageUnit      
+      }
+      priceComp['@baseType'] = "ProductOfferingPrice";
+      priceComp['@schemaLocation'] = "https://raw.githubusercontent.com/laraminones/tmf-new-schemas/main/UsageSpecId.json";
+      (priceComp as any).usageSpecId = component.usageSpecId ?? component?.newValue?.usageSpecId;
+
+
+      console.log('-- here')
+      console.log(priceComp)
     }
 
     if (component?.selectedCharacteristic || component?.newValue?.selectedCharacteristic) {
@@ -516,7 +533,18 @@ export class OfferComponent implements OnInit, OnDestroy{
     }
 
     if (component.newValue.priceType === 'usage') {
-      priceComp.unitOfMeasure = { amount: 1, units: component.newValue.usageUnit };
+      console.log(component.newValue)
+      priceComp.unitOfMeasure = { 
+        amount: 1,
+        units: component.newValue.usageUnit     
+      };
+
+      priceComp['@baseType'] = "ProductOfferingPrice";
+      priceComp['@schemaLocation'] = "https://raw.githubusercontent.com/laraminones/tmf-new-schemas/main/UsageSpecId.json";
+      (priceComp as any).usageSpecId = component.newValue.usageSpecId;
+
+      console.log('----- here')
+      console.log(priceComp)
     }
 
     if (component.newValue.selectedCharacteristic) {
@@ -619,7 +647,18 @@ export class OfferComponent implements OnInit, OnDestroy{
     }
 
     if (priceType === 'usage') {
-      price.unitOfMeasure = { amount: 1, units: comp.usageUnit ?? plan?.newValue?.priceComponents[0]?.usageUnit };
+      price.unitOfMeasure = { 
+        amount: 1,
+        units: comp.usageUnit ?? plan?.newValue?.priceComponents[0]?.usageUnit     
+      };
+
+      price['@baseType'] = "ProductOfferingPrice";
+      price['@schemaLocation'] = "https://raw.githubusercontent.com/laraminones/tmf-new-schemas/main/UsageSpecId.json";
+      (price as any).usageSpecId = comp.usageSpecId ?? plan?.newValue?.priceComponents[0].usageSpecId;
+
+
+      console.log('----- here')
+      console.log(price)
     }
 
     if (comp?.discountValue != null) {
@@ -679,7 +718,17 @@ export class OfferComponent implements OnInit, OnDestroy{
       }
   
       if (plan.newValue.priceComponents[0]?.priceType === 'usage') {
-        price.unitOfMeasure = { amount: 1, units: plan.newValue.priceComponents[0].usageUnit };
+        price.unitOfMeasure = { 
+          amount: 1,
+          units: plan.newValue.priceComponents[0].usageUnit        
+        };
+
+        price['@baseType'] = "ProductOfferingPrice";
+        price['@schemaLocation'] = "https://raw.githubusercontent.com/laraminones/tmf-new-schemas/main/UsageSpecId.json";
+        (price as any).usageSpecId = plan?.newValue?.priceComponents[0].usageSpecId;
+
+        console.log('----- here')
+        console.log(price)
       }
   
       if (plan.newValue.priceComponents[0]?.selectedCharacteristic) {
@@ -883,7 +932,12 @@ export class OfferComponent implements OnInit, OnDestroy{
       lifecycleStatus: this.offer.lifecycleStatus,
       version: this.offer.version,
       category: this.offer.category,
-      productOfferingPrice: this.offer.productOfferingPrice,
+      productOfferingPrice: this.offer.productOfferingPrice.map((price: any) => {
+        return { // WORKARROUND ISSUE WITH THE PRICE PLAN TO BE INCLUDED IN THE REF
+          id: price.id,
+          href: price.href
+        }
+      }),
       validFor: this.offer.validFor,
       productOfferingTerm: this.offer.productOfferingTerm
     };

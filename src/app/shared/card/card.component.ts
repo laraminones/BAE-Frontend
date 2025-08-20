@@ -53,7 +53,7 @@ export class CardComponent implements OnInit, OnDestroy, AfterViewInit {
   modal: Modal;
   prodSpec:ProductSpecification = {};
   complianceProf:any[] = certifications;
-  complianceLevel:number = 1;
+  complianceLevel:string = 'NL';
   showModal:boolean=false;
   cartSelection:boolean=false;
   check_prices:boolean=false;
@@ -84,6 +84,10 @@ export class CardComponent implements OnInit, OnDestroy, AfterViewInit {
   private themeSubscription: Subscription = new Subscription();
 
 
+  productAlreadyInCart:boolean=false;
+  showQuoteModal:boolean=false;
+  customerId:string='';
+  isCustomPrice:boolean = false;
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -123,6 +127,50 @@ export class CardComponent implements OnInit, OnDestroy, AfterViewInit {
 
           this.cdr.detectChanges();
         }
+        if(ev.type === 'CloseQuoteRequest'){
+          this.showQuoteModal=false;
+          this.cdr.detectChanges();
+        } else if (ev.type == 'RemovedCartItem'){
+          this.cartService.getShoppingCart().then(data => {
+            const exists = data.some((item: any) => item.id === this.productOff?.id);
+            if (exists) {
+              this.productAlreadyInCart=true;
+            } else {
+              this.productAlreadyInCart=false;
+            }
+          })
+        } else if (ev.type == 'AddedCartItem'){
+          this.cartService.getShoppingCart().then(data => {
+            const exists = data.some((item: any) => item.id === this.productOff?.id);
+            if (exists) {
+              this.productAlreadyInCart=true;
+            } else {
+              this.productAlreadyInCart=false;
+            }
+          })
+        }
+        if(ev.type === 'CloseQuoteRequest'){
+          this.showQuoteModal=false;
+          this.cdr.detectChanges();
+        } else if (ev.type == 'RemovedCartItem'){
+          this.cartService.getShoppingCart().then(data => {
+            const exists = data.some((item: any) => item.id === this.productOff?.id);
+            if (exists) {
+              this.productAlreadyInCart=true;
+            } else {
+              this.productAlreadyInCart=false;
+            }
+          })
+        } else if (ev.type == 'AddedCartItem'){
+          this.cartService.getShoppingCart().then(data => {
+            const exists = data.some((item: any) => item.id === this.productOff?.id);
+            if (exists) {
+              this.productAlreadyInCart=true;
+            } else {
+              this.productAlreadyInCart=false;
+            }
+          })
+        }
       })
     }
 
@@ -137,6 +185,9 @@ export class CardComponent implements OnInit, OnDestroy, AfterViewInit {
         this.closeCats=false;
       }
       this.cdr.detectChanges();
+    }
+    if(this.showQuoteModal=true){
+      this.showQuoteModal=false;
     }
     if(this.cartSelection==true){
       this.cartSelection=false;
@@ -156,13 +207,19 @@ export class CardComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.themeSubscription = this.themeService.currentTheme$.subscribe(theme => {
       this.currentTheme = theme;
     });
     let aux = this.localStorage.getObject('login_items') as LoginInfo;
     if(JSON.stringify(aux) != '{}' && (((aux.expire - moment().unix())-4) > 0)) {
       this.check_logged=true;
+      if(aux.logged_as==aux.id){
+        this.customerId = aux.partyId;
+      } else {
+        let loggedOrg = aux.organizations.find((element: { id: any; }) => element.id == aux.logged_as)
+        this.customerId = loggedOrg.partyId
+      }
       this.cdr.detectChanges();
     } else {
       this.check_logged=false,
@@ -178,8 +235,7 @@ export class CardComponent implements OnInit, OnDestroy, AfterViewInit {
       this.categories = this.productOff?.category;
       this.checkMoreCats=false;
     }
-    //this.price = this.productOff?.productOfferingPrice?.at(0)?.price?.value + ' ' +
-    //  this.productOff?.productOfferingPrice?.at(0)?.price?.unit ?? 'n/a';
+
     let profile = this.productOff?.attachment?.filter(item => item.name === 'Profile Picture') ?? [];
     if(profile.length==0){
       this.images = this.productOff?.attachment?.filter(item => item.attachmentType === 'Picture') ?? [];
@@ -187,76 +243,37 @@ export class CardComponent implements OnInit, OnDestroy, AfterViewInit {
       this.images = profile;
     }
     let specId:any|undefined=this.productOff?.productSpecification?.id;
-    if(specId != undefined){
+    if(specId != undefined) {
       this.api.getProductSpecification(specId).then(spec => {
-        let vcs = 0
-        let domeSup = 0
-        let tokenComp = []
         this.prodSpec = spec;
         console.log('prod spec')
         console.log(this.prodSpec)
         this.getOwner();
 
         if(this.prodSpec.productSpecCharacteristic != undefined) {
-          let vcProf = this.prodSpec.productSpecCharacteristic.find((p => {
-            return p.name === `Compliance:VC`
-          }));
-
-          if (vcProf) {
-            const vcToken: any = vcProf.productSpecCharacteristicValue?.at(0)?.value
-            const decoded = jwtDecode(vcToken)
-            let credential: any = null
-
-            if ('verifiableCredential' in decoded) {
-              credential = decoded.verifiableCredential;
-            } else if('vc' in decoded) {
-              credential = decoded.vc;
-            }
-
-            if (credential != null) {
-              const subject = credential.credentialSubject;
-
-              if ('compliance' in subject) {
-                tokenComp = subject.compliance.map((comp: any) => {
-                  return comp.standard
-                })
-              }
-            }
-          }
-        }
-
-        for(let z=0; z < this.complianceProf.length; z++){
-          if (this.complianceProf[z].domesupported) {
-            domeSup += 1
-          }
-
-          if(this.prodSpec.productSpecCharacteristic != undefined){
-            if (tokenComp.indexOf(this.complianceProf[z].name) > -1) {
-              vcs += 1
-            }
-          }
-        }
-
-        if (vcs > 0) {
-          this.complianceLevel = 2
-          if (vcs == domeSup) {
-            this.complianceLevel = 3
-          }
+          this.complianceLevel = this.api.getComplianceLevel(this.prodSpec);
         }
       })
     }
 
-    let result:any = this.priceService.formatCheapestPricePlan(this.productOff);
-    this.price = {
-      "price": result.price,
-      "unit": result.unit,
-      "priceType": result.priceType,
-      "text": result.text
-    }
+    this.isCustomPrice = await this.priceService.isCustomOffering(this.productOff)
 
     this.prepareOffData();
 
+    this.cartService.getShoppingCart().then(data => {
+      const exists = data.some((item: any) => item.id === this.productOff?.id);
+      if (exists) {
+        this.productAlreadyInCart=true;
+      } else {
+        this.productAlreadyInCart=false;
+      }
+    })
+
     this.cdr.detectChanges();
+  }
+
+  isCustom(): boolean {
+    return this.isCustomPrice;
   }
 
   getProductImage() {
@@ -628,6 +645,13 @@ async deleteProduct(product: Product | undefined){
 
   closeDrawer(): void {
     this.isDrawerOpen = false;
+  }
+
+  toggleQuoteModal(){
+    //Hides details modal
+    this.showModal=false;
+    //Show quote modal
+    this.showQuoteModal=true;
   }
 
   protected readonly JSON = JSON;

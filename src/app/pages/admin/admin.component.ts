@@ -21,6 +21,7 @@ export class AdminComponent implements OnInit {
   show_create_categories:boolean = false;
   show_update_categories:boolean = false;
   show_verification:boolean = false;
+  show_revenue:boolean = false;
 
   category_to_update:any;
   constructor(
@@ -52,6 +53,7 @@ export class AdminComponent implements OnInit {
     this.show_create_categories = false;
     this.show_update_categories = false;
     this.show_verification = false;
+    this.show_revenue = false;
     this.cdr.detectChanges();
   }
 
@@ -60,6 +62,7 @@ export class AdminComponent implements OnInit {
     this.show_create_categories = true;
     this.show_update_categories = false;
     this.show_verification = false;
+    this.show_revenue = false;
     this.cdr.detectChanges();
   }
 
@@ -68,6 +71,7 @@ export class AdminComponent implements OnInit {
     this.show_create_categories = false;
     this.show_update_categories = true;
     this.show_verification = false;
+    this.show_revenue = false;
     this.cdr.detectChanges();
   }
 
@@ -77,23 +81,48 @@ export class AdminComponent implements OnInit {
     this.show_create_categories = false;
     this.show_update_categories = false;
     this.show_verification = true;
+    this.show_revenue = false;
+    this.cdr.detectChanges();
+  }
+
+  goToRevenue() {
+    this.selectRevenue()
+    this.show_categories = false;
+    this.show_create_categories = false;
+    this.show_update_categories = false;
+    this.show_verification = false;
+    this.show_revenue = true;
     this.cdr.detectChanges();
   }
 
   selectCategories(){
     let categories_button = document.getElementById('categories-button')
     let verify_button = document.getElementById('verify-button')
+    let revenue_button = document.getElementById('revenue-button')
 
     this.selectMenu(categories_button,'text-white bg-primary-100');
     this.unselectMenu(verify_button,'text-white bg-primary-100');
+    this.unselectMenu(revenue_button,'text-white bg-primary-100');
   }
 
   selectVerification(){
     let categories_button = document.getElementById('categories-button')
     let verify_button = document.getElementById('verify-button')
+    let revenue_button = document.getElementById('revenue-button')
 
     this.selectMenu(verify_button,'text-white bg-primary-100');
     this.unselectMenu(categories_button,'text-white bg-primary-100');
+    this.unselectMenu(revenue_button,'text-white bg-primary-100');
+  }
+
+  selectRevenue(){
+    let categories_button = document.getElementById('categories-button')
+    let verify_button = document.getElementById('verify-button')
+    let revenue_button = document.getElementById('revenue-button')
+
+    this.unselectMenu(verify_button,'text-white bg-primary-100');
+    this.unselectMenu(categories_button,'text-white bg-primary-100');
+    this.selectMenu(revenue_button,'text-white bg-primary-100')
   }
 
   removeClass(elem: HTMLElement, cls:string) {

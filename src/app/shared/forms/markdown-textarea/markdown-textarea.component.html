@@ -87,7 +87,7 @@
         <div class="tooltip-arrow" data-popper-arrow></div>
       </div>
     </div>
-    <div class="px-4 py-2 bg-white dark:bg-secondary-300 rounded-b-lg">
+    <div class="relative px-4 py-2 bg-white dark:bg-secondary-300 rounded-b-lg">
       <label for="editor" class="sr-only">Publish post</label>
       @if(showPreview){
         <markdown class="min-h-16 h-fit block bg-white text-wrap break-all dark:bg-secondary-300 dark:text-white text-gray-900"
@@ -95,6 +95,7 @@
 
       }@else{
         <textarea id="editor"
+                  data-cy="textArea"
                   class="block w-full h-fit px-0 text-sm text-gray-800 dark:text-gray-200 bg-white dark:bg-secondary-300 border-0"
                   placeholder="Add product description..."
                   [value]="value"
@@ -103,8 +104,10 @@
                   (input)="updateValue($event)"></textarea>
       }
       @if(showEmoji){
-        <emoji-mart (click)="$event.stopPropagation();" [darkMode]="false" [style]="{ position: 'relative', left: '200px', top: '-500px' }" (emojiClick)="addEmoji($event)"></emoji-mart>
-      }
+        <div class="absolute z-50 top-[-100px] right-0">
+          <emoji-mart (click)="$event.stopPropagation();" [darkMode]="false"  (emojiClick)="addEmoji($event)"></emoji-mart>
+        </div>
+         }
 
     </div>
   </div>

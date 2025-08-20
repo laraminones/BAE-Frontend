@@ -12,6 +12,7 @@ import {CategoriesPanelComponent} from "./categories-panel/categories-panel.comp
 import { CartDrawerComponent } from "./cart-drawer/cart-drawer.component";
 import { FeedbackModalComponent } from './feedback-modal/feedback-modal.component';
 import {RouterLink} from "@angular/router";
+import { QuoteRequestModalComponent } from './quote-request-modal/quote-request-modal.component'
 
 // Lista de componentes que pertenecen a este módulo.
 const SHARED_COMPONENTS = [
@@ -28,7 +29,8 @@ const SHARED_MODULES = [
   ReactiveFormsModule,
   FontAwesomeModule,
   TranslateModule,
-  HttpClientModule
+  HttpClientModule,
+  QuoteRequestModalComponent
 ];
 
 // Lista de componentes/directivas Standalone que se importan y re-exportan.

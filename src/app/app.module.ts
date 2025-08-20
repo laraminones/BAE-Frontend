@@ -95,6 +95,10 @@ export function createThemeAwareLoader(http: HttpClient, themeService: ThemeServ
 }
 
 import {AboutDomeComponent} from "src/app/pages/about-dome/about-dome.component"
+import { QuotesModule } from "src/app/features/quotes/quotes.module"
+import { MarkdownTextareaComponent } from "src/app/shared/forms/markdown-textarea/markdown-textarea.component"
+import { ProviderRevenueSharingComponent } from "src/app/pages/user-profile/profile-sections/provider-revenue-sharing/provider-revenue-sharing.component"
+import { OperatorRevenueSharingComponent } from "src/app/pages/admin/operator-revenue-sharing/operator-revenue-sharing.component"
 
 @NgModule({
   declarations: [
@@ -172,6 +176,7 @@ import {AboutDomeComponent} from "src/app/pages/about-dome/about-dome.component"
         PickerComponent,
         NgxFileDropModule,
         ChatbotWidgetComponent,
+        QuotesModule,
         MarkdownModule.forRoot(),
         TranslateModule.forRoot({
             defaultLanguage: 'en',
@@ -189,7 +194,10 @@ import {AboutDomeComponent} from "src/app/pages/about-dome/about-dome.component"
         CharacteristicComponent,
         PricePlanDrawerComponent,
         OfferComponent,
-        AboutDomeComponent
+        AboutDomeComponent,
+        MarkdownTextareaComponent,
+        ProviderRevenueSharingComponent,
+        OperatorRevenueSharingComponent
     ],
   providers: [
     AppInitService,

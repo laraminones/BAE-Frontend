@@ -15,7 +15,6 @@ import { LoginInfo, cartProduct,productSpecCharacteristicValueCart } from '../..
 import { ShoppingCartServiceService } from 'src/app/services/shopping-cart-service.service';
 import { AccountServiceService } from 'src/app/services/account-service.service';
 import {EventMessageService} from "../../services/event-message.service";
-import { jwtDecode } from "jwt-decode";
 import * as moment from 'moment';
 import { environment } from 'src/environments/environment';
 import { Location } from '@angular/common';
@@ -37,9 +36,15 @@ export class ProductDetailsComponent implements OnInit {
   @ViewChild('attachContent')
   attachContent: ElementRef | undefined;
   @ViewChild('agreementsContent')
-  agreementsContent: ElementRef | undefined;
+  agreementsContent: ElementRef | undefined;  
   @ViewChild('textDiv') textDiv!: ElementRef;
   @ViewChild('termsText') termsTextRef!: ElementRef;
+  @ViewChild('agreementsScrollAnchor') agreementsScrollAnchor!: ElementRef;
+  @ViewChild('relScrollAnchor') relScrollAnchor!: ElementRef;
+  @ViewChild('attachScrollAnchor') attachScrollAnchor!: ElementRef;
+  @ViewChild('charsScrollAnchor') charsScrollAnchor!: ElementRef;
+  @ViewChild('detailsScrollAnchor') detailsScrollAnchor!: ElementRef; 
+  
 
   id:any;
   productOff: Product | undefined;
@@ -50,7 +55,8 @@ export class ProductDetailsComponent implements OnInit {
   attatchments: AttachmentRefOrValue[]  = [];
   prodSpec:ProductSpecification = {};
   complianceProf:any[] = [];
-  complianceLevel:number=1;
+  complianceLevel:string='NL';
+  complianceDescription:string='No level. This product hasnt reached any compliance level yet.'
   serviceSpecs:any[] = [];
   resourceSpecs:any[]=[];
   check_logged:boolean=false;
@@ -66,14 +72,17 @@ export class ProductDetailsComponent implements OnInit {
   checkCustom:boolean=false;
   textDivHeight:any;
   prodChars:any[]=[];
+  selfAtt:any='';
 
   errorMessage:any='';
   showError:boolean=false;
   showTermsMore:boolean=false;
   PURCHASE_ENABLED: boolean = environment.PURCHASE_ENABLED;
   showReadMoreButton:boolean=false;
+  customerId:string='';
 
   orgInfo:any=undefined;
+  showQuoteModal:boolean = false;
 
   protected readonly faScaleBalanced = faScaleBalanced;
   protected readonly faArrowProgress = faArrowProgress;
@@ -128,7 +137,10 @@ export class ProductDetailsComponent implements OnInit {
         }
 
         this.cdr.detectChanges();
-      }
+      } else if(ev.type === 'CloseQuoteRequest'){
+          this.showQuoteModal=false;
+          this.cdr.detectChanges();
+        }
     })
   }
 
@@ -176,6 +188,14 @@ export class ProductDetailsComponent implements OnInit {
     if(JSON.stringify(aux) != '{}' && (((aux.expire - moment().unix())-4) > 0)) {
       this.check_logged=true;
       this.cdr.detectChanges();
+
+      if(aux.logged_as == aux.id){
+        this.customerId = aux.partyId;
+      } else {
+        let loggedOrg = aux.organizations.find((element: { id: any; }) => element.id == aux.logged_as)
+        this.customerId = loggedOrg.partyId
+      }
+
     } else {
       this.check_logged=false,
       this.cdr.detectChanges();
@@ -200,7 +220,7 @@ export class ProductDetailsComponent implements OnInit {
               prices.push(price);
               console.log(price)
               if(price.priceType == 'custom'){
-                this.checkCustom=true;
+                this.checkCustom = true;
               }
             })
           }
@@ -209,23 +229,23 @@ export class ProductDetailsComponent implements OnInit {
         if(this.prodSpec.productSpecCharacteristic != undefined) {
           // Avoid displaying the compliance credential
           this.prodChars = this.prodSpec.productSpecCharacteristic.filter((char: any) => {
-            return char.name != 'Compliance:VC'
+            return char.name != 'Compliance:VC' && char.name != 'Compliance:SelfAtt'
           })
 
           console.log('-- prod spec')
           console.log(this.prodSpec.productSpecCharacteristic)
 
           for(let i=0; i<certifications.length; i++){
-            if(certifications[i].domesupported==true){
+            //Now we only show the certifications that are attached when creating/updating the product
+            let compProf = this.prodSpec.productSpecCharacteristic.find((p => {
+              return p.name === certifications[i].name
+            }));
+            if(compProf){
+              let cert:any = certifications[i]
+              cert.href = compProf.productSpecCharacteristicValue?.at(0)?.value
               this.complianceProf.push(certifications[i])
-            } else {
-              let compProf = this.prodSpec.productSpecCharacteristic.find((p => {
-                return p.name === certifications[i].name
-              }));
-              if(compProf){
-                this.complianceProf.push(certifications[i])
-              }
             }
+            //Deleting certifications out of characteristics' array
             const index = this.prodChars.findIndex(item => item.name === certifications[i].name);
             if(index!==-1){
               this.prodChars.splice(index, 1);
@@ -264,8 +284,8 @@ export class ProductDetailsComponent implements OnInit {
         }
         this.category = this.productOff?.category?.at(0)?.name ?? 'none';
         this.categories = this.productOff?.category;
-        this.price = this.productOff?.productOfferingPrice?.at(0)?.price?.value + ' ' +
-          this.productOff?.productOfferingPrice?.at(0)?.price?.unit ?? 'n/a';
+        this.price = this.productOff?.productOfferingPrice?.at(0)?.price?.value + ' ' + this.productOff?.productOfferingPrice?.at(0)?.price?.unit ?? 'n/a';
+
         let profile = this.productOff?.attachment?.filter(item => item.name === 'Profile Picture') ?? [];
         console.log('profile...')
         console.log(profile)
@@ -276,77 +296,52 @@ export class ProductDetailsComponent implements OnInit {
           this.images = profile;
           this.attatchments = this.productOff?.attachment?.filter(item => item.name != 'Profile Picture') ?? [];
         }
-        let vcs = 0
-        let domeSup = 0
-        let tokenComp = []
 
         if(this.prodSpec.productSpecCharacteristic != undefined) {
-          let vcProf = this.prodSpec.productSpecCharacteristic.find((p => {
-            return p.name === `Compliance:VC`
+
+          // Find if there is a self attestement
+          let selfAttObj = this.prodSpec.productSpecCharacteristic.find((p => {
+            return p.name === `Compliance:SelfAtt`
           }));
 
-          if (vcProf) {
-            const vcToken: any = vcProf.productSpecCharacteristicValue?.at(0)?.value
-            const decoded = jwtDecode(vcToken)
-            let credential: any = null
-
-            if ('verifiableCredential' in decoded) {
-              credential = decoded.verifiableCredential;
-            } else if('vc' in decoded) {
-              credential = decoded.vc;
-            }
-
-            if (credential != null) {
-              const subject = credential.credentialSubject;
-
-              if ('compliance' in subject) {
-                tokenComp = subject.compliance.map((comp: any) => {
-                  return comp.standard
-                })
-              }
-            }
+          if(selfAttObj){
+            this.selfAtt = selfAttObj.productSpecCharacteristicValue?.at(0)?.value
           }
         }
 
-        for(let z = 0; z < this.complianceProf.length; z++){
-          if (this.complianceProf[z].domesupported) {
-            domeSup += 1
-          }
-
-          if(this.prodSpec.productSpecCharacteristic != undefined) {
-            // Search certificates or VCs
-            let compProf = this.prodSpec.productSpecCharacteristic.find((p => {
-              return p.name === this.complianceProf[z].name
-            }));
-
-            if (!compProf) {
-              this.complianceProf[z].href = '#'
-              this.complianceProf[z].value = 'Not provided yet'
-            } else {
-              this.complianceProf[z].href = compProf.productSpecCharacteristicValue?.at(0)?.value
-              this.complianceProf[z].value = 'Certification included'
-            }
-
-            if (tokenComp.indexOf(this.complianceProf[z].name) > -1) {
-              this.complianceProf[z].verified = true
-              vcs += 1
-            }
-          }
-        }
-
-        // Set compliance level
-        if (vcs > 0) {
-          this.complianceLevel = 2
-          if (vcs == domeSup) {
-            this.complianceLevel = 3
-          }
-        }
+        //Hardcoding compliance lever for the moment
+        this.complianceLevel = this.api.getComplianceLevel(this.prodSpec);
+        this.complianceDescription = this.getComplianceDescription();
       })
     })
   }
 
+  toggleQuoteModal(){
+    //Show quote modal
+    this.showQuoteModal = true;
+  }
+
+  getComplianceDescription(): string {
+    switch (this.complianceLevel) {
+      case 'NL':
+        return `No level. This product hasn't reached any compliance level yet.`;
+      case 'BL':
+        return `Basic level. Reached when the provider signs the "self attestation" document (attached below).`;
+      case 'P':
+        return `Professional level. The provider has signed the "self attestation" document (attached below) and the product includes the following certifications: BSI-C5, CISPE, EU Cloud CoC, CSA CCM, ISO/IEC 27001, TISAX and SWIPO.`;
+      case 'PP':
+        return `Professional level. The provider has signed the "self attestation" document (attached below) and the product includes the following certifications: BSI-C5, CISPE, EU Cloud CoC, CSA CCM, ISO/IEC 27001, TISAX, SWIPO and CNDCP (Climate Neutral Data Centre Pact).`;
+      default:
+        return '';
+    }
+  }
+
   isVerified(char: any) {
     return char.verified == true
+  }
+
+  isCustom() {
+    return this.checkCustom;
   }
 
   ngAfterViewChecked() {
@@ -355,7 +350,7 @@ export class ProductDetailsComponent implements OnInit {
       setTimeout(() => this.checkOverflow(), 0); // Schedule after render
     }
     // Trigger change detection after the view has been initialized
-    this.setImageHeight();
+    //this.setImageHeight();
   }
   
   checkOverflow() {
@@ -653,8 +648,18 @@ async deleteProduct(product: Product | undefined){
 
   goToDetails(scroll:boolean){
     //const targetElement = this.elementRef.nativeElement.querySelector('#detailsContent');
-    if (this.detailsContent!=undefined && scroll) {
-      this.detailsContent.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (scroll) {
+      //this.detailsScrollAnchor.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const anchor = this.detailsScrollAnchor?.nativeElement;
+      if (!anchor) return;
+    
+      // Scroll the outer container if needed
+      const scrollContainer = document.scrollingElement || document.documentElement;
+      anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    
+      // Or: explicitly scroll the document
+      const y = anchor.getBoundingClientRect().top + window.scrollY - 88; // adjust for sticky header
+      window.scrollTo({ top: y, behavior: 'smooth' });
     }
 
     let details_button = document.getElementById('details-button')
@@ -671,8 +676,8 @@ async deleteProduct(product: Product | undefined){
   }
 
   goToChars(scroll:boolean){
-    if (this.charsContent != undefined && scroll) {
-      this.charsContent.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (scroll) {
+      this.charsScrollAnchor.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     let details_button = document.getElementById('details-button')
@@ -689,8 +694,8 @@ async deleteProduct(product: Product | undefined){
   }
 
   goToAttach(scroll:boolean){
-    if (this.attachContent != undefined && scroll) {
-      this.attachContent.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (scroll) {
+      this.attachScrollAnchor.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     let details_button = document.getElementById('details-button')
@@ -707,8 +712,9 @@ async deleteProduct(product: Product | undefined){
   }
 
   goToAgreements(scroll:boolean){
-    if (this.agreementsContent != undefined && scroll) {
-      this.agreementsContent.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center'});
+    if (scroll) {
+      //this.agreementsContent.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start'});
+      this.agreementsScrollAnchor.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     let details_button = document.getElementById('details-button')
@@ -725,8 +731,8 @@ async deleteProduct(product: Product | undefined){
   }
 
   goToRelationships(scroll:boolean){
-    if (this.relationshipsContent != undefined && scroll) {
-      this.relationshipsContent.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (scroll) {
+      this.relScrollAnchor.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     let details_button = document.getElementById('details-button')

@@ -45,6 +45,10 @@
             <button (click)="getBilling()" id="bill-button" class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white">
                 {{ 'PROFILE._bill' | translate }}
             </button>
+
+            <button (click)="getRevenue()" id="revenue-button" class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white">
+                {{ 'PROFILE._revenue' | translate }}
+            </button>
             <!--button (click)="goToOrders()" id="order-button" class="block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white">
                 {{ 'PROFILE._orders' | translate }}
             </button-->
@@ -62,6 +66,9 @@
         }
         @if(show_billing){
             <billing-info></billing-info>
+        }
+        @if(show_revenue){
+            <provider-revenue-sharing></provider-revenue-sharing>
         }
         </div>
     </div>

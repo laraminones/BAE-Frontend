@@ -1,6 +1,7 @@
 export const environment = {
     //BASE_URL: 'https://dome-marketplace.org',
     BASE_URL: 'http://proxy.docker:8004',
+    PAYMENT_URL: 'https://payment.dome-marketplace-sbx.org',
     //API_PORT: 8004,
     //API_PORT: 443,
     LEGACY_PREFIX: '',
@@ -30,6 +31,7 @@ export const environment = {
     PROD_SPEC_LIMIT: 6,
     SERV_SPEC_LIMIT: 6,
     RES_SPEC_LIMIT: 6,
+    USAGE_SPEC_LIMIT: 6,
     ORDER_LIMIT: 1000,
     CATEGORY_LIMIT: 100,
     TAX_RATE: 20,
@@ -64,6 +66,17 @@ export const environment = {
     BUNDLE_ENABLED: false,
     DFT_CATALOG_ID: '',
     MAX_FILE_SIZE:3145728,
-    providerThemeName: 'DOME'
-
+    providerThemeName: 'DOME',
+    quoteApi: 'http://localhost:8080/quoteManagement',
+    quoteEndpoints: {
+        createQuote: '/createQuote',
+        listAllQuotes: '/listAllQuotes',
+        getQuoteById: '/quoteById',
+        getQuotesByUser: '/quoteByUser',
+        updateQuoteStatus: '/updateQuoteStatus',
+        updateQuoteDate: '/updateQuoteDate',
+        addNoteToQuote: '/addNoteToQuote',
+        addAttachmentToQuote: '/addAttachmentToQuote',
+        deleteQuote: '/quote'
+    }
 };
