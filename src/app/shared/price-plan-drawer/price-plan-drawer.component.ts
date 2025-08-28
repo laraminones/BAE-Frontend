@@ -95,7 +95,17 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
     // Escuchar eventos de teclado (por si necesitas otros)
     document.addEventListener('keydown', this.handleEscape.bind(this));
     // Configurar los términos y condiciones
-    this.tsAndCs = this.productOff?.productOfferingTerm?.[0] || { description: '' };
+    this.tsAndCs = { description: '' };
+
+    this.productOff?.productOfferingTerm?.forEach((term) => {
+      console.log(term.name)
+      console.log('----')
+      if (term.name != 'procurement') {
+        console.log('---- Setting the term')
+        this.tsAndCs = term;
+      }
+    });
+
     this.isFree = this.productOff?.productOfferingPrice?.length === 0;
 
     if (this.isFree) {
@@ -127,7 +137,14 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
       this.updateOrderChars();
     }
     if (changes['isOpen']?.currentValue === true) {
-      this.tsAndCs = this.productOff?.productOfferingTerm?.[0] || { description: '' };
+      this.tsAndCs = { description: '' };
+
+      this.productOff?.productOfferingTerm?.forEach((term) => {
+        if (term.name != 'procurement') {
+          console.log('---- Setting the term')
+          this.tsAndCs = term;
+        }
+      });
       if(this.tsAndCs.description == ''){
         this.form.controls['tsAccepted'].setValue(true);
         this.cdr.detectChanges();
