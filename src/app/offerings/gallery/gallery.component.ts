@@ -4,6 +4,9 @@ import {CardComponent} from "../../shared/card/card.component";
 import {components} from "../../models/product-catalog";
 type ProductOffering = components["schemas"]["ProductOffering"];
 import { ApiServiceService } from 'src/app/services/product-service.service';
+import {ThemeService} from "../../services/theme.service";
+import {ThemeConfig} from "../../themes";
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'bae-off-gallery',
@@ -13,16 +16,22 @@ import { ApiServiceService } from 'src/app/services/product-service.service';
 export class GalleryComponent implements OnInit {
 
   products: ProductOffering[]=[];
+  private themeSubscription: Subscription = new Subscription();
+  currentTheme: ThemeConfig | null = null;
 
   constructor(
     private api: ApiServiceService,
-    private cdr: ChangeDetectorRef) {
+    private cdr: ChangeDetectorRef,
+    private themeService: ThemeService) {
   }
 
   //Must be under environment.PRODUCT_LIMIT (i.e. 6 atm)
   gallery_limit=4;
 
   ngOnInit() {
+    this.themeSubscription = this.themeService.currentTheme$.subscribe(theme => {
+      this.currentTheme = theme;
+    });
     console.log('API RESPONSE:')
     this.api.getProducts(0,undefined).then(data => {
       for(let i=0; i < this.gallery_limit && i < data.length; i++){

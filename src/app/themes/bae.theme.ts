@@ -4,7 +4,7 @@ import {environment} from "../../environments/environment";
 const baeHeaderLinks: NavLink[] = [
   {
     label: 'HEADER._home',
-    url: '/',
+    url: '/dashboard',
     isRouterLink: true
   },
   {

@@ -45,7 +45,7 @@ export class ProductDetailsComponent implements OnInit {
   @ViewChild('charsScrollAnchor') charsScrollAnchor!: ElementRef;
   @ViewChild('detailsScrollAnchor') detailsScrollAnchor!: ElementRef; 
   
-
+  providerThemeName = environment.providerThemeName;
   id:any;
   productOff: Product | undefined;
   category: string = 'none';

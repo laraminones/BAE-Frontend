@@ -22,6 +22,12 @@ module.exports = {
           100: 'rgb(var(--theme-secondary-100) / <alpha-value>)',// Antes '#14274a'
           200: 'rgb(var(--theme-secondary-200) / <alpha-value>)',// Antes '#0c1c38'
           300: 'rgb(var(--theme-secondary-300) / <alpha-value>)',// Antes '#182740'
+          400: 'rgb(var(--theme-secondary-400) / <alpha-value>)',
+          500: 'rgb(var(--theme-secondary-500) / <alpha-value>)'
+        },
+        tertiary: {
+          50: 'rgb(var(--theme-tertiary-50) / <alpha-value>)', //BG color for dark theme
+          100: 'rgb(var(--theme-tertiary-100) / <alpha-value>)' //BG color for dark theme
         },
         // Puedes añadir más colores temáticos aquí si es necesario
         // Ejemplo:

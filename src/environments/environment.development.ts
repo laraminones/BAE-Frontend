@@ -66,7 +66,7 @@ export const environment = {
     BUNDLE_ENABLED: false,
     DFT_CATALOG_ID: '',
     MAX_FILE_SIZE:3145728,
-    providerThemeName: 'DOME',
+    providerThemeName: 'BAE',
     quoteApi: 'http://localhost:8080/quoteManagement',
     quoteEndpoints: {
         createQuote: '/createQuote',

@@ -1,5 +1,5 @@
 
-<div class="dark:bg-secondary-200">
+<div class="dark:bg-tertiary-50">
   <!-- Jumbo section -->
   <section id="jumbo" class="w-full">
       <div class="pt-8 pb-8 px-4 w-full text-left lg:pt-16 lg:px-12 bg-cover bg-right-bottom items-center justify-between" [style.background-image]="'url(' + currentTheme?.assets?.jumboBgUrl + ')'"
@@ -66,8 +66,8 @@
         <form class="mx-5 w-full">
           <div class="flex">
             <div class="relative w-full">
-              <input type="search" id="dashboardSearchBar" [formControl]="searchField" (keydown.enter)="filterSearch($event)" class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-s-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500" placeholder="{{ 'DASHBOARD._search_ph' | translate }}" required>
-              <button type="submit" id="dashboardSearchButton" (click)="filterSearch($event)" class="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+              <input type="search" id="dashboardSearchBar" [formControl]="searchField" (keydown.enter)="filterSearch($event)" class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-secondary-500 dark:border-s-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500" placeholder="{{ 'DASHBOARD._search_ph' | translate }}" required>
+              <button type="submit" id="dashboardSearchButton" (click)="filterSearch($event)" class="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-primary-100 rounded-e-lg border border-secondary-100 hover:bg-primary-50 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:border-secondary-400">
                 <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                 </svg>
@@ -81,7 +81,8 @@
 
     <!--<app-how-it-works></app-how-it-works>-->
     <!--<bae-off-featured></bae-off-featured>-->
-    <bae-off-gallery *ngIf="currentTheme?.dashboard?.showFeaturedOfferings"></bae-off-gallery>
+    <bae-off-gallery *ngIf="currentTheme?.dashboard?.showFeaturedOfferings">
+    </bae-off-gallery>
     <app-platform-benefits *ngIf="currentTheme?.dashboard?.showPlatformBenefits"></app-platform-benefits>
     <!--<app-explore-dome></app-explore-dome>-->
     <!--<app-faq></app-faq>-->

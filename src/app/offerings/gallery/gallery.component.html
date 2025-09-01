@@ -1,3 +1,6 @@
+<div [ngClass]="{
+  'pb-8 lg:pb-16 px-4 mx-auto max-w-screen-xl': !currentTheme?.dashboard?.showPlatformBenefits
+}">
 <!-- Offerings Gallery section -->
 <h2 class="text-4xl mt-4 font-extrabold text-primary-100 text-center dark:text-primary-50">{{ 'GALLERY._title' | translate }}</h2>
 <div id="featuredOfferings" class="pt-8 pb-2 px-4 mx-auto max-w-screen-xl w-full grid gap-2 grid-cols-1 place-items-center sm:grid-cols-2 xl:grid-cols-4">
@@ -33,4 +36,5 @@
     {{ 'GALLERY._add_your_service' | translate }}
   </button>
 </div>-->
-<!-- End Offerings Section -->
+<!-- End Offerings Section -->  
+</div>
