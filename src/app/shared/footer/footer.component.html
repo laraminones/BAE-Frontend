@@ -30,8 +30,8 @@
 
 @if(feedback){
   <feedback-modal
-  rateMessage="How would you rate your overall experience with DOME?"
-  writeMessage="How can we improve DOME?"
+  rateMessage="{{ 'FEEDBACK._footer_title' | translate }}"
+  writeMessage="{{ 'FEEDBACK._footer_improve' | translate }}"
   type="experience"
   class="fixed inset-0 flex items-center justify-center z-40"></feedback-modal>
 }

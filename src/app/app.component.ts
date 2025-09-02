@@ -22,6 +22,7 @@ import {environment} from "../environments/environment";
 export class AppComponent implements OnInit {
   title = 'DOME Marketplace';
   showPanel = false;
+  providerThemeName=environment.providerThemeName;
 
   constructor(private translate: TranslateService,
               private localStorage: LocalStorageService,

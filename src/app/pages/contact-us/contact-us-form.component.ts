@@ -1,6 +1,10 @@
 import {Component, HostListener, OnInit, ChangeDetectorRef} from '@angular/core';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import {faHandsHoldingHeart} from "@fortawesome/pro-solid-svg-icons";
+import { environment } from 'src/environments/environment';
+import {ThemeService} from "../../services/theme.service";
+import {ThemeConfig} from "../../themes";
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-contact-us-form',
@@ -18,13 +22,23 @@ export class ContactUsFormComponent implements OnInit {
     message: new FormControl('', [Validators.required]),
   });
 
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private themeService: ThemeService
+  ) { }
+
   protected readonly faHandsHoldingHeart = faHandsHoldingHeart;
 
   dataControllerDome:any='https://dome-project.eu/about/#partners';
   DPA:any='https://dome-marketplace-sbx.org/assets/documents/privacy.pdf';
   showThanksMessage:boolean=false;
+  currentTheme: ThemeConfig | null = null;
+  private themeSubscription: Subscription = new Subscription();
   
   ngOnInit() {
+    this.themeSubscription = this.themeService.currentTheme$.subscribe(theme => {
+      this.currentTheme = theme;
+    });
   }
 
   sendMail() {

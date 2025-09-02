@@ -31,7 +31,7 @@
         
                       <li class="flex items-center">
                       <input id="standby" type="checkbox" value="" (change)="onStateFilterChange('standby')"
-                          class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500" />
+                          class="w-4 h-4 bg-gray-100 checked:bg-primary-100 dark:checked:bg-primary-100 border-gray-300 rounded focus:ring-primary-100" />
           
                       <label for="standby" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-200">
                         {{ 'PRODUCT_INVENTORY._standby' | translate }}
@@ -40,7 +40,7 @@
           
                       <li class="flex items-center">
                       <input id="alarm" type="checkbox" value="" (change)="onStateFilterChange('alarm')"
-                          class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500" />
+                          class="w-4 h-4 bg-gray-100 checked:bg-primary-100 dark:checked:bg-primary-100 border-gray-300 rounded focus:ring-primary-100" />
           
                       <label for="alarm" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-200">
                         {{ 'PRODUCT_INVENTORY._alarm' | translate }}
@@ -49,7 +49,7 @@
           
                       <li class="flex items-center">
                       <input id="available" type="checkbox" value="" (change)="onStateFilterChange('available')"
-                          class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500" />
+                          class="w-4 h-4 bg-gray-100 checked:bg-primary-100 dark:checked:bg-primary-100 border-gray-300 rounded focus:ring-primary-100" />
           
                       <label for="available" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-200">
                         {{ 'PRODUCT_INVENTORY._available' | translate }}
@@ -58,7 +58,7 @@
       
                       <li class="flex items-center">
                         <input id="reserved" type="checkbox" value="" (change)="onStateFilterChange('reserved')"
-                            class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500" />
+                            class="w-4 h-4 bg-gray-100 checked:bg-primary-100 dark:checked:bg-primary-100 border-gray-300 rounded focus:ring-primary-100" />
             
                         <label for="reserved" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-200">
                             {{ 'PRODUCT_INVENTORY._reserved' | translate }}
@@ -67,7 +67,7 @@
 
                       <li class="flex items-center">
                         <input id="suspended" type="checkbox" value="" (change)="onStateFilterChange('suspended')"
-                            class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500" />
+                            class="w-4 h-4 bg-gray-100 checked:bg-primary-100 dark:checked:bg-primary-100 border-gray-300 rounded focus:ring-primary-100" />
             
                         <label for="suspended" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-200">
                             {{ 'PRODUCT_INVENTORY._suspended' | translate }}
@@ -76,7 +76,7 @@
 
                       <li class="flex items-center">
                         <input id="unknown" type="checkbox" value="" (change)="onStateFilterChange('unknown')"
-                            class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500" />
+                            class="w-4 h-4 bg-gray-100 checked:bg-primary-100 dark:checked:bg-primary-100 border-gray-300 rounded focus:ring-primary-100" />
             
                         <label for="unknown" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-200">
                             {{ 'PRODUCT_INVENTORY._unknown' | translate }}

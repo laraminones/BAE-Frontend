@@ -58,6 +58,7 @@ export class SearchCatalogComponent implements OnInit{
   searchEnabled = environment.SEARCH_ENABLED;
   showPanel = false;
   feedback:boolean=false;
+  providerThemeName=environment.providerThemeName;
   logo='';
 
 

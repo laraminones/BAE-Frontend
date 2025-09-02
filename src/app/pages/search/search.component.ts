@@ -37,6 +37,7 @@ export class SearchComponent implements OnInit {
   searchField = new FormControl();
   showPanel = false;
   feedback:boolean=false;
+  providerThemeName=environment.providerThemeName;
 
   constructor(
     private api: ApiServiceService,

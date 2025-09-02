@@ -31,7 +31,7 @@
             
                           <li class="flex items-center">
                           <input id="feasibilityChecked" type="checkbox" value="" (change)="onStateFilterChange('feasibilityChecked')"
-                              class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500" />
+                              class="w-4 h-4 bg-gray-100 checked:bg-primary-100 dark:checked:bg-primary-100 border-gray-300 rounded focus:ring-primary-100" />
               
                           <label for="feasibilityChecked" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-200">
                             {{ 'PRODUCT_INVENTORY._feasibility' | translate }}
@@ -40,7 +40,7 @@
               
                           <li class="flex items-center">
                           <input id="designed" type="checkbox" value="" (change)="onStateFilterChange('designed')"
-                              class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500" />
+                              class="w-4 h-4 bg-gray-100 checked:bg-primary-100 dark:checked:bg-primary-100 border-gray-300 rounded focus:ring-primary-100" />
               
                           <label for="designed" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-200">
                             {{ 'PRODUCT_INVENTORY._designed' | translate }}
@@ -49,7 +49,7 @@
           
                           <li class="flex items-center">
                             <input id="reserved" type="checkbox" value="" (change)="onStateFilterChange('reserved')"
-                                class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500" />
+                                class="w-4 h-4 bg-gray-100 checked:bg-primary-100 dark:checked:bg-primary-100 border-gray-300 rounded focus:ring-primary-100" />
                 
                             <label for="reserved" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-200">
                                 {{ 'PRODUCT_INVENTORY._reserved' | translate }}
@@ -58,7 +58,7 @@
     
                           <li class="flex items-center">
                             <input id="inactive" type="checkbox" value="" (change)="onStateFilterChange('inactive')"
-                                class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500" />
+                                class="w-4 h-4 bg-gray-100 checked:bg-primary-100 dark:checked:bg-primary-100 border-gray-300 rounded focus:ring-primary-100" />
                 
                             <label for="inactive" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-200">
                                 {{ 'PRODUCT_INVENTORY._inactive' | translate }}
@@ -67,7 +67,7 @@
 
                           <li class="flex items-center">
                             <input id="active" type="checkbox" value="" (change)="onStateFilterChange('active')"
-                                class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500" />
+                                class="w-4 h-4 bg-gray-100 checked:bg-primary-100 dark:checked:bg-primary-100 border-gray-300 rounded focus:ring-primary-100" />
                 
                             <label for="active" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-200">
                                 {{ 'PRODUCT_INVENTORY._active' | translate }}
@@ -76,7 +76,7 @@
 
                           <li class="flex items-center">
                             <input id="terminated" type="checkbox" value="" (change)="onStateFilterChange('terminated')"
-                                class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500" />
+                                class="w-4 h-4 bg-gray-100 checked:bg-primary-100 dark:checked:bg-primary-100 border-gray-300 rounded focus:ring-primary-100" />
                 
                             <label for="terminated" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-200">
                                 {{ 'PRODUCT_INVENTORY._terminated' | translate }}
