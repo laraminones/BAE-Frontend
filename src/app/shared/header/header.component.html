@@ -16,7 +16,7 @@
             <li>
               <!-- CASO 1: El enlace es un MENÚ DESPLEGABLE (tiene 'children') -->
               <ng-container *ngIf="link.children && link.children.length > 0; else simpleLink">
-                <button [id]="link.id" [attr.data-dropdown-toggle]="link.id + 'Menu'" class="block cursor-pointer py-2 pl-3 pr-4 text-white rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-secondary-50 lg:p-0 dark:text-white lg:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent" aria-current="page">
+                <button [id]="link.id" [attr.data-dropdown-toggle]="link.id + 'Menu'" class="block cursor-pointer py-2 pl-3 pr-4 text-white rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-secondary-50 lg:p-0 dark:text-white lg:dark:hover:text-primary-100 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent" aria-current="page">
                   {{ link.label | translate }}
                 </button>
                 <!-- Menú desplegable -->
@@ -39,11 +39,11 @@
               <!-- CASO 2: El enlace es SIMPLE (no tiene 'children') -->
               <ng-template #simpleLink>
                 <!-- Enlace externo -->
-                <a *ngIf="!link.isRouterLink" [href]="link.url" target="_blank" class="block py-2 pl-3 pr-4 text-white rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-secondary-50 lg:p-0 dark:text-white lg:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent">
+                <a *ngIf="!link.isRouterLink" [href]="link.url" target="_blank" class="block py-2 pl-3 pr-4 text-white rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-secondary-50 lg:p-0 dark:text-white lg:dark:hover:text-primary-100 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent">
                   {{ link.label | translate }}
                 </a>
                 <!-- Enlace interno -->
-                <a *ngIf="link.isRouterLink" [routerLink]="link.url" class="block py-2 pl-3 pr-4 text-white rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-secondary-50 lg:p-0 dark:text-white lg:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent">
+                <a *ngIf="link.isRouterLink" [routerLink]="link.url" class="block py-2 pl-3 pr-4 text-white rounded hover:bg-gray-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-secondary-50 lg:p-0 dark:text-white lg:dark:hover:text-primary-100 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent">
                   {{ link.label | translate }}
                 </a>
               </ng-template>
@@ -117,27 +117,27 @@
       <div class="w-full bg-primary-100 dark:bg-secondary-100 rounded-lg" id="navbar-dropdown">
         <ul class="flex flex-col font-medium p-4 lg:p-0 rounded-lg lg:text-white lg:flex-row lg:space-x-8 lg:mt-0 lg:border-0">
           <li>
-            <a (click)="goTo('/search')" class="block cursor-pointer py-2 pl-3 pr-4 text-white rounded hover:bg-secondary-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-secondary-50 lg:p-0 dark:text-white lg:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent" aria-current="page">{{ 'HEADER._services' | translate }}</a>
+            <a (click)="goTo('/search')" class="block cursor-pointer py-2 pl-3 pr-4 text-white rounded hover:bg-secondary-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-secondary-50 lg:p-0 dark:text-white lg:dark:hover:text-primary-100 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent" aria-current="page">{{ 'HEADER._services' | translate }}</a>
           </li>
           <li>
-            <a (click)="goTo('/catalogues')" class="block cursor-pointer py-2 pl-3 pr-4 text-white rounded hover:bg-secondary-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-secondary-50 lg:p-0 dark:text-white lg:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent" aria-current="page">{{ 'HEADER._catalogs' | translate }}</a>
+            <a (click)="goTo('/catalogues')" class="block cursor-pointer py-2 pl-3 pr-4 text-white rounded hover:bg-secondary-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-secondary-50 lg:p-0 dark:text-white lg:dark:hover:text-primary-100 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent" aria-current="page">{{ 'HEADER._catalogs' | translate }}</a>
           </li>
           <li>
-            <a (click)="goTo('/about')" class="block cursor-pointer py-2 pl-3 pr-4 text-white rounded hover:bg-secondary-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-secondary-50 lg:p-0 dark:text-white lg:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent" aria-current="page">{{ 'HEADER._about' | translate }}</a>
+            <a (click)="goTo('/about')" class="block cursor-pointer py-2 pl-3 pr-4 text-white rounded hover:bg-secondary-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-secondary-50 lg:p-0 dark:text-white lg:dark:hover:text-primary-100 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent" aria-current="page">{{ 'HEADER._about' | translate }}</a>
           </li>
           <li>
-            <a href="{{domePublish}}" target="_blank" class="block py-2 pl-3 pr-4 text-white rounded hover:bg-secondary-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-secondary-50 lg:p-0 dark:text-white lg:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent">{{ 'HEADER._publish' | translate }}</a>
+            <a href="{{domePublish}}" target="_blank" class="block py-2 pl-3 pr-4 text-white rounded hover:bg-secondary-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-secondary-50 lg:p-0 dark:text-white lg:dark:hover:text-primary-100 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent">{{ 'HEADER._publish' | translate }}</a>
           </li>
           <li>
-            <a href="{{ knowledge }}" target="_blank" class="block py-2 pl-3 pr-4 text-white rounded hover:bg-secondary-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-secondary-50 lg:p-0 dark:text-white lg:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent">{{ 'HEADER._info' | translate }}</a>
+            <a href="{{ knowledge }}" target="_blank" class="block py-2 pl-3 pr-4 text-white rounded hover:bg-secondary-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-secondary-50 lg:p-0 dark:text-white lg:dark:hover:text-primary-100 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent">{{ 'HEADER._info' | translate }}</a>
           </li>
           @if (!is_logged) {
           <li>
-            <a href="{{domeRegister}}" target="_blank" type="button" class="block py-2 pl-3 pr-4 text-white rounded hover:bg-secondary-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-secondary-50 lg:p-0 dark:text-white lg:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent" aria-current="page">{{ 'HEADER._register' | translate }}</a>
+            <a href="{{domeRegister}}" target="_blank" type="button" class="block py-2 pl-3 pr-4 text-white rounded hover:bg-secondary-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-secondary-50 lg:p-0 dark:text-white lg:dark:hover:text-primary-100 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent" aria-current="page">{{ 'HEADER._register' | translate }}</a>
           </li>
           }
           <!--<li>
-            <button data-dropdown-toggle="support-dropdown" data-dropdown-placement="bottom-end" class="block py-2 pl-3 pr-4 text-white rounded hover:bg-secondary-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-secondary-50 lg:p-0 dark:text-white lg:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent" aria-current="page">{{ 'HEADER._support' | translate }}</button>
+            <button data-dropdown-toggle="support-dropdown" data-dropdown-placement="bottom-end" class="block py-2 pl-3 pr-4 text-white rounded hover:bg-secondary-100 lg:hover:bg-transparent lg:border-0 lg:hover:text-secondary-50 lg:p-0 dark:text-white lg:dark:hover:text-primary-100 dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent" aria-current="page">{{ 'HEADER._support' | translate }}</button>
           </li>-->
         </ul>
       </div>
@@ -168,9 +168,11 @@
             <li>
               <button id="productOrders" (click)="goTo('/product-orders')" class="flex w-full justify-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"><fa-icon [icon]="faReceipt" class="mr-2"></fa-icon>{{ 'HEADER._orders' | translate }}</button>
             </li>
-            <li>
-              <button id="quotelist" (click)="goTo('/quote-list')" class="flex w-full justify-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"><fa-icon [icon]="faReceipt" class="mr-2"></fa-icon>Quotes</button>
-            </li>
+            @if(providerThemeName=='DOME'){
+              <li>
+                <button id="quotelist" (click)="goTo('/quote-list')" class="flex w-full justify-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"><fa-icon [icon]="faReceipt" class="mr-2"></fa-icon>Quotes</button>
+              </li>
+            }
             <li>
               <button id="usageSpecs" (click)="goTo('/usage-spec')" class="flex w-full justify-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"><fa-icon [icon]="faRuler" class="mr-2"></fa-icon>Usage Spec</button>
             </li>

@@ -1,4 +1,4 @@
-<footer class="fixed bottom-0 left-0 z-10 h-[25px] w-full p-4 bg-white border-t border-gray-200 shadow md:flex md:items-center md:justify-end md:p-6 dark:bg-gray-800 dark:border-gray-600">
+<footer class="fixed bottom-0 left-0 z-10 h-[25px] w-full p-4 bg-white border-t border-gray-200 shadow md:flex md:items-center md:justify-end md:p-6 dark:bg-tertiary-50 dark:border-gray-600">
   <div class="flex justify-between items-center w-full">
     <!-- Social Links Dinámicos -->
     <div class="flex justify-start text-gray-500 dark:text-gray-400">
@@ -30,8 +30,8 @@
 
 @if(feedback){
   <feedback-modal
-  rateMessage="How would you rate your overall experience with DOME?"
-  writeMessage="How can we improve DOME?"
+  rateMessage="{{ 'FEEDBACK._footer_title' | translate }}"
+  writeMessage="{{ 'FEEDBACK._footer_improve' | translate }}"
   type="experience"
   class="fixed inset-0 flex items-center justify-center z-40"></feedback-modal>
 }

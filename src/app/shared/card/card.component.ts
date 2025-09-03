@@ -40,6 +40,7 @@ export class CardComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() productOff: Product | undefined;
   @Input() cardId: number;
 
+  providerThemeName = environment.providerThemeName;
   category: string = 'none';
   categories: any[] | undefined  = [];
   categoriesMore: any[] | undefined  = [];

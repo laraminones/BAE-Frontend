@@ -34,6 +34,10 @@
   }
 }
 
+ngx-file-drop .ngx-file-drop__drop-zone {
+  border-color: rgb(var(--theme-primary-100)) !important; /* your theme color */
+}
+
 /* Default styles for Markdown elements */
 markdown {
   font-family: "Blinker", system-ui, sans-serif;
