@@ -38,6 +38,7 @@ import {ThemeService} from "../../services/theme.service";
 export class CardComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @Input() productOff: Product | undefined;
+  @Input() prodSpecInput: ProductSpecification | undefined;
   @Input() cardId: number;
 
   providerThemeName = environment.providerThemeName;
@@ -243,19 +244,25 @@ export class CardComponent implements OnInit, OnDestroy, AfterViewInit {
     } else {
       this.images = profile;
     }
-    let specId:any|undefined=this.productOff?.productSpecification?.id;
-    if(specId != undefined) {
-      this.api.getProductSpecification(specId).then(spec => {
-        this.prodSpec = spec;
-        console.log('prod spec')
-        console.log(this.prodSpec)
-        this.getOwner();
-
-        if(this.prodSpec.productSpecCharacteristic != undefined) {
-          this.complianceLevel = this.api.getComplianceLevel(this.prodSpec);
-        }
-      })
-    }
+    this.prodSpec = this.productOff?.productSpecification ?? {};
+    /*if(!this.prodSpecInput){
+      console.log('no prod spec ----')
+      let specId:any|undefined=this.productOff?.productSpecification?.id;
+      if(specId != undefined){
+        this.api.getProductSpecification(specId).then(spec => {
+          this.prodSpec = spec;
+          console.log('prod spec')
+          console.log(this.prodSpec)
+          this.getOwner();
+  
+          if(this.prodSpec.productSpecCharacteristic != undefined) {
+            this.complianceLevel = this.api.getComplianceLevel(this.prodSpec);
+          }
+        })
+      }
+    } else {
+      this.prodSpec = this.prodSpecInput
+    }*/
 
     this.isCustomPrice = await this.priceService.isCustomOffering(this.productOff)
 
@@ -280,6 +287,15 @@ export class CardComponent implements OnInit, OnDestroy, AfterViewInit {
   getProductImage() {
     return this.images.length > 0 ? this.images?.at(0)?.url : 'https://placehold.co/600x400/svg';
   }
+
+  hasLongWord(str: string | undefined, threshold = 20) {
+    if(str){
+      return str.split(/\s+/).some(word => word.length > threshold);
+    } else {
+      return false
+    }   
+  }
+  
 
   loadMoreCategories(){
     this.loadMoreCats=!this.loadMoreCats;
@@ -539,7 +555,11 @@ async deleteProduct(product: Product | undefined){
     }
 
     if(this.productOff?.productOfferingTerm != undefined){
-      if(this.productOff.productOfferingTerm.length == 1 && this.productOff.productOfferingTerm[0].name == undefined){
+      const licenseTerm = this.productOff.productOfferingTerm.find(
+        element => element.name === 'License'
+      );
+
+      if (!licenseTerm) {
         this.check_terms=false;
       } else {
         this.check_terms=true;

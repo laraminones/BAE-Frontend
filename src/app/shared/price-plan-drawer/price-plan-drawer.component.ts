@@ -139,12 +139,18 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
     if (changes['isOpen']?.currentValue === true) {
       this.tsAndCs = { description: '' };
 
-      this.productOff?.productOfferingTerm?.forEach((term) => {
+      /*this.productOff?.productOfferingTerm?.forEach((term) => {
         if (term.name != 'procurement') {
           console.log('---- Setting the term')
           this.tsAndCs = term;
         }
-      });
+      });*/
+      const licenseTerm = this.productOff?.productOfferingTerm?.find(
+        element => element.name === 'License'
+      );
+      if(licenseTerm){
+        this.tsAndCs={ description: licenseTerm.description };
+      }
       if(this.tsAndCs.description == ''){
         this.form.controls['tsAccepted'].setValue(true);
         this.cdr.detectChanges();

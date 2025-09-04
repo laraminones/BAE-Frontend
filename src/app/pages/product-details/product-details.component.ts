@@ -98,7 +98,7 @@ export class ProductDetailsComponent implements OnInit {
   stepsElements:string[]=['step-chars','step-price','step-terms','step-checkout'];
   stepsText:string[]=['text-chars','text-price','text-terms','text-checkout'];
   stepsCircles:string[]=['circle-chars','circle-price','circle-terms','circle-checkout'];
-
+  licenseTerm:any=undefined;
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -297,6 +297,10 @@ export class ProductDetailsComponent implements OnInit {
           this.attatchments = this.productOff?.attachment?.filter(item => item.name != 'Profile Picture') ?? [];
         }
 
+        this.licenseTerm = this.productOff?.productOfferingTerm?.find(
+          element => element.name === 'License'
+        );
+
         if(this.prodSpec.productSpecCharacteristic != undefined) {
 
           // Find if there is a self attestement
@@ -314,6 +318,7 @@ export class ProductDetailsComponent implements OnInit {
         this.complianceDescription = this.getComplianceDescription();
       })
     })
+
   }
 
   toggleQuoteModal(){
@@ -379,7 +384,10 @@ export class ProductDetailsComponent implements OnInit {
     }
 
     if(this.productOff?.productOfferingTerm != undefined){
-      if(this.productOff.productOfferingTerm.length == 1 && this.productOff.productOfferingTerm[0].name == undefined){
+      this.licenseTerm = this.productOff.productOfferingTerm.find(
+        element => element.name === 'License'
+      );
+      if(!this.licenseTerm){
         this.check_terms=false;
       } else {
         this.check_terms=true;

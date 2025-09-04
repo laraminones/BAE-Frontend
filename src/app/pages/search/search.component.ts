@@ -73,7 +73,6 @@ export class SearchComponent implements OnInit {
     }
     console.log('INIT')
     await this.getProducts(false);
-
     await this.eventMessage.messages$.subscribe(async ev => {
       if(ev.type === 'AddedFilter' || ev.type === 'RemovedFilter') {
         console.log('event filter')
@@ -131,6 +130,7 @@ export class SearchComponent implements OnInit {
       this.loading=false;
       this.loading_more=false;
     })
+
   }
 
   async next(){
