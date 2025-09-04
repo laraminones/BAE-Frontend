@@ -34,7 +34,7 @@ export class LicenseComponent implements OnInit, OnDestroy {
       if(ev.type === 'UpdateOffer') {
         if (this.isEditMode && this.hasBeenModified && this.originalValue) {
           const currentValue = {
-            treatment: this.treatmentControl?.value || '',
+            treatment: 'License',
             description: this.descControl?.value || ''
           };
           
@@ -68,11 +68,6 @@ export class LicenseComponent implements OnInit, OnDestroy {
     return this.form as FormGroup;  // Lo convierte en FormGroup
   }
 
-  get treatmentControl(): FormControl | null {
-    const control = this.formGroup.get('treatment');
-    return control instanceof FormControl ? control : null;
-  }
-
   get descControl(): FormControl | null {
     const control = this.formGroup.get('description');
     return control instanceof FormControl ? control : null;
@@ -86,22 +81,28 @@ export class LicenseComponent implements OnInit, OnDestroy {
     if (this.isEditMode && this.data) {
       console.log('📝 Data received:', this.data);
       //LICENSE
-      if (Array.isArray(this.data.productOfferingTerm)) {
-        this.formGroup.addControl('treatment', new FormControl<string>(this.data.productOfferingTerm[0].name));
-        this.formGroup.addControl('description', new FormControl<string>(this.data.productOfferingTerm[0].description));
-        
-        // Store original value only in edit mode
-        this.originalValue = {
-          treatment: this.data.productOfferingTerm[0].name,
-          description: this.data.productOfferingTerm[0].description
-        };
-        console.log('📝 Original value stored:', this.originalValue);
+      if (this.data.productOfferingTerm && Array.isArray(this.data.productOfferingTerm)) {
+        let license = this.data.productOfferingTerm?.find((element: { name: any; }) => element.name == 'License')
+        if(license){
+          this.formGroup.addControl('treatment', new FormControl<string>('License'));
+          this.formGroup.addControl('description', new FormControl<string>(license.description));
+          
+          // Store original value only in edit mode
+          this.originalValue = {
+            treatment: license.name,
+            description: license.description
+          };
+          console.log('📝 Original value stored:', this.originalValue);
+        } else {
+          this.formGroup.addControl('treatment', new FormControl<string>('License'));
+          this.formGroup.addControl('description', new FormControl<string>(''));
+        }
       } else {
-        this.formGroup.addControl('treatment', new FormControl<string>(''));
+        this.formGroup.addControl('treatment', new FormControl<string>('License'));
         this.formGroup.addControl('description', new FormControl<string>(''));
       }
     } else {
-      this.formGroup.addControl('treatment', new FormControl<string>(''));
+      this.formGroup.addControl('treatment', new FormControl<string>('License'));
       this.formGroup.addControl('description', new FormControl<string>(''));
     }
 
@@ -119,7 +120,7 @@ export class LicenseComponent implements OnInit, OnDestroy {
     // Solo emitir cambios si estamos en modo edición y hay cambios reales
     if (this.isEditMode && this.hasBeenModified && this.originalValue) {
       const currentValue = {
-        treatment: this.treatmentControl?.value || '',
+        treatment: 'License',
         description: this.descControl?.value || ''
       };
       

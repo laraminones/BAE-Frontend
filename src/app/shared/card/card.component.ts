@@ -555,7 +555,11 @@ async deleteProduct(product: Product | undefined){
     }
 
     if(this.productOff?.productOfferingTerm != undefined){
-      if(this.productOff.productOfferingTerm.length == 1 && this.productOff.productOfferingTerm[0].name == undefined){
+      const licenseTerm = this.productOff.productOfferingTerm.find(
+        element => element.name === 'License'
+      );
+
+      if (!licenseTerm) {
         this.check_terms=false;
       } else {
         this.check_terms=true;

@@ -235,24 +235,58 @@ export class OfferComponent implements OnInit, OnDestroy{
       console.log('Found productOfferingTerm:', this.offer.productOfferingTerm);
       
       // Mantener el primer término (licencia) incluso si está vacío
-      const licenseTerm = this.offer.productOfferingTerm[0];
-      
-      // Filtrar el resto de términos
-      const otherTerms = this.offer.productOfferingTerm.slice(1).filter((term: any) => 
-        term.name && term.name.trim() !== '' && term.description && term.description.trim() !== ''
+      //const licenseTerm = this.offer.productOfferingTerm[0];
+      const licenseTerm = this.offer.productOfferingTerm.find(
+        (element: { name: string; }) => element.name === 'License'
       );
       
-      // Reconstruir el array con el término de licencia en la posición 0
-      this.offer.productOfferingTerm = [licenseTerm, ...otherTerms];
+      // Filtrar el resto de términos
 
-      this.productOfferForm.patchValue({
-        license: {
-          treatment: this.offer.productOfferingTerm[0].name,
-          description: this.offer.productOfferingTerm[0].description
-        }
-      });
+      /*const otherTerms = this.offer.productOfferingTerm.filter(
+        (term: any) => term.name !== 'License'
+      ) ?? [];
+    
+      
+      // Reconstruir el array con el término de licencia en la posición 0
+      this.offer.productOfferingTerm = [licenseTerm, ...otherTerms];*/
+
+      if(licenseTerm){
+        this.productOfferForm.patchValue({
+          license: {
+            treatment: 'License',
+            description: licenseTerm.description
+          }
+        });
+      } else {
+        this.productOfferForm.patchValue({
+          license: {
+            treatment: 'License',
+            description: ''
+          }
+        });        
+      }
 
       //PROCUREMENT
+      const procurementTerm = this.offer.productOfferingTerm.find(
+        (element: { name: string; }) => element.name === 'procurement'
+      );
+      if(procurementTerm){
+        const procurementValue = {
+          id: procurementTerm.description,
+          name: procurementTerm.description
+        };
+        console.log('Setting procurement value:', procurementValue);
+        this.productOfferForm.patchValue({
+          procurementMode: procurementValue
+        });
+      } else {
+        this.productOfferForm.patchValue({
+          procurementMode: {
+            id: 'manual',
+            name: 'Manual'
+          }
+        });
+      }
       /*console.log('Checking procurement terms...');
       this.offer.productOfferingTerm.forEach((term: any) => {
         console.log('Checking term:', term);
@@ -850,7 +884,7 @@ export class OfferComponent implements OnInit, OnDestroy{
       },
       productOfferingTerm: [
         {
-          name: formValue.license.treatment || '',
+          name: 'License',
           description: formValue.license.description || ''
         },
         {
@@ -973,13 +1007,13 @@ export class OfferComponent implements OnInit, OnDestroy{
 
         case 'license':
           // Actualizar términos de licencia
-          const licenseTerm = basePayload.productOfferingTerm.find((term: any) => term.name === change.currentValue.treatment);
+          const licenseTerm = basePayload.productOfferingTerm.find((term: any) => term.name === 'License');
           if (licenseTerm) {
             licenseTerm.description = change.currentValue.description;
           } else {
             // Añadir el término de licencia al principio del array
             basePayload.productOfferingTerm.unshift({
-              name: change.currentValue.treatment,
+              name: 'License',
               description: change.currentValue.description
             });
           }
@@ -1089,18 +1123,25 @@ export class OfferComponent implements OnInit, OnDestroy{
     });
 
     // Limpiar términos vacíos en productOfferingTerm
-    if (basePayload.productOfferingTerm) {
+    /*if (basePayload.productOfferingTerm) {
       // Mantener el primer término (licencia) incluso si está vacío
-      const licenseTerm = basePayload.productOfferingTerm[0];
+      //const licenseTerm = basePayload.productOfferingTerm[0];
+      let licenseTerm = basePayload.productOfferingTerm.find((element: { name: any; }) => element.name == 'License')
+      if(!licenseTerm){
+        licenseTerm={
+          name: 'License',
+          description: basePayload.productOfferingTerm[0].description
+        }
+      }
       
       // Filtrar el resto de términos
-      const otherTerms = basePayload.productOfferingTerm.slice(1).filter((term: any) => 
-        term.name && term.name.trim() !== '' && term.description && term.description.trim() !== ''
-      );
+      const otherTerms = this.offer.productOfferingTerm.filter(
+        (term: any) => term.name !== 'License'
+      ) ?? [];
       
       // Reconstruir el array con el término de licencia en la posición 0
       basePayload.productOfferingTerm = [licenseTerm, ...otherTerms];
-    }
+    }*/
 
     console.log('📝 Final update payload:', basePayload);
 
