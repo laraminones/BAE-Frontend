@@ -62,6 +62,7 @@ export class CreateServiceSpecComponent implements OnInit {
 
   errorMessage:any='';
   showError:boolean=false;
+  loading:boolean=false;
 
   //CHARS
   stringValue: string = '';
@@ -279,8 +280,10 @@ export class CreateServiceSpecComponent implements OnInit {
   }
 
   createService(){
+    this.loading=true;
     this.servSpecService.postServSpec(this.serviceToCreate).subscribe({
       next: data => {
+        this.loading=false;
         this.goBack();
         console.log('serv created')
       },
@@ -292,6 +295,7 @@ export class CreateServiceSpecComponent implements OnInit {
         } else {
           this.errorMessage='There was an error while creating the service!';
         }
+        this.loading=false;
         this.showError=true;
         setTimeout(() => {
           this.showError = false;

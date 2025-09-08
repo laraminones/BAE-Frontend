@@ -39,6 +39,7 @@ export class UpdateServiceSpecComponent implements OnInit {
   showGeneral:boolean=true;
   showChars:boolean=false;
   showSummary:boolean=false;
+  loading:boolean=false;
 
   //SERVICE GENERAL INFO:
   generalForm = new FormGroup({
@@ -283,8 +284,10 @@ export class UpdateServiceSpecComponent implements OnInit {
   }
 
   updateService(){
+    this.loading=true;
     this.servSpecService.updateServSpec(this.serviceToUpdate,this.serv.id).subscribe({
       next: data => {
+        this.loading=false;
         this.goBack();
         console.log('serv updated')
       },
@@ -296,6 +299,7 @@ export class UpdateServiceSpecComponent implements OnInit {
         } else {
           this.errorMessage='There was an error while updating the service!';
         }
+        this.loading=false;
         this.showError=true;
         setTimeout(() => {
           this.showError = false;

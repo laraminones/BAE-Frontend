@@ -35,6 +35,7 @@ export class CreateCatalogComponent implements OnInit {
   //Check if step was done
   generalDone:boolean=false;
   finishDone:boolean=false;
+  loading:boolean=false;
 
   //SERVICE GENERAL INFO:
   generalForm = new FormGroup({
@@ -121,8 +122,10 @@ export class CreateCatalogComponent implements OnInit {
   }
 
   createCatalog(){
+    this.loading=true;
     this.api.postCatalog(this.catalogToCreate).subscribe({
       next: data => {
+        this.loading=false;
         this.goBack();
       },
       error: error => {
@@ -133,6 +136,7 @@ export class CreateCatalogComponent implements OnInit {
         } else {
           this.errorMessage='There was an error while creating the catalog!';
         }
+        this.loading=false;
         this.showError=true;
         setTimeout(() => {
           this.showError = false;

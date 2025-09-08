@@ -62,6 +62,7 @@ export class CreateResourceSpecComponent implements OnInit {
 
   errorMessage:any='';
   showError:boolean=false;
+  loading:boolean=false;
 
   //CHARS
   stringValue: string = '';
@@ -288,8 +289,10 @@ export class CreateResourceSpecComponent implements OnInit {
   }
 
   createResource(){
+    this.loading=true;
     this.resSpecService.postResSpec(this.resourceToCreate).subscribe({
       next: data => {
+        this.loading=false;
         this.goBack();
         console.log('serv created')
       },
@@ -301,6 +304,7 @@ export class CreateResourceSpecComponent implements OnInit {
         } else {
           this.errorMessage='There was an error while creating the resource!';
         }
+        this.loading=false;
         this.showError=true;
         setTimeout(() => {
           this.showError = false;

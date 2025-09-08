@@ -68,6 +68,7 @@ export class OfferComponent implements OnInit, OnDestroy{
   pricePlans:any = [];
   errorMessage:any='';
   showError:boolean=false;
+  loading:boolean=false;
   bundleChecked:boolean=false;
   offersBundle:any[]=[];
   loadingData:boolean=false;
@@ -815,6 +816,7 @@ export class OfferComponent implements OnInit, OnDestroy{
   }
 
   async createOffer() {
+    this.loading=true;
     const plans = this.productOfferForm.value.pricePlans;
 
     if (plans.length === 0) {
@@ -911,11 +913,13 @@ export class OfferComponent implements OnInit, OnDestroy{
       next: (data) => {
         console.log('product offer created:');
         console.log(data);
+        this.loading=false;
         this.goBack();
       },
       error: (error) => {
         console.error('Error during offer save/update:', error);
         this.errorMessage = error?.error?.error ? 'Error: ' + error.error.error : 'An error occurred while saving the offer!';
+        this.loading=false;
         this.showError = true;
         setTimeout(() => (this.showError = false), 3000);
       }
@@ -956,6 +960,7 @@ export class OfferComponent implements OnInit, OnDestroy{
   }
 
   async updateOffer() {
+    this.loading=true;
     console.log('🔄 Starting offer update process...');
     console.log('📝 Current form changes:', this.formChanges);
 
@@ -1149,10 +1154,12 @@ export class OfferComponent implements OnInit, OnDestroy{
       // Llamar a la API para actualizar la oferta
       await lastValueFrom(this.api.updateProductOffering(basePayload, this.offer.id));
       console.log('✅ Offer updated successfully');
+      this.loading=false;
       this.goBack();
     } catch (error: any) {
       console.error('❌ Error updating offer:', error);
       this.errorMessage = error?.error?.error ? 'Error: ' + error.error.error : 'An error occurred while updating the offer!';
+      this.loading=false;
       this.showError = true;
       setTimeout(() => (this.showError = false), 3000);
     }

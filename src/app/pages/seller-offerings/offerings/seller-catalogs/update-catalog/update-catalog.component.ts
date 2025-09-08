@@ -46,6 +46,7 @@ export class UpdateCatalogComponent implements OnInit {
 
   errorMessage:any='';
   showError:boolean=false;
+  loading:boolean=false;
 
   constructor(
     private router: Router,
@@ -129,8 +130,10 @@ export class UpdateCatalogComponent implements OnInit {
   }
 
   createCatalog(){
+    this.loading=true;
     this.api.updateCatalog(this.catalogToUpdate,this.cat.id).subscribe({
       next: data => {
+        this.loading=false;
         this.goBack();
       },
       error: error => {
@@ -141,6 +144,7 @@ export class UpdateCatalogComponent implements OnInit {
         } else {
           this.errorMessage='There was an error while updating the catalog!';
         }
+        this.loading=false;
         this.showError=true;
         setTimeout(() => {
           this.showError = false;

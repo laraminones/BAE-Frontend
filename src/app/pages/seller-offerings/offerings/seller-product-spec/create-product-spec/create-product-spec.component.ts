@@ -160,6 +160,7 @@ export class CreateProductSpecComponent implements OnInit {
 
   errorMessage:any='';
   showError:boolean=false;
+  loading:boolean=false;
 
   //CHARS
   stringValue: string = '';
@@ -1185,8 +1186,10 @@ export class CreateProductSpecComponent implements OnInit {
   }
 
   createProduct(){
+    this.loading=true;
     this.prodSpecService.postProdSpec(this.productSpecToCreate).subscribe({
       next: data => {
+        this.loading=false;
         this.goBack();
       },
       error: error => {
@@ -1197,6 +1200,7 @@ export class CreateProductSpecComponent implements OnInit {
         } else {
           this.errorMessage='There was an error while creating the product!';
         }
+        this.loading=false;
         this.showError=true;
         setTimeout(() => {
           this.showError = false;

@@ -158,6 +158,7 @@ export class UpdateProductSpecComponent implements OnInit {
 
   errorMessage:any='';
   showError:boolean=false;
+  loading:boolean=false;
 
   //CHARS
   stringValue: string = '';
@@ -1399,8 +1400,10 @@ export class UpdateProductSpecComponent implements OnInit {
   }
 
   updateProduct(){
+    this.loading=true;
     this.prodSpecService.updateProdSpec(this.productSpecToUpdate, this.prod.id).subscribe({
       next: data => {
+        this.loading=false;
         this.goBack();
         console.log('actualiado producto')
       },
@@ -1412,6 +1415,7 @@ export class UpdateProductSpecComponent implements OnInit {
         } else {
           this.errorMessage='There was an error while uploading the product!';
         }
+        this.loading=false;
         this.showError=true;
         setTimeout(() => {
           this.showError = false;

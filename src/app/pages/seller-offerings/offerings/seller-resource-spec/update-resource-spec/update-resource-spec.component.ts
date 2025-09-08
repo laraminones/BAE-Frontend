@@ -60,6 +60,7 @@ export class UpdateResourceSpecComponent implements OnInit {
 
   errorMessage:any='';
   showError:boolean=false;
+  loading:boolean=false;
 
   //CHARS
   stringValue: string = '';
@@ -282,8 +283,10 @@ export class UpdateResourceSpecComponent implements OnInit {
   }
 
   updateResource(){
+    this.loading=true;
     this.resSpecService.updateResSpec(this.resourceToUpdate,this.res.id).subscribe({
       next: data => {
+        this.loading=false;
         this.goBack();
         console.log('serv updated')
       },
@@ -295,6 +298,7 @@ export class UpdateResourceSpecComponent implements OnInit {
         } else {
           this.errorMessage='There was an error while updating the resource!';
         }
+        this.loading=false;
         this.showError=true;
         setTimeout(() => {
           this.showError = false;
