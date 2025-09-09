@@ -30,6 +30,65 @@ export class ApiServiceService {
     return lastValueFrom(this.http.get<any[]>(url));
   }
 
+  async getProductsDetails(offers:any[]){
+    let normalized: any[] = [];
+
+    if (Array.isArray(offers)) {
+      normalized = offers;
+    } else if (offers && typeof offers === 'object') {
+      normalized = [offers]; // wrap single object into array
+    }
+    return await Promise.all(normalized.map(async (offer:any): Promise<ProductOffering> => {
+      try {
+        // Getting specs and prices in parallel
+        const [spec, prodPrices] = await Promise.all([
+          offer.productSpecification?.id
+            ? this.getProductSpecification(offer.productSpecification.id)
+            : Promise.resolve(undefined),
+          offer.productOfferingPrice
+            ? Promise.all(offer.productOfferingPrice.map((p: { id: any; }) => this.getProductPrice(p.id)))
+            : Promise.resolve([])
+        ]);
+
+        // Building `ProductOffering` object
+        return {
+          id: offer.id,
+          href: offer.href,
+          name: offer.name,
+          description: offer.description,
+          isBundle: offer.isBundle,
+          isSellable: offer.isSellable,
+          lastUpdate: offer.lastUpdate,
+          lifecycleStatus: offer.lifecycleStatus,
+          statusReason: offer.statusReason,
+          version: offer.version,
+          agreement: offer.agreement ?? [],
+          attachment: spec?.attachment ?? [],
+          bundledProductOffering: offer.bundledProductOffering ?? [],
+          category: offer.category ?? [],
+          channel: offer.channel ?? [],
+          marketSegment: offer.marketSegment ?? [],
+          place: offer.place ?? [],
+          prodSpecCharValueUse: offer.prodSpecCharValueUse ?? [],
+          productOfferingPrice: prodPrices ?? [],
+          productOfferingRelationship: offer.productOfferingRelationship ?? [],
+          productOfferingTerm: offer.productOfferingTerm ?? [],
+          productSpecification: spec ?? offer.productSpecification,
+          resourceCandidate: offer.resourceCandidate,
+          serviceCandidate: offer.serviceCandidate,
+          serviceLevelAgreement: offer.serviceLevelAgreement,
+          validFor: offer.validFor,
+          "@baseType": offer["@baseType"],
+          "@schemaLocation": offer["@schemaLocation"],
+          "@type": offer["@type"]
+        };
+      } catch (error) {
+        console.error(`Error processing product ${offer.id}:`, error);
+        return offer; // If error returns the original offer
+      }
+    }));
+  }
+
   getProductsByCategory(ids:Category[],page:any,keywords:any) {
     let id_str='';
     for(let i = 0; i < ids.length; i++){

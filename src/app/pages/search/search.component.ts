@@ -122,13 +122,13 @@ export class SearchComponent implements OnInit {
     }
 
     this.paginationService.getItemsPaginated(this.page, this.PRODUCT_LIMIT, next, this.products,this.nextProducts, options,
-      this.paginationService.getProducts.bind(this.paginationService)).then(data => {
-      this.page_check=data.page_check;      
-      this.products=data.items;
-      this.nextProducts=data.nextItems;
-      this.page=data.page;
-      this.loading=false;
-      this.loading_more=false;
+      this.paginationService.getProducts.bind(this.paginationService)).then(async data => {
+        this.products=await this.api.getProductsDetails(data.items);
+        this.page_check=data.page_check;
+        this.nextProducts=await this.api.getProductsDetails(data.nextItems);
+        this.page=data.page;
+        this.loading=false;
+        this.loading_more=false;
     })
 
   }

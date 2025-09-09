@@ -251,9 +251,10 @@ export class PaginationService {
       const productOfferings: ProductOffering[] = filters && filters.length > 0
         ? await this.api.getProductsByCategory(filters, page, keywords)
         : await this.api.getProducts(page, keywords);
+        return productOfferings
 
       // Get Product Details in parallel
-      return await Promise.all(
+      /*return await Promise.all(
         productOfferings.map(async (offer): Promise<ProductOffering> => {
           try {
             // Getting specs and prices in parallel
@@ -303,7 +304,7 @@ export class PaginationService {
             return offer; // If error returns the original offer
           }
         })
-      );
+      );*/
 
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -319,9 +320,10 @@ export class PaginationService {
       const productOfferings: ProductOffering[] = filters && filters.length > 0
         ? await this.api.getProductsByCategoryAndCatalog(filters, id, page)
         : await this.api.getProductsByCatalog(id, page);
+        return productOfferings
 
       // Process product offerings in parallel
-      return await Promise.all(
+      /*return await Promise.all(
         productOfferings.map(async (offer): Promise<ProductOffering> => {
           try {
             // Getting specs and prices in parallel
@@ -351,7 +353,7 @@ export class PaginationService {
             return offer; // If error returns the original offer
           }
         })
-      );
+      );*/
     } catch (error) {
       console.error('Error fetching products:', error);
       return []; // Returns [] if error
