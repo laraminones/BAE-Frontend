@@ -78,5 +78,6 @@ export const environment = {
         addNoteToQuote: '/addNoteToQuote',
         addAttachmentToQuote: '/addAttachmentToQuote',
         deleteQuote: '/quote'
-    }
+    },
+    analytics: ''
 };

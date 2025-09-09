@@ -12,7 +12,8 @@ import {
   faUsers,
   faCogs,
   faReceipt,
-  faRuler
+  faRuler,
+  faPieChart
 } from "@fortawesome/sharp-solid-svg-icons";
 import {LocalStorageService} from "../../services/local-storage.service";
 import { ApiServiceService } from 'src/app/services/product-service.service';
@@ -83,6 +84,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, DoCheck, OnDestro
   knowledge_guidelines: string = environment.KB_GUIDELNES_URL
   registration: string = environment.REGISTRATION_FORM_URL
   ticketing: string = environment.TICKETING_SYSTEM_URL
+  analytics: string = environment.analytics
   domeAbout: string = environment.DOME_ABOUT_LINK
   domeRegister: string = environment.DOME_REGISTER_LINK
   domePublish: string = environment.DOME_PUBLISH_LINK
@@ -466,4 +468,5 @@ export class HeaderComponent implements OnInit, AfterViewInit, DoCheck, OnDestro
   protected readonly faCogs = faCogs;
   protected readonly faReceipt = faReceipt;
   protected readonly faRuler = faRuler;
+  protected readonly faPieChart = faPieChart;
 }
