@@ -51,7 +51,7 @@ export class OrderInfoComponent implements OnInit, AfterViewInit {
 
   page: number=0;
   ORDER_LIMIT: number = environment.ORDER_LIMIT;
-  filters: any[]=[];
+  filters: any[]=['acknowledged','inProgress','completed','pending'];
   check_custom:boolean=false;
   isSeller:boolean=false;
   role:any='Customer'
@@ -202,6 +202,7 @@ export class OrderInfoComponent implements OnInit, AfterViewInit {
     this.selectedDate = today.toISOString();
     this.dateRange.setValue('month');
     this.initPartyInfo();
+    initFlowbite();
   }
 
   initPartyInfo(){
