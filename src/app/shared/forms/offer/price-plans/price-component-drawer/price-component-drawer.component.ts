@@ -103,6 +103,9 @@ export class PriceComponentDrawerComponent implements OnInit {
         } else {
           this.showValueSelect = true;
         }
+        if(!pscv) {
+          this.showValueSelect = false;
+        }
       }
       
       if(this.priceComponentForm.get('discountValue')?.value != null){
@@ -111,6 +114,7 @@ export class PriceComponentDrawerComponent implements OnInit {
       const selectedChar = this.priceComponentForm.get('selectedCharacteristic')?.value?.[0];
 
       if (selectedChar) {
+        console.log('---- selected char ----')
         console.log(selectedChar)
         this.selectedCharacteristic = selectedChar;
         console.log('selected char')

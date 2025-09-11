@@ -41,7 +41,7 @@
             (click)="onPricePlanSelected(pp)">
           <div class="text-base font-semibold text-primary-100 dark:text-gray-400 flex justify-between content-center text-wrap break-all">
             {{pp.name}}
-            @if (pp.prodSpecCharValueUse){
+            @if (isProfile(pp)){
               <span class="bg-indigo-100 text-indigo-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-indigo-900 dark:text-indigo-300">PROFILE</span>
             }
           </div>

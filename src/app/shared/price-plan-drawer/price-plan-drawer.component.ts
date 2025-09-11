@@ -177,9 +177,20 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
     this.filteredCharacteristics = [];
     for(let i = 0; i < this.characteristics.length; i++){
       if (!certifications.some(certification => certification.name === this.characteristics[i].name)) {
+        if(!this.characteristics[i]?.productSpecCharacteristicValue && this.prodSpec?.productSpecCharacteristic){
+          const match = this.prodSpec.productSpecCharacteristic.find(
+            (spec: any) => spec.id === this.characteristics[i].id
+          );
+      
+          if (match) {
+            this.characteristics[i].productSpecCharacteristicValue = match.productSpecCharacteristicValue;
+          }    
+        }
         this.filteredCharacteristics.push(this.characteristics[i]);
       }
     }
+    console.log('----- filter chars')
+    console.log(this.filteredCharacteristics)
 
     // Reconfigurar el grupo de características en el formulario
     const characteristicsGroup = this.fb.group({});
@@ -201,6 +212,25 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
     this.form.setControl('characteristics', characteristicsGroup);
   }
 
+  isProfile(pricePlan: any):boolean{
+    let check=true;
+    let realCharsLength = 0;
+    if(this.prodSpec?.productSpecCharacteristic){
+      let prodchars=this.prodSpec?.productSpecCharacteristic
+      for(let i=0;i<prodchars.length;i++){
+        if (!certifications.some(certification => certification.name === prodchars[i].name)) {
+          realCharsLength++;
+        }
+      }
+    }
+    if(pricePlan?.prodSpecCharValueUse && pricePlan?.prodSpecCharValueUse.length < realCharsLength){
+      check = false
+    } else if(pricePlan?.prodSpecCharValueUse?.value == undefined){
+      check = false
+    }
+    return check
+  }
+
   // Handle price plan selection
   async onPricePlanSelected(pricePlan: any) {
     this.metrics=[];
@@ -212,8 +242,24 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
     // Set chars based on selected price plan
     this.isCustom = pricePlan.priceType === 'custom';
     if (pricePlan.prodSpecCharValueUse) {
-      this.characteristics = pricePlan.prodSpecCharValueUse;
       this.hasProfile = true;
+      this.characteristics = pricePlan.prodSpecCharValueUse;
+      let realCharsLength = 0;
+      if(this.prodSpec?.productSpecCharacteristic){
+        let prodchars=this.prodSpec?.productSpecCharacteristic
+        for(let i=0;i<prodchars.length;i++){
+          if (!certifications.some(certification => certification.name === prodchars[i].name)) {
+            realCharsLength++;
+          }
+        }
+      }
+      if(pricePlan?.prodSpecCharValueUse && pricePlan?.prodSpecCharValueUse.length < realCharsLength){
+        this.hasProfile = false
+        this.characteristics = this.prodSpec.productSpecCharacteristic || [];
+      } else if(pricePlan?.prodSpecCharValueUse?.value == undefined){
+        this.hasProfile = false
+        this.characteristics = this.prodSpec.productSpecCharacteristic || [];
+      }
     } else {
       this.characteristics = this.prodSpec.productSpecCharacteristic || [];
       this.hasProfile = false;
@@ -338,6 +384,12 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
         valueType = 'string'
       } else if (!valueType && !isNaN(value)) {
         valueType = 'number'
+      }
+
+      if(!value && valueType == 'number'){
+        value=0
+      } else {
+        value=''
       }
 
       this.orderChars.push({

@@ -322,6 +322,8 @@ export class OfferComponent implements OnInit, OnDestroy{
         }
        if(pricePlan?.prodSpecCharValueUse && pricePlan?.prodSpecCharValueUse.length < realCharsLength){
         configProfileCheck=false
+       } else if(pricePlan?.prodSpecCharValueUse?.value == undefined){
+        configProfileCheck=false
        }
        let priceInfo: any = {
         id: pricePlan.id,
