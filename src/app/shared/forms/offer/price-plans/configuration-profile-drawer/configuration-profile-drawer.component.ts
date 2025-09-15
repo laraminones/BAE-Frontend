@@ -67,7 +67,10 @@ export class ConfigurationProfileDrawerComponent implements OnInit {
   }
 
   changeProfileValue(index: number, event: any) {
+    console.log('--------- PROFILE ---------')
+    console.log(event.target.value)
     this.characteristics.at(index).patchValue({ selectedValue: event.target.value });
+    console.log(this.characteristics.at(index))
   }
 
   private mapFormToProfile(): any[] {
@@ -77,9 +80,9 @@ export class ConfigurationProfileDrawerComponent implements OnInit {
       name: char.name,
       description: char.description || '',
       productSpecCharacteristicValue: char.options.map((opt: any) => {
-        if (!("value" in opt)) {
+        if (!("value" in opt) || "valueFrom" in opt) {
           opt.value = "unitOfMeasure" in opt ? Number(char.selectedValue) : char.selectedValue;
-        } 
+        }
         return {
           ...opt,
           isDefault: String(opt.value) === String(char.selectedValue),
@@ -97,6 +100,8 @@ export class ConfigurationProfileDrawerComponent implements OnInit {
     if (this.form.invalid) return;
 
     const formattedProfile = this.mapFormToProfile();
+    console.log('saved profile')
+    console.log(formattedProfile)
     this.save.emit(formattedProfile);
 
     this.closeDrawer();
