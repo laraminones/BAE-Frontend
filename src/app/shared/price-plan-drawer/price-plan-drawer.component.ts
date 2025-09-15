@@ -288,6 +288,14 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
     this.calculatePrice();
   }
 
+  hasLongWord(str: string | undefined, threshold = 20) {
+    if(str){
+      return str.split(/\s+/).some(word => word.length > threshold);
+    } else {
+      return false
+    }   
+  }
+
   // Validate if the form is ready to submit
   isFormValid(): boolean {
     return this.form.valid;

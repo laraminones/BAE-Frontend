@@ -30,22 +30,26 @@
     </button>
 
     @if (!isFree) {
-      <p class="mb-6 text-sm text-gray-500 dark:text-gray-400 text-wrap break-all">In order to add <b>{{productOff?.name}}</b> to your cart you have to select the price model and the set of characteristics you prefer.</p>
-      <p class="mb-6 text-sm text-gray-500 dark:text-gray-400 text-wrap break-all">Please, select the price plan:</p>
+      <p class="mb-6 text-sm text-gray-500 dark:text-gray-400 text-wrap break-words">In order to add <b>{{productOff?.name}}</b> to your cart you have to select the price model and the set of characteristics you prefer.</p>
+      <p class="mb-6 text-sm text-gray-500 dark:text-gray-400 text-wrap break-words">Please, select the price plan:</p>
       @for (pp of productOff?.productOfferingPrice; track pp.id){
         <div class="price-plan flex flex-col rounded-lg border border-dashed border-primary-100 bg-white dark:bg-gray-800 p-2 m-2 gap-1 cursor-pointer hover:bg-sky-50 transition-all duration-200"
             [ngClass]="{
-                    'border-primary-100 text-wrap break-all border': pp.id !== form.get('selectedPricePlan')?.value,
+                    'border-primary-100 text-wrap border': pp.id !== form.get('selectedPricePlan')?.value,
                     'border-transparent outline outline-2 outline-teal-500 bg-teal-50': pp.id === form.get('selectedPricePlan')?.value
               }"
             (click)="onPricePlanSelected(pp)">
-          <div class="text-base font-semibold text-primary-100 dark:text-gray-400 flex justify-between content-center text-wrap break-all">
+          <div class="text-base font-semibold text-primary-100 dark:text-gray-400 flex justify-between content-center text-wrap break-words">
             {{pp.name}}
             @if (pp.prodSpecCharValueUse){
               <span class="bg-indigo-100 text-indigo-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-indigo-900 dark:text-indigo-300">PROFILE</span>
             }
           </div>
-          <markdown class="text-gray-500 dark:text-gray-400 text-wrap break-all" [data]="pp.description"></markdown>
+          <markdown [ngClass]="{
+            'break-all': hasLongWord(pp.description, 20),
+            'break-words': !hasLongWord(pp.description, 20)
+          }"
+          class="text-gray-500 dark:text-gray-400 text-wrap" [data]="pp.description"></markdown>
         </div>
       } @empty {
         <div>The offering is free</div>

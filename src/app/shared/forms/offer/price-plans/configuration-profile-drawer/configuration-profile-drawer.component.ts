@@ -67,8 +67,6 @@ export class ConfigurationProfileDrawerComponent implements OnInit {
   }
 
   changeProfileValue(index: number, event: any) {
-    console.log('--------- PROFILE ---------')
-    console.log(event.target.value)
     this.characteristics.at(index).patchValue({ selectedValue: event.target.value });
     console.log(this.characteristics.at(index))
   }
@@ -100,8 +98,6 @@ export class ConfigurationProfileDrawerComponent implements OnInit {
     if (this.form.invalid) return;
 
     const formattedProfile = this.mapFormToProfile();
-    console.log('saved profile')
-    console.log(formattedProfile)
     this.save.emit(formattedProfile);
 
     this.closeDrawer();
