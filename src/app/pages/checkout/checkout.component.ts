@@ -49,6 +49,8 @@ export class CheckoutComponent implements OnInit {
   validBillAddr: boolean = true;
   errorMessage: any = '';
   showError: boolean = false;
+  providerId:any = null;
+  loadingItems:boolean=false;
 
   constructor(
     private localStorage: LocalStorageService,
@@ -75,23 +77,35 @@ export class CheckoutComponent implements OnInit {
         this.initCheckoutData();
       }
       if(ev.type === 'AddedCartItem') {
+        this.loadingItems=true;
         console.log('Elemento añadido')
-        this.cartService.getShoppingCart().then(data => {
+        this.cartService.getShoppingCart().then(async data => {
           console.log('---CARRITO API---')
           console.log(data)
           this.items=data;
+          if(this.providerId){
+            await this.getProviderInfo();
+            this.groupItemsByOwner(this.providerId);
+          }
           this.cdr.detectChanges();
           this.getTotalPrice();
+          this.loadingItems=false;
           console.log('------------------')
         })
       }
       if(ev.type === 'RemovedCartItem') {
-        this.cartService.getShoppingCart().then(data => {
+        this.loadingItems=true;
+        this.cartService.getShoppingCart().then(async data => {
           console.log('---CARRITO API---')
           console.log(data)
           this.items=data;
+          if(this.providerId){
+            await this.getProviderInfo();
+            this.groupItemsByOwner(this.providerId);
+          }
           this.cdr.detectChanges();
           this.getTotalPrice();
+          this.loadingItems=false;
           console.log('------------------')
         })
       }
@@ -276,7 +290,7 @@ export class CheckoutComponent implements OnInit {
 
 
   ngOnInit(): void {
-
+    this.loadingItems=true;
     this.formatter = new Intl.NumberFormat('es-ES', {
       style: 'currency',
       currency: 'EUR',
@@ -332,6 +346,7 @@ export class CheckoutComponent implements OnInit {
   }
 
   initCheckoutData() {
+    this.providerId = this.route.snapshot.paramMap.get('id');
     let aux = this.localStorage.getObject('login_items') as LoginInfo;
     if (aux) {
       this.contact.email = aux.email;
@@ -347,10 +362,15 @@ export class CheckoutComponent implements OnInit {
     console.log('--- Login Info ---')
     console.log(aux)
 
-    this.cartService.getShoppingCart().then(data => {
+    this.cartService.getShoppingCart().then(async data => {
       console.log('---CARRITO API---')
       console.log(data)
       this.items = data;
+      if(this.providerId){
+        await this.getProviderInfo();
+        this.groupItemsByOwner(this.providerId);
+        this.loadingItems=false;
+      }
       this.cdr.detectChanges();
       this.getTotalPrice();
       console.log('------------------')
@@ -361,6 +381,26 @@ export class CheckoutComponent implements OnInit {
     this.loading_baddrs = true;
     this.getBilling();
   }
+
+  async getProviderInfo(){
+    for(let i=0; i < this.items.length; i++){
+      let offer = await this.api.getProductById(this.items[i].id);
+      let product = await this.api.getProductSpecification(offer.productSpecification.id)
+      console.log(product)
+      this.items[i]['relatedParty']=product.relatedParty
+    }
+  }
+
+  groupItemsByOwner(ownerId: any) {
+    const itemsForOwner = this.items.filter((item: any) => {
+      const owner = item.relatedParty?.find((rp: any) => rp.role === 'Owner')?.id;
+      return owner === ownerId;
+    });
+  
+    console.log(itemsForOwner);
+    this.items = itemsForOwner; // replace with only this owner's items
+  }
+  
 
   getBilling() {
     let isBillSelected = false;
@@ -500,10 +540,15 @@ export class CheckoutComponent implements OnInit {
     await this.cartService.removeItemShoppingCart(product.id)
     console.log('deleted');
     this.eventMessage.emitRemovedCartItem(product as cartProduct);
-    this.cartService.getShoppingCart().then(data => {
+    this.cartService.getShoppingCart().then(async data => {
       console.log('---CARRITO API---')
       console.log(data)
       this.items = data;
+      if(this.providerId){
+        await this.getProviderInfo();
+        this.groupItemsByOwner(this.providerId);
+        this.loadingItems=false;
+      }
       this.cdr.detectChanges();
       this.getTotalPrice();
       console.log('------------------')

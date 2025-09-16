@@ -53,6 +53,10 @@ const routes: Routes = [
     component: CheckoutComponent,
     canActivate: [AuthGuard], data: { roles: [] }
   },
+  { path: 'checkout/:id',
+    component: CheckoutComponent,
+    canActivate: [AuthGuard], data: { roles: [] }
+  },
   { path: 'product-inventory',
   component: ProductInventoryComponent,
   canActivate: [AuthGuard], data: { roles: [] }
