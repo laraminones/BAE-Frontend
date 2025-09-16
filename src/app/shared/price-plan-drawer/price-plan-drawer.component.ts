@@ -90,8 +90,6 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
-    console.log('------------producto')
-    console.log(this.productOff)
     // Escuchar eventos de teclado (por si necesitas otros)
     document.addEventListener('keydown', this.handleEscape.bind(this));
     // Configurar los términos y condiciones

@@ -33,8 +33,9 @@ export class GalleryComponent implements OnInit {
       this.currentTheme = theme;
     });
     console.log('API RESPONSE:')
-    this.api.getProducts(0,undefined).then(data => {
-      for(let i=0; i < this.gallery_limit && i < data.length; i++){
+    this.api.getProducts(0,undefined).then(async data => {
+      this.products=await this.api.getProductsDetails(data);
+     /* for(let i=0; i < this.gallery_limit && i < data.length; i++){
           let attachment: any[]= []
           this.api.getProductSpecification(data[i].productSpecification.id).then(spec => {
             attachment = spec.attachment
@@ -98,7 +99,7 @@ export class GalleryComponent implements OnInit {
             }
 
           })
-        }
+        }*/
     })
 
     console.log('Productos...')
