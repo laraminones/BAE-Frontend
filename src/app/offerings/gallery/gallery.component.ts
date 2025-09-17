@@ -34,7 +34,8 @@ export class GalleryComponent implements OnInit {
     });
     console.log('API RESPONSE:')
     this.api.getProducts(0,undefined).then(async data => {
-      this.products=await this.api.getProductsDetails(data);
+      const firstFour = data.slice(0, 4);
+      this.products=await this.api.getProductsDetails(firstFour);
      /* for(let i=0; i < this.gallery_limit && i < data.length; i++){
           let attachment: any[]= []
           this.api.getProductSpecification(data[i].productSpecification.id).then(spec => {
