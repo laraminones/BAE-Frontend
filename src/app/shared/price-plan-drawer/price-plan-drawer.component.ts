@@ -94,6 +94,8 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
     document.addEventListener('keydown', this.handleEscape.bind(this));
     // Configurar los términos y condiciones
     this.tsAndCs = { description: '' };
+    console.log('---- producto')
+    console.log(this.productOff)
 
     this.productOff?.productOfferingTerm?.forEach((term) => {
       console.log(term.name)
@@ -157,6 +159,25 @@ export class PricePlanDrawerComponent implements OnInit, OnDestroy {
         this.cdr.detectChanges();
       }
       console.log(this.tsAndCs)
+    }
+    if (changes['productOff'] && changes['productOff'].currentValue) {
+      console.log('Changes...')
+      console.log(this.productOff)
+  
+      this.isFree = this.productOff?.productOfferingPrice?.length === 0;
+  
+      if (this.isFree) {
+        this.form.get('selectedPricePlan')?.setValue({});
+        this.characteristics = this.prodSpec.productSpecCharacteristic || [];
+        this.filterCharacteristics();
+      }
+
+      let profile = this.productOff?.attachment?.filter(item => item.name === 'Profile Picture') ?? [];
+      if(profile.length==0){
+        this.images = this.productOff?.attachment?.filter(item => item.attachmentType === 'Picture') ?? [];
+      } else {
+        this.images = profile;
+      }
     }
   }
 

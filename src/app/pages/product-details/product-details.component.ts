@@ -83,6 +83,7 @@ export class ProductDetailsComponent implements OnInit {
 
   orgInfo:any=undefined;
   showQuoteModal:boolean = false;
+  productAlreadyInCart:boolean=false;
 
   protected readonly faScaleBalanced = faScaleBalanced;
   protected readonly faArrowProgress = faArrowProgress;
@@ -140,7 +141,25 @@ export class ProductDetailsComponent implements OnInit {
       } else if(ev.type === 'CloseQuoteRequest'){
           this.showQuoteModal=false;
           this.cdr.detectChanges();
-        }
+      } else if (ev.type == 'RemovedCartItem'){
+        this.cartService.getShoppingCart().then(data => {
+          const exists = data.some((item: any) => item.id === this.productOff?.id);
+          if (exists) {
+            this.productAlreadyInCart=true;
+          } else {
+            this.productAlreadyInCart=false;
+          }
+        })
+      } else if (ev.type == 'AddedCartItem'){
+        this.cartService.getShoppingCart().then(data => {
+          const exists = data.some((item: any) => item.id === this.productOff?.id);
+          if (exists) {
+            this.productAlreadyInCart=true;
+          } else {
+            this.productAlreadyInCart=false;
+          }
+        })
+      }
     })
   }
 
@@ -182,7 +201,7 @@ export class ProductDetailsComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     initFlowbite();
     let aux = this.localStorage.getObject('login_items') as LoginInfo;
     if(JSON.stringify(aux) != '{}' && (((aux.expire - moment().unix())-4) > 0)) {
@@ -201,124 +220,122 @@ export class ProductDetailsComponent implements OnInit {
       this.cdr.detectChanges();
     }
     window.scrollTo(0, 0);
+    let cart = await this.cartService.getShoppingCart();
+    const exists = cart.some((item: any) => item.id === this.productOff?.id);
+    if (exists) {
+      this.productAlreadyInCart=true;
+    } else {
+      this.productAlreadyInCart=false;
+    }
     this.id = this.route.snapshot.paramMap.get('id');
     console.log('--- Details ID:')
     console.log(this.id)
-    this.api.getProductById(this.id).then(prod => {
-      console.log('prod')
-      console.log(prod)
-      this.api.getProductSpecification(prod.productSpecification.id).then(spec => {
-        this.prodSpec=spec;
-        this.getOwner();
-        let attachment = spec.attachment
-        console.log(spec.attachment)
-        let prodPrices: any[] | undefined= prod.productOfferingPrice;
-        let prices: any[]=[];
-        if(prodPrices!== undefined){
-          for(let j=0; j < prodPrices.length; j++){
-            this.api.getProductPrice(prodPrices[j].id).then(price => {
-              prices.push(price);
-              console.log(price)
-              if(price.priceType == 'custom'){
-                this.checkCustom = true;
-              }
-            })
+    let prod = await this.api.getProductById(this.id);
+    let spec = await this.api.getProductSpecification(prod.productSpecification.id);
+    this.prodSpec=spec;
+    this.getOwner();
+    let prodPrices: any[] | undefined= prod.productOfferingPrice;
+    let prices: any[]=[];
+    if(prodPrices!== undefined){
+      for(let j=0; j < prodPrices.length; j++){
+        this.api.getProductPrice(prodPrices[j].id).then(price => {
+          prices.push(price);
+          console.log(price)
+          if(price.priceType == 'custom'){
+            this.checkCustom = true;
           }
-        }
+        })
+      }
+    }
 
-        if(this.prodSpec.productSpecCharacteristic != undefined) {
-          // Avoid displaying the compliance credential
-          this.prodChars = this.prodSpec.productSpecCharacteristic.filter((char: any) => {
-            return char.name != 'Compliance:VC' && char.name != 'Compliance:SelfAtt'
-          })
-
-          console.log('-- prod spec')
-          console.log(this.prodSpec.productSpecCharacteristic)
-
-          for(let i=0; i<certifications.length; i++){
-            //Now we only show the certifications that are attached when creating/updating the product
-            let compProf = this.prodSpec.productSpecCharacteristic.find((p => {
-              return p.name === certifications[i].name
-            }));
-            if(compProf){
-              let cert:any = certifications[i]
-              cert.href = compProf.productSpecCharacteristicValue?.at(0)?.value
-              this.complianceProf.push(certifications[i])
-            }
-            //Deleting certifications out of characteristics' array
-            const index = this.prodChars.findIndex(item => item.name === certifications[i].name);
-            if(index!==-1){
-              this.prodChars.splice(index, 1);
-            }
-          }
-        }
-        if(this.prodSpec.serviceSpecification != undefined){
-          for(let j=0; j < this.prodSpec.serviceSpecification.length; j++){
-            this.api.getServiceSpec(this.prodSpec.serviceSpecification[j].id).then(serv => {
-              this.serviceSpecs.push(serv);
-            })
-          }
-        }
-        if(this.prodSpec.resourceSpecification != undefined){
-          for(let j=0; j < this.prodSpec.resourceSpecification.length; j++){
-            this.api.getResourceSpec(this.prodSpec.resourceSpecification[j].id).then(res => {
-              this.resourceSpecs.push(res);
-            })
-          }
-        }
-
-        console.log('serv specs')
-        console.log(this.serviceSpecs)
-        this.productOff={
-          id: prod.id,
-          name: prod.name,
-          category: prod.category,
-          description: prod.description,
-          lastUpdate: prod.lastUpdate,
-          attachment: attachment,
-          productOfferingPrice: prices,
-          productSpecification: prod.productSpecification,
-          productOfferingTerm: prod.productOfferingTerm,
-          serviceLevelAgreement: prod.serviceLevelAgreement,
-          version: prod.version
-        }
-        this.category = this.productOff?.category?.at(0)?.name ?? 'none';
-        this.categories = this.productOff?.category;
-        this.price = this.productOff?.productOfferingPrice?.at(0)?.price?.value + ' ' + this.productOff?.productOfferingPrice?.at(0)?.price?.unit ?? 'n/a';
-
-        let profile = this.productOff?.attachment?.filter(item => item.name === 'Profile Picture') ?? [];
-        console.log('profile...')
-        console.log(profile)
-        if(profile.length==0){
-          this.images = this.productOff?.attachment?.filter(item => item.attachmentType === 'Picture') ?? [];
-          this.attatchments = this.productOff?.attachment?.filter(item => item.attachmentType != 'Picture') ?? [];
-        } else {
-          this.images = profile;
-          this.attatchments = this.productOff?.attachment?.filter(item => item.name != 'Profile Picture') ?? [];
-        }
-
-        this.licenseTerm = this.productOff?.productOfferingTerm?.find(
-          element => element.name === 'License'
-        );
-
-        if(this.prodSpec.productSpecCharacteristic != undefined) {
-
-          // Find if there is a self attestement
-          let selfAttObj = this.prodSpec.productSpecCharacteristic.find((p => {
-            return p.name === `Compliance:SelfAtt`
-          }));
-
-          if(selfAttObj){
-            this.selfAtt = selfAttObj.productSpecCharacteristicValue?.at(0)?.value
-          }
-        }
-
-        //Hardcoding compliance lever for the moment
-        this.complianceLevel = this.api.getComplianceLevel(this.prodSpec);
-        this.complianceDescription = this.getComplianceDescription();
+    if(this.prodSpec.productSpecCharacteristic != undefined) {
+      // Avoid displaying the compliance credential
+      this.prodChars = this.prodSpec.productSpecCharacteristic.filter((char: any) => {
+        return char.name != 'Compliance:VC' && char.name != 'Compliance:SelfAtt'
       })
-    })
 
+      for(let i=0; i<certifications.length; i++){
+        //Now we only show the certifications that are attached when creating/updating the product
+        let compProf = this.prodSpec.productSpecCharacteristic.find((p => {
+          return p.name === certifications[i].name
+        }));
+        if(compProf){
+          let cert:any = certifications[i]
+          cert.href = compProf.productSpecCharacteristicValue?.at(0)?.value
+          this.complianceProf.push(certifications[i])
+        }
+        //Deleting certifications out of characteristics' array
+        const index = this.prodChars.findIndex(item => item.name === certifications[i].name);
+        if(index!==-1){
+          this.prodChars.splice(index, 1);
+        }
+      }
+    }
+    if(this.prodSpec.serviceSpecification != undefined){
+      for(let j=0; j < this.prodSpec.serviceSpecification.length; j++){
+        this.api.getServiceSpec(this.prodSpec.serviceSpecification[j].id).then(serv => {
+          this.serviceSpecs.push(serv);
+        })
+      }
+    }
+    if(this.prodSpec.resourceSpecification != undefined){
+      for(let j=0; j < this.prodSpec.resourceSpecification.length; j++){
+        this.api.getResourceSpec(this.prodSpec.resourceSpecification[j].id).then(res => {
+          this.resourceSpecs.push(res);
+        })
+      }
+    }
+
+    this.productOff={
+      id: prod.id,
+      name: prod.name,
+      category: prod.category,
+      description: prod.description,
+      lastUpdate: prod.lastUpdate,
+      attachment: spec.attachment,
+      productOfferingPrice: prices,
+      productSpecification: prod.productSpecification,
+      productOfferingTerm: prod.productOfferingTerm,
+      serviceLevelAgreement: prod.serviceLevelAgreement,
+      version: prod.version
+    }
+    console.log('-------- producto')
+    console.log(this.productOff)
+    this.cdr.detectChanges();
+    this.category = this.productOff?.category?.at(0)?.name ?? 'none';
+    this.categories = this.productOff?.category;
+    this.price = this.productOff?.productOfferingPrice?.at(0)?.price?.value + ' ' + this.productOff?.productOfferingPrice?.at(0)?.price?.unit ?? 'n/a';
+
+    let profile = this.productOff?.attachment?.filter(item => item.name === 'Profile Picture') ?? [];
+    console.log('profile...')
+    console.log(profile)
+    if(profile.length==0){
+      this.images = this.productOff?.attachment?.filter(item => item.attachmentType === 'Picture') ?? [];
+      this.attatchments = this.productOff?.attachment?.filter(item => item.attachmentType != 'Picture') ?? [];
+    } else {
+      this.images = profile;
+      this.attatchments = this.productOff?.attachment?.filter(item => item.name != 'Profile Picture') ?? [];
+    }
+
+    this.licenseTerm = this.productOff?.productOfferingTerm?.find(
+      element => element.name === 'License'
+    );
+
+    if(this.prodSpec.productSpecCharacteristic != undefined) {
+
+      // Find if there is a self attestement
+      let selfAttObj = this.prodSpec.productSpecCharacteristic.find((p => {
+        return p.name === `Compliance:SelfAtt`
+      }));
+
+      if(selfAttObj){
+        this.selfAtt = selfAttObj.productSpecCharacteristicValue?.at(0)?.value
+      }
+    }
+
+    //Hardcoding compliance lever for the moment
+    this.complianceLevel = this.api.getComplianceLevel(this.prodSpec);
+    this.complianceDescription = this.getComplianceDescription();
   }
 
   toggleQuoteModal(){
