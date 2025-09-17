@@ -117,10 +117,6 @@ export class SellerCatalogsComponent {
   }
 
   async next(){
-    //this.loading_more=true;
-    this.page=this.page+this.CATALOG_LIMIT;
-    this.cdr.detectChanges;
-    console.log(this.page)
     await this.getCatalogs(true);
   }
 
