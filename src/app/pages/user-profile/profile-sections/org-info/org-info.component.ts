@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, ElementRef, ViewChild, AfterViewInit, HostListener } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ElementRef, ViewChild, AfterViewInit, HostListener, OnChanges } from '@angular/core';
 import { LoginInfo } from 'src/app/models/interfaces';
 import { ApiServiceService } from 'src/app/services/product-service.service';
 import { AccountServiceService } from 'src/app/services/account-service.service';
@@ -23,7 +23,7 @@ type OrganizationUpdate = components["schemas"]["Organization_Update"];
   templateUrl: './org-info.component.html',
   styleUrl: './org-info.component.css'
 })
-export class OrgInfoComponent {
+export class OrgInfoComponent implements OnInit {
   loading: boolean = false;
   orders:any[]=[];
   profile:any;
@@ -130,6 +130,9 @@ export class OrgInfoComponent {
     today.setMonth(today.getMonth()-1);
     this.selectedDate = today.toISOString();
     this.initPartyInfo();
+    setTimeout(() => {        
+      initFlowbite();   
+    }, 500);
   }
 
   initPartyInfo(){
@@ -156,7 +159,6 @@ export class OrgInfoComponent {
       this.loading=false;
       this.cdr.detectChanges();
     })
-
     this.cdr.detectChanges();
     initFlowbite();
   }
