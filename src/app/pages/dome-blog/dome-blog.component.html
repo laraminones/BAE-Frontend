@@ -1,0 +1,46 @@
+<!-- Full height app wrapper -->
+<div class="bg-secondary-50 dark:bg-secondary-200 fixed inset-0 flex flex-col">
+    <!-- Sticky header -->
+    <section id="jumbo" 
+        class="sticky top-0 z-10 w-full bg-cover bg-right-bottom pt-8"
+        style="background-image: url(assets/images/bg_1_shadow.png)">
+        
+        <div class="pt-8 pb-8 px-4 w-full text-left lg:pt-16 lg:px-12">
+            <div class="flex flex-row mx-auto max-w-screen-xl justify-between">
+                <div class="flex flex-col">
+                    <h1 class="mb-4 text-4xl font-extrabold tracking-tight md:text-5xl lg:text-6xl text-secondary-50">
+                        DOME blog
+                    </h1>
+                    <p class="text-lg font-normal lg:text-xl text-secondary-50">
+                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor
+                    </p>
+                </div>
+                <button type="button" (click)="goToCreate()"  class="ml-2 mr-8 mb-4 text-white max-h-12 bg-primary-100 hover:bg-primary-50 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center align-middle me-2">
+                    <p class="pl-2 pr-2">Add a new entry</p>
+                    <svg class="w-[18px] h-[18px] text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/>
+                    </svg>
+                </button> 
+            </div>    
+        </div>
+    </section>
+
+    <!-- Only this area scrolls -->
+    <div class="flex-1 overflow-y-auto p-4 pb-16">
+        @for(entry of entries; track entry){
+            <div class="flex flex-col m-4 mx-auto max-w-screen-xl w-full border border-secondary-300 bg-white dark:bg-secondary-100 rounded-lg shadow-lg p-8">
+                <h2 class="text-2xl font-bold mb-4 dark:text-white">{{ entry.title }}</h2>
+                <h4 class="mb-4 text-lg italic text-secondary-200 dark:text-secondary-50">
+                    Created by 
+                    <b class="text-secondary-100 dark:text-primary-50">{{entry.author}}</b> 
+                    on {{entry.date | date:'EEEE, dd/MM/yy, HH:mm'}}.
+                </h4>
+                <p class="dark:text-white line-clamp-4">{{entry.content}}</p>
+                <button type="button" (click)="goToDetails(entry.id)" 
+                        class="mt-4 w-fit text-white bg-primary-100 hover:bg-primary-50 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center">
+                    <p class="pl-2 pr-2">Read more</p>
+                </button> 
+            </div>
+        }
+    </div>
+</div>
