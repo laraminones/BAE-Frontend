@@ -153,7 +153,14 @@ export class ProcurementModeComponent implements ControlValueAccessor, AfterView
     // Suscribirse a los cambios del formulario
     this.form.valueChanges.subscribe(value => {
       console.log('📝 Form value changed in subscription:', value);
+      
       if (value && value.mode) {
+        if(value.mode=='manual'){
+          this.form.setErrors(null)
+        } else {
+          this.form.setErrors({ invalidProcurement: true }); 
+        }
+
         const mode = this.procurementModes.find(m => m.id === value.mode) || this.procurementModes[0];
         console.log('📝 Found mode:', mode);
         
@@ -170,7 +177,7 @@ export class ProcurementModeComponent implements ControlValueAccessor, AfterView
     console.log('🔄 changeProcurement - Updated procurementMode:', this.procurementMode);
     let pm = this.procurementModes.find(mode => mode.id === event.target.value);
     console.log('🔄 changeProcurement - Found mode:', pm);
-    
+
     if (pm) {
       // Actualizar el FormGroup
       this.formGroup.patchValue({
