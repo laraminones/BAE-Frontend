@@ -35,7 +35,7 @@ export class OrgInfoComponent implements OnInit {
     name: new FormControl('', [Validators.required]),
     website: new FormControl(''),
     description: new FormControl(''),
-    country: new FormControl(''),
+    country: new FormControl('',[Validators.required]),
   });
   mediumForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$'), Validators.maxLength(320)]),
@@ -144,6 +144,7 @@ export class OrgInfoComponent implements OnInit {
       this.token=aux.token;
       this.email=aux.email;
       //this.partyId = aux.partyId;
+      this.profileForm.reset();
       this.getProfile();
     }
     initFlowbite();

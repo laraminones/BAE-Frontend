@@ -12,7 +12,7 @@
         <hr class="h-px mr-4 ml-4 bg-primary-100 dark:bg-white border-0">
         <form class="m-4 grid md:grid-cols-2 gap-4" [formGroup]="profileForm">
             <div>
-                <span class="font-bold dark:text-white">{{ 'PROFILE._name' | translate }}</span>
+                <span class="font-bold dark:text-white">{{ 'PROFILE._name' | translate }} (*)</span>
                 <input type="text" formControlName="name" id="name"
                 class="mb-2 bg-gray-50 text-gray-900 dark:bg-secondary-300 dark:text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 [ngClass]="(profileForm.get('name')?.invalid == true && profileForm.value.name!='') || (profileForm.get('name')?.touched && profileForm.value.name=='') ? 'border-red-600' : 'border-gray-300 dark:border-secondary-200'" />
@@ -26,8 +26,8 @@
                 class="mb-2 bg-gray-50 border border-gray-300 text-gray-900 dark:bg-secondary-300 dark:border-secondary-200 dark:text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />    
             </div>
             <div>
-                <span class="font-bold dark:text-white">{{ 'PROFILE._country' | translate }}</span>
-                <select id="country" formControlName="country" class=""class="mb-2 bg-gray-50 border border-gray-300 text-gray-900 dark:bg-secondary-300 dark:border-secondary-200 dark:text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                <span class="font-bold dark:text-white">{{ 'PROFILE._country' | translate }} (*)</span>
+                <select id="country" formControlName="country" class="mb-2 bg-gray-50 border border-gray-300 text-gray-900 dark:bg-secondary-300 dark:border-secondary-200 dark:text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                     <option *ngFor="let country of euCountries" [value]="country.code">
                       {{ country.name }}
                     </option>
