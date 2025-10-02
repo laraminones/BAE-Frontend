@@ -8,7 +8,7 @@ export const environment = {
     PRODUCT_SPEC: '/productSpecification',
     SERVICE_SPEC: '/serviceSpecification',
     RESOURCE_SPEC: '/resourceSpecification',
-    CUSTOMER_BILLING:'/appliedCustomerBillingRate',
+    CUSTOMER_BILLING:'/customerBill',
 
     ACCOUNT: '/account',
     SHOPPING_CART: '/shoppingCart',

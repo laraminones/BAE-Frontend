@@ -18,7 +18,7 @@ export const environment = {
     BILLING: '/billing',
     CHARGING: '/charging',
 
-    CUSTOMER_BILLING:'/appliedCustomerBillingRate',
+    CUSTOMER_BILLING:'/customerBill',
     CONSUMER_BILLING_URL: 'http://localhost:8640',
     INVOICE_LIMIT: 100,
 

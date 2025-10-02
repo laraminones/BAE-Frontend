@@ -18,7 +18,7 @@ export const environment = {
     CHARGING: '/charging',
     BILLING: '/billing',
 
-    CUSTOMER_BILLING:'/appliedCustomerBillingRate',
+    CUSTOMER_BILLING:'/customerBill',
     CONSUMER_BILLING_URL: 'http://localhost:8640',
     //API PAGINATION
     PRODUCT_LIMIT: 6,
