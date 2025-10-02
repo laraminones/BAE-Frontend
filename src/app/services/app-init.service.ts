@@ -34,7 +34,7 @@ export class AppInitService {
                 environment.quoteApi = config.quoteApi ?? 'http://localhost:8080/quoteManagement';
                 environment.PAYMENT_URL = config.paymentUrl;
                 environment.analytics = config.analytics ?? 'https://analytics.dome-marketplace-sbx.org/',
-                environment.feedbackCampaign = config.feedbackCampaign ?? true,
+                environment.feedbackCampaign = config.feedbackCampaign ?? false,
                 environment.feedbackCampaignExpiration = config.feedbackCampaign ?? moment().add(1, 'week').unix()
                 resolve(config);
             }),
