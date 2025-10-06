@@ -101,7 +101,10 @@ const routes: Routes = [
   { path: 'blog/:id',
     component: BlogEntryDetailComponent
   },
-  { path: 'blog-new-entry',
+  { path: 'blog-entry',
+    component: EntryFormComponent
+  },
+  { path: 'blog-entry/:id',
     component: EntryFormComponent
   },
   { path: '**', redirectTo: 'dashboard', pathMatch: 'full' },
