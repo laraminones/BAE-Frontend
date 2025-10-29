@@ -1,6 +1,7 @@
 export const environment = {
     //BASE_URL: 'https://dome-marketplace.org',
     BASE_URL: 'http://proxy.docker:8004',
+    isProduction: false,
     PAYMENT_URL: 'https://payment.dome-marketplace-sbx.org',
     //API_PORT: 8004,
     //API_PORT: 443,
