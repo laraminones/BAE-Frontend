@@ -1,7 +1,7 @@
 export const environment = {
     BASE_URL: '',
     isProduction: true,
-    PAYMENT_URL: 'https://payment.dome-marketplace-sbx.org',
+    PAYMENT_URL: '/revenue',
     LEGACY_PREFIX: '/ux',
     PRODUCT_CATALOG: '/catalog',
     SERVICE: '/service',
@@ -9,7 +9,7 @@ export const environment = {
     PRODUCT_SPEC: '/productSpecification',
     SERVICE_SPEC: '/serviceSpecification',
     RESOURCE_SPEC: '/resourceSpecification',
-    CUSTOMER_BILLING:'/appliedCustomerBillingRate',
+    CUSTOMER_BILLING:'/customerBill',
 
     ACCOUNT: '/account',
     SHOPPING_CART: '/shoppingCart',
@@ -80,5 +80,7 @@ export const environment = {
         addAttachmentToQuote: '/addAttachmentToQuote',
         deleteQuote: '/quote'
     },
-    analytics: ''
+    analytics: '',
+    feedbackCampaign: false,
+    feedbackCampaignExpiration: 0
 };

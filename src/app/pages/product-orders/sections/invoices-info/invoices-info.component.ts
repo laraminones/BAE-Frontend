@@ -37,6 +37,8 @@ export class InvoicesInfoComponent implements OnInit {
   partyId:any='';
   showInvoiceDetails:boolean=false;
   invoiceToShow:any;
+  appliedCustomerBillingRates: any[] = [];
+  loadingACBRs: boolean = false;
   dateRange = new FormControl();
   selectedDate:any;
   preferred:boolean=false;
@@ -260,10 +262,21 @@ export class InvoicesInfoComponent implements OnInit {
     return totalPrice
   }
 
-  toggleShowDetails(invoice:any){
+  async toggleShowDetails(invoice:any){
     console.log(invoice)
     this.showInvoiceDetails=true;
     this.invoiceToShow=invoice;
+    this.appliedCustomerBillingRates = [];
+    this.loadingACBRs = true;
+
+    try {
+      this.appliedCustomerBillingRates = await this.invoicesService.getAppliedCustomerBillingRates(invoice.id);
+      console.log('Applied Customer Billing Rates:', this.appliedCustomerBillingRates);
+    } catch (error) {
+      console.error('Error fetching applied customer billing rates:', error);
+    } finally {
+      this.loadingACBRs = false;
+    }
   }
 
   async onRoleChange(role: any) {

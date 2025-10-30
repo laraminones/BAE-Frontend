@@ -1,7 +1,7 @@
 export const environment = {
     BASE_URL: 'http://localhost:8004',
     isProduction: false,
-    PAYMENT_URL: 'https://payment.dome-marketplace-sbx.org',
+    PAYMENT_URL: '/revenue',
     LEGACY_PREFIX: '',
     //API_PORT: 8632,
     //API_PORT: 8004,
@@ -19,7 +19,7 @@ export const environment = {
     CHARGING: '/charging',
     BILLING: '/billing',
 
-    CUSTOMER_BILLING:'/appliedCustomerBillingRate',
+    CUSTOMER_BILLING:'/customerBill',
     CONSUMER_BILLING_URL: 'http://localhost:8640',
     //API PAGINATION
     PRODUCT_LIMIT: 6,
@@ -80,5 +80,7 @@ export const environment = {
         addAttachmentToQuote: '/addAttachmentToQuote',
         deleteQuote: '/quote'
     },
-    analytics: ''
+    analytics: '',
+    feedbackCampaign: false,
+    feedbackCampaignExpiration: 0
 };

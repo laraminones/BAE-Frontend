@@ -4,7 +4,8 @@ import {
   OnInit,
   ChangeDetectorRef,
   HostListener,
-  ElementRef, ViewChild, AfterViewInit, OnDestroy
+  ElementRef, ViewChild, AfterViewInit, OnDestroy,
+  OnChanges
 } from '@angular/core';
 import {components} from "../../models/product-catalog";
 import { FastAverageColor } from 'fast-average-color';
@@ -223,6 +224,10 @@ export class CardComponent implements OnInit, OnDestroy, AfterViewInit {
         this.customerId = loggedOrg.partyId
       }
       this.cdr.detectChanges();
+      let cart = await this.cartService.getShoppingCart();
+      const exists = cart.some((item: any) => item.id === this.productOff?.id);
+      this.productAlreadyInCart=exists;
+      this.cdr.detectChanges();
     } else {
       this.check_logged=false,
       this.cdr.detectChanges();
@@ -245,37 +250,14 @@ export class CardComponent implements OnInit, OnDestroy, AfterViewInit {
       this.images = profile;
     }
     this.prodSpec = this.productOff?.productSpecification ?? {};
-    /*if(!this.prodSpecInput){
-      console.log('no prod spec ----')
-      let specId:any|undefined=this.productOff?.productSpecification?.id;
-      if(specId != undefined){
-        this.api.getProductSpecification(specId).then(spec => {
-          this.prodSpec = spec;
-          console.log('prod spec')
-          console.log(this.prodSpec)
-          this.getOwner();
-  
-          if(this.prodSpec.productSpecCharacteristic != undefined) {
-            this.complianceLevel = this.api.getComplianceLevel(this.prodSpec);
-          }
-        })
-      }
-    } else {
-      this.prodSpec = this.prodSpecInput
-    }*/
+    this.getOwner();
+    if(this.prodSpec.productSpecCharacteristic != undefined) {
+      this.complianceLevel = this.api.getComplianceLevel(this.prodSpec);
+    }
 
     this.isCustomPrice = await this.priceService.isCustomOffering(this.productOff)
 
     this.prepareOffData();
-
-    this.cartService.getShoppingCart().then(data => {
-      const exists = data.some((item: any) => item.id === this.productOff?.id);
-      if (exists) {
-        this.productAlreadyInCart=true;
-      } else {
-        this.productAlreadyInCart=false;
-      }
-    })
 
     this.cdr.detectChanges();
   }

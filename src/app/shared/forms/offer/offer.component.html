@@ -172,8 +172,8 @@
       </button>
       @if(formType === 'create' && currentStep === 7 || formType === 'update'){
         <button data-cy="offerFinish" (click)="submitForm()"
-        [disabled]="!productOfferForm.controls['generalInfo'].valid || loading"
-        [ngClass]="loading || (formType === 'update' && !productOfferForm.controls['generalInfo'].valid) ? 'opacity-50' : 'hover:bg-primary-50'"
+        [disabled]="!isFormValid|| loading"
+        [ngClass]="loading || (formType === 'update' && !isFormValid) ? 'opacity-50' : 'hover:bg-primary-50'"
 
         class="px-4 py-2 text-base font-medium text-white rounded-lg bg-primary-100">
           {{ formType === 'create' ? 'Create Offer' : 'Update Offer' }}

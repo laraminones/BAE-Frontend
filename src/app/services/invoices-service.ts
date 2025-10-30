@@ -29,7 +29,7 @@ export class InvoicesService {
     // TODO. Qué le pasa a esta petición? devuelve algo raro....
     let url = `${InvoicesService.BASE_URL}${InvoicesService.BASE_PATCH}${InvoicesService.API_ORDERING}?limit=1000&offset=${page}`;
   
-    url += `&relatedParty.id=${partyId}&relatedParty.role=${role}`
+    url += `&relatedParty.id=${partyId}&relatedParty.role=${role}&state=settled`
 
     // let status=''
     // if(filters.length>0){
@@ -158,5 +158,12 @@ export class InvoicesService {
     console.log(patchData);
     let url = `${InvoicesService.BASE_URL}${InvoicesService.BASE_PATCH}${InvoicesService.API_ORDERING}/${invoiceId}`;
     return this.http.patch(url, patchData)
+  }
+
+  getAppliedCustomerBillingRates(billId: string) {
+    console.log('Reading applied customer billing rates for bill:', billId);
+    let url = `${InvoicesService.BASE_URL}${InvoicesService.BASE_PATCH}/appliedCustomerBillingRate?bill.id=${billId}`;
+    console.log(url);
+    return lastValueFrom(this.http.get<any[]>(url));
   }
 }

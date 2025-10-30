@@ -15,7 +15,9 @@ export class PaymentService {
   completePayment(params: any) {
     const body: any = {
       confirm_action: params.action,
-      reference: params.ref
+      reference: params.ref,
+      client: params.client,
+      signature: params.sig
     }
 
     if (params.jwt) {
