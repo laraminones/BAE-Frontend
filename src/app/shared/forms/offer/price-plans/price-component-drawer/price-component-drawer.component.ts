@@ -144,6 +144,8 @@ export class PriceComponentDrawerComponent implements OnInit {
   submitForm() {
     if (this.priceComponentForm.valid) {
       this.save.emit(this.priceComponentForm.value);
+      console.log('----------- SAVED PRICE COMP')
+      console.log(this.priceComponentForm.value)
       this.closeDrawer();
     }
   }

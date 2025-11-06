@@ -79,7 +79,7 @@ export class UpdateProductSpecComponent implements OnInit {
   //CHARS INFO
   charsForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.maxLength(100), noWhitespaceValidator]),
-    description: new FormControl('')
+    description: new FormControl('', [Validators.maxLength(500)])
   });
   stringCharSelected:boolean=true;
   numberCharSelected:boolean=false;
