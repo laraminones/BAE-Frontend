@@ -240,8 +240,9 @@ export class OrgInfoComponent implements OnInit {
         this.getProfile();
         this.successVisibility = true;
         setTimeout(() => {
-          this.successVisibility = false
-        }, 2000);       
+          this.successVisibility = false;
+        }, 2000); 
+        this.mediumForm.reset();      
       },
       error: error => {
           console.error('There was an error while updating!', error);
