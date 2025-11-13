@@ -19,7 +19,7 @@
         <h2 class="text-left text-2xl mb-2 font-bold dark:text-white">{{ 'CONTACTUS._fill' | translate }}</h2>
         <div class="grid grid-cols-3 gap-4">
             <div>
-                <label for="email" class="font-bold text-lg dark:text-white">{{ 'CONTACTUS._email' | translate }}</label>
+                <label for="email" class="font-bold text-lg dark:text-white">{{ 'CONTACTUS._email' | translate }} (*)</label>
                 <input formControlName="email" type="text" id="email"
                 [ngClass]="contactForm.get('email')?.touched && contactForm.get('email')?.invalid
                 ? 'border-red-600'
@@ -36,7 +36,7 @@
                 }
             </div>
             <div>
-                <label for="name" class="font-bold text-lg dark:text-white">{{ 'CONTACTUS._firstname' | translate }}</label>
+                <label for="name" class="font-bold text-lg dark:text-white">{{ 'CONTACTUS._firstname' | translate }} (*)</label>
                 <input formControlName="name" type="text" id="name"
                 [ngClass]="contactForm.get('name')?.touched && contactForm.get('name')?.invalid
                 ? 'border-red-600'
@@ -50,7 +50,7 @@
                 }              
             </div>
             <div>
-                <label for="lastname" class="font-bold text-lg dark:text-white">{{ 'CONTACTUS._lastname' | translate }}</label>
+                <label for="lastname" class="font-bold text-lg dark:text-white">{{ 'CONTACTUS._lastname' | translate }} (*)</label>
                 <input formControlName="lastname" type="text" id="lastname"
                 [ngClass]="contactForm.get('lastname')?.touched && contactForm.get('lastname')?.invalid
                 ? 'border-red-600'
@@ -66,7 +66,7 @@
         </div>
         <div class="grid grid-cols-2 gap-4">
             <div>
-                <label for="organization" class="font-bold text-lg dark:text-white">{{ 'CONTACTUS._organization' | translate }}</label>
+                <label for="organization" class="font-bold text-lg dark:text-white">{{ 'CONTACTUS._organization' | translate }} (*)</label>
                 <input formControlName="organization" type="text" id="organization"
                 [ngClass]="contactForm.get('organization')?.touched && contactForm.get('organization')?.invalid
                 ? 'border-red-600'
@@ -80,7 +80,7 @@
                 } 
             </div>
             <div>
-                <label for="role" class="font-bold text-lg dark:text-white">{{ 'CONTACTUS._role' | translate }}</label>
+                <label for="role" class="font-bold text-lg dark:text-white">{{ 'CONTACTUS._role' | translate }} (*)</label>
                 <input formControlName="role" type="text" id="role"
                 [ngClass]="contactForm.get('role')?.touched && contactForm.get('role')?.invalid
                 ? 'border-red-600'
@@ -95,7 +95,7 @@
             </div>
         </div>
         <div>
-            <label for="organization" class="font-bold text-lg dark:text-white">{{ 'CONTACTUS._message' | translate }}</label>
+            <label for="organization" class="font-bold text-lg dark:text-white">{{ 'CONTACTUS._message' | translate }} (*)</label>
             <textarea id="editor" formControlName="message" rows="8" 
             [ngClass]="contactForm.get('message')?.touched && contactForm.get('message')?.invalid
             ? 'border-red-600'

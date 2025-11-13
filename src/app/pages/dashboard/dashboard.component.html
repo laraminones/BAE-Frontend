@@ -84,19 +84,24 @@
     <!--<bae-off-gallery *ngIf="currentTheme?.dashboard?.showFeaturedOfferings">
     </bae-off-gallery>-->
     <app-platform-benefits *ngIf="currentTheme?.dashboard?.showPlatformBenefits"></app-platform-benefits>
-    <div class="border-t border-gray-200 dark:border-gray-600">
-      <div class="flex flex-row items-center py-8 px-4 mb-4">
-        <img 
-          class="h-12 w-auto" 
-          src="assets/logos/euflag.png" 
-          alt="EU flag image"
-        >
-        <p class="ml-4 text-base font-normal text-gray-500 dark:text-gray-400 text-start">
-          Distributed Open Marketplace for Europe (DOME) Project has received funding from 
-          European Union’s Digital Europe Programme under the Grant Agreement No 101084071.
-        </p>
+    @if(providerThemeName=='DOME'){
+      <div >
+        <div class="border-t border-gray-200 dark:border-gray-600 w-full">
+          <div class="flex flex-row items-center pt-4">
+            <img 
+              class="h-12 w-auto ml-4" 
+              src="assets/logos/euflag.png" 
+              alt="EU flag image"
+            >
+            <p class="ml-4 text-base font-normal text-gray-500 dark:text-gray-400 text-start">
+              Distributed Open Marketplace for Europe (DOME) Project has received funding from 
+              European Union’s Digital Europe Programme under the Grant Agreement No 101084071.
+            </p>
+          </div>
+        </div> 
       </div>
-    </div>    
+  
+    } 
     <!--<app-explore-dome></app-explore-dome>-->
     <!--<app-faq></app-faq>-->
 

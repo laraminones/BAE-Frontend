@@ -241,6 +241,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, DoCheck, OnDestro
         }
       }
     })
+    initFlowbite();
   }
 
   ngAfterViewInit() {

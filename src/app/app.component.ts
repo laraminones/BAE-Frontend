@@ -77,7 +77,7 @@ export class AppComponent implements OnInit {
         console.log(((info.expire - moment().unix()) - 4))
 
         this.refreshApi.startInterval(((info.expire - moment().unix())-4)*1000, ev);
-
+        initFlowbite();
         //this.refreshApi.startInterval(3000, ev.value);
       }
     })
@@ -92,6 +92,7 @@ export class AppComponent implements OnInit {
       this.refreshApi.startInterval(((aux.expire - moment().unix())-4)*1000, aux);
       console.log('token')
       console.log(aux.token)
+      initFlowbite();
     }
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {

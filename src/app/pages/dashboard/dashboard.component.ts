@@ -36,6 +36,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   delay: number = 2000;
   currentTheme: ThemeConfig | null = null;
   private themeSubscription: Subscription = new Subscription();
+  providerThemeName=environment.providerThemeName;
 
   //loginSubscription: Subscription = new Subscription();;
   constructor(private localStorage: LocalStorageService,
@@ -111,6 +112,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
         this.localStorage.addLoginInfo(info);
         this.eventMessage.emitLogin(info);
+        initFlowbite();
         console.log('----')
         //this.refreshApi.stopInterval();
         //this.refreshApi.startInterval(((data.expire - moment().unix())-4)*1000, data);

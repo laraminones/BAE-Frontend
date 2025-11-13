@@ -1,4 +1,4 @@
-import {OnDestroy, OnInit, Component} from '@angular/core';
+import {OnDestroy, OnInit, Component, ViewEncapsulation} from '@angular/core';
 import { faLinkedin, faYoutube, faXTwitter } from '@fortawesome/free-brands-svg-icons';
 import { Router } from '@angular/router';
 import { Subscription } from "rxjs";
@@ -12,7 +12,8 @@ import * as moment from 'moment';
 @Component({
   selector: 'bae-footer',
   templateUrl: './footer.component.html',
-  styleUrls: ['./footer.component.css']
+  styleUrls: ['./footer.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class FooterComponent implements OnInit, OnDestroy {
   protected readonly faLinkedin = faLinkedin;
